@@ -1,0 +1,1799 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d0e10">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Mental math trainer for investment banking interviews: percents, multiplication, fractions, CAGR, multiples, IRR, margins and paper LBO steps.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2316171a'/%3E%3Ctext x='32' y='44' font-family='Arial,sans-serif' font-size='34' font-weight='700' text-anchor='middle' fill='%235b9cff'%3E%25%3C/text%3E%3C/svg%3E">
+<title>IB Mental Math</title>
+<style>
+:root{
+  --bg:#0d0e10; --surface:#16171a; --surface2:#1e2024; --line:#2a2d33; --line2:#363a42;
+  --text:#eceef1; --text2:#c3c7ce; --muted:#9aa1ab; --faint:#6f7680;
+  --accent:#5b9cff; --accent-strong:#2f6fe0; --accent-soft:rgba(91,156,255,.14);
+  --good:#34c77b; --good-soft:rgba(52,199,123,.12); --bad:#f06565; --bad-soft:rgba(240,101,101,.12); --warn:#f2b13c;
+  --series:#3987e5; --grid:#2a2c31;
+  --r:14px;
+  --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 var(--sans);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh;overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+a{color:var(--accent)}
+.wrap{max-width:560px;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(28px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:46px}
+.brand{font-weight:650;letter-spacing:.01em;color:var(--text2);font-size:.95rem}
+.brand b{color:var(--accent);font-weight:750}
+.iconbtn{background:none;border:0;color:var(--muted);min-height:44px;min-width:44px;border-radius:10px;font-size:.95rem;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.iconbtn:hover,.iconbtn:focus-visible{color:var(--text);background:var(--surface)}
+h1{font-size:1.7rem;line-height:1.2;margin:14px 0 4px;letter-spacing:-.015em}
+h2{font-size:1.05rem;margin:26px 0 10px;color:var(--text2);font-weight:650;letter-spacing:.01em}
+.sub{color:var(--muted);margin:0 0 18px}
+.muted{color:var(--muted)} .faint{color:var(--faint)} .small{font-size:.85rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.mode{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 10px;color:var(--text)}
+.mode:hover,.mode:focus-visible{border-color:var(--line2);background:var(--surface2);outline:none}
+.mode .mi{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:750;font-size:1.05rem;flex:0 0 auto}
+.mode .mt{font-weight:650;font-size:1.08rem}
+.mode .md{color:var(--muted);font-size:.88rem;margin-top:2px}
+.mode .chev{margin-left:auto;color:var(--faint);font-size:1.3rem}
+.focusline{margin-top:6px;font-size:.8rem;color:var(--text2);display:flex;flex-wrap:wrap;gap:6px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);font-size:.78rem;color:var(--text2)}
+.links{display:flex;gap:8px;margin-top:6px}
+.links .btn{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 18px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-weight:600;font-size:1rem}
+.btn:hover,.btn:focus-visible{border-color:var(--line2);background:var(--surface2);outline:none}
+.btn.primary{background:var(--accent-strong);border-color:var(--accent-strong);color:#fff}
+.btn.primary:hover,.btn.primary:focus-visible{background:#3a7af0;border-color:#3a7af0}
+.btn.ghost{background:transparent}
+.btn.small{min-height:40px;padding:0 12px;font-size:.9rem;border-radius:10px}
+.btn.danger{color:var(--bad)}
+.lastline{margin-top:18px;color:var(--muted);font-size:.88rem;text-align:center}
+/* setup rows */
+.catrow{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 12px 12px 14px;margin-bottom:8px}
+.catrow.off{opacity:.55}
+.cr1{display:flex;align-items:flex-start;gap:10px}
+.cr1 .ci{flex:1;min-width:0}
+.cname{font-weight:650}
+.cex{color:var(--muted);font-size:.85rem}
+.cstat{color:var(--faint);font-size:.78rem;margin-top:2px}
+.cr2{display:flex;align-items:center;gap:10px;margin-top:10px}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+.seg button{border:0;background:transparent;color:var(--muted);min-width:42px;min-height:36px;border-radius:7px;font-weight:650}
+.seg button[aria-pressed="true"]{background:var(--surface2);color:var(--text);box-shadow:inset 0 0 0 1px var(--line2)}
+.seglabel{font-size:.78rem;color:var(--faint);min-width:64px}
+.cr2 .btn{margin-left:auto}
+.tog{position:relative;display:inline-block;width:46px;height:28px;flex:0 0 auto;margin-top:2px}
+.tog input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;width:100%;height:100%}
+.tog span{position:absolute;inset:0;border-radius:999px;background:var(--line);transition:background .15s;pointer-events:none}
+.tog span::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#c9ccd2;transition:transform .15s}
+.tog input:checked + span{background:var(--accent-strong)}
+.tog input:checked + span::after{transform:translateX(18px);background:#fff}
+.tog input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.note{font-size:.82rem;color:var(--muted);margin:4px 2px 14px}
+/* play */
+.playtop{display:flex;align-items:center;gap:8px;min-height:44px}
+.pmeta{flex:1;text-align:center;font-size:.9rem;color:var(--muted);font-weight:600}
+.clock{font-family:var(--mono);color:var(--text);font-size:1.05rem;margin-left:6px}
+.clock.low{color:var(--warn)}
+.pscore{min-width:64px;text-align:right;font-size:.95rem;color:var(--muted);font-weight:600;padding-right:4px}
+.pscore .g{color:var(--good)}
+.pbar{height:3px;background:var(--surface2);border-radius:3px;overflow:hidden;margin:2px 0 14px}
+.pbar div{height:100%;width:0;background:var(--accent);transition:width .25s linear}
+.chiprow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.pchip{display:inline-flex;gap:6px;align-items:center;font-size:.78rem;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 10px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.skipbtn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;min-height:36px;padding:0 14px;font-size:.85rem;font-weight:600;flex:0 0 auto}
+.skipbtn:hover,.skipbtn:focus-visible{color:var(--text);border-color:var(--line2);outline:none}
+.prompt{font-weight:500;letter-spacing:-.01em;line-height:1.2;color:var(--text2);margin:0 0 14px;min-height:1.2em;overflow-wrap:anywhere}
+.prompt .ln{display:block}
+.prompt .num{color:var(--text);font-weight:700}
+.prompt.s1{font-size:clamp(2.3rem,11vw,3.3rem)}
+.prompt.s2{font-size:clamp(1.7rem,7.4vw,2.3rem)}
+.prompt.s3{font-size:clamp(1.35rem,5.6vw,1.8rem)}
+.prompt.s4{font-size:clamp(1.15rem,4.6vw,1.5rem)}
+.field{position:relative}
+.field input{width:100%;height:66px;background:var(--surface);border:1.5px solid var(--line2);border-radius:var(--r);padding:0 76px 0 16px;font-size:clamp(1.9rem,8vw,2.4rem);font-weight:650;color:var(--text);outline:none;font-variant-numeric:tabular-nums;caret-color:var(--accent)}
+.field input:focus{border-color:var(--accent)}
+.field input.shake{animation:shake .28s}
+@keyframes shake{25%{transform:translateX(-6px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+.adorn{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:650;font-size:1.15rem;pointer-events:none}
+.irow{display:flex;gap:8px;align-items:stretch}
+.irow .field{flex:1;min-width:0}
+.irow .go{flex:0 0 auto;min-width:88px;min-height:66px;border-radius:var(--r);font-size:1.05rem}
+.fb{margin-top:12px;min-height:0}
+.fbbox{border-radius:12px;padding:10px 12px;border:1px solid var(--line);background:var(--surface)}
+.fbbox.ok{border-color:rgba(52,199,123,.45);background:var(--good-soft)}
+.fbbox.no{border-color:rgba(240,101,101,.45);background:var(--bad-soft)}
+.fbbox.info{border-color:var(--line2)}
+.fbh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;font-weight:650}
+.fbh .st{font-weight:750}
+.fbbox.ok .st{color:var(--good)} .fbbox.no .st{color:var(--bad)}
+.fbh .ans{font-size:1.3rem;color:var(--text)}
+.fbh .lab{color:var(--muted);font-weight:600;font-size:.85rem}
+.fbyou{margin-top:2px;color:var(--muted);font-size:.85rem;overflow-wrap:anywhere}
+.fbyou b{color:var(--bad);font-weight:650}
+.fbh .t{color:var(--muted);font-weight:600;font-size:.88rem;margin-left:auto}
+.fbs{margin-top:6px;color:var(--text2);font-size:.95rem;line-height:1.4}
+.fbs b{color:var(--text)}
+.fbhint{margin-top:6px;color:var(--faint);font-size:.78rem}
+/* summary */
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tile .tv{font-size:1.7rem;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.tile .tl{font-size:.78rem;color:var(--muted);margin-top:2px}
+.best{display:inline-block;margin:10px 0 0;color:var(--warn);font-weight:650;font-size:.9rem}
+table.t{width:100%;border-collapse:collapse;font-size:.92rem}
+table.t th{text-align:left;font-weight:600;color:var(--faint);font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;padding:6px 6px;border-bottom:1px solid var(--line)}
+table.t td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.t th.r,table.t td.r{text-align:right}
+table.t tr:last-child td{border-bottom:0}
+.accbar{display:inline-block;width:42px;height:6px;border-radius:3px;background:var(--surface2);vertical-align:middle;margin-left:6px;overflow:hidden}
+.accbar i{display:block;height:100%;background:var(--series);border-radius:3px}
+.miss{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+.miss .mq{font-weight:600}
+.miss .ma{font-size:.88rem;color:var(--muted);margin-top:3px}
+.miss .ma b{color:var(--text)}
+.miss .mh{font-size:.9rem;color:var(--text2);margin-top:5px}
+.actions{display:flex;gap:10px;margin-top:20px}
+.actions .btn{flex:1}
+/* stats */
+.segwide{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px;margin:0 0 10px}
+.segwide button{flex:1;border:0;background:transparent;color:var(--muted);min-height:38px;border-radius:7px;font-weight:600;font-size:.9rem}
+.segwide button[aria-pressed="true"]{background:var(--surface2);color:var(--text);box-shadow:inset 0 0 0 1px var(--line2)}
+.chart{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 10px 6px;margin-bottom:10px}
+.chart .ct{font-size:.85rem;color:var(--text2);font-weight:600;margin:0 4px 4px}
+.chart svg{display:block;width:100%;touch-action:pan-y}
+.chart .empty{color:var(--faint);font-size:.88rem;padding:28px 6px;text-align:center}
+.tip{position:absolute;pointer-events:none;background:#0a0b0d;border:1px solid var(--line2);border-radius:8px;padding:6px 8px;font-size:.78rem;color:var(--text);white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.4);display:none;z-index:2}
+.tip .tm{color:var(--muted)}
+.sesslist{font-size:.88rem}
+.datarow{display:flex;flex-wrap:wrap;gap:8px}
+.datarow .btn{flex:1 1 140px}
+textarea.paste{width:100%;min-height:120px;margin-top:10px;background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:10px;font:13px/1.4 var(--mono);color:var(--text)}
+.warnbar{background:rgba(242,177,60,.1);border:1px solid rgba(242,177,60,.35);color:#f5cf86;border-radius:10px;padding:8px 12px;font-size:.85rem;margin:6px 0 10px}
+.toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);background:#22252b;border:1px solid var(--line2);color:var(--text);padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:10;max-width:calc(100% - 32px);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+/* self-test */
+.tst h1{font-size:1.4rem}
+.tst .ok{color:var(--good)} .tst .bad{color:var(--bad)}
+.tst pre{white-space:pre-wrap;word-break:break-word;font:12px/1.45 var(--mono);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--text2)}
+.tst .ex{font-size:.85rem;border-bottom:1px solid var(--line);padding:7px 0}
+.tst .ex .k{color:var(--faint);font-family:var(--mono);font-size:.75rem}
+@media (min-width:600px){ .tiles.four{grid-template-columns:repeat(4,1fr)} }
+/* on-screen keyboard open: tighten the play screen so feedback stays above the keypad */
+body.kb .playtop{min-height:38px}
+body.kb .pbar{margin-bottom:8px}
+body.kb .chiprow{margin-bottom:6px}
+body.kb .prompt{margin-bottom:10px}
+body.kb .prompt.s1{font-size:clamp(2rem,9vw,2.6rem)}
+body.kb .prompt.s2{font-size:clamp(1.5rem,6.4vw,2rem)}
+body.kb .prompt.s3{font-size:clamp(1.2rem,5vw,1.55rem)}
+body.kb .prompt.s4{font-size:clamp(1.05rem,4.3vw,1.3rem)}
+body.kb .field input,body.kb .irow .go{height:58px;min-height:58px}
+body.kb .fb{margin-top:8px}
+body.kb .fbhint{display:none}
+@media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} }
+</style>
+</head>
+<body>
+<div id="app" class="wrap"></div>
+<noscript><p style="padding:16px">This trainer needs JavaScript.</p></noscript>
+<script>
+(function () {
+'use strict';
+
+/* =====================================================================
+   1. RNG + NUMBER HELPERS
+   ===================================================================== */
+var _rand = Math.random;
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    var t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function rand() { return _rand(); }
+function ri(a, b) { return a + Math.floor(rand() * (b - a + 1)); }
+function pick(arr) { return arr[Math.floor(rand() * arr.length)]; }
+function chance(p) { return rand() < p; }
+function snap(x) { return Math.round(x * 1e9) / 1e9; }
+function isInt(x) { return Number.isInteger(snap(x)); }
+function decimals(x) {
+  var s = String(snap(x));
+  if (s.indexOf('e') >= 0) return 10;
+  var i = s.indexOf('.');
+  return i < 0 ? 0 : s.length - i - 1;
+}
+function fmt(x, maxD, minD) {
+  if (maxD == null) maxD = 2;
+  if (minD == null) minD = 0;
+  if (!isFinite(x)) return String(x);
+  return snap(x).toLocaleString('en-US', { maximumFractionDigits: maxD, minimumFractionDigits: Math.min(minD, maxD) });
+}
+function f2(x) { return fmt(x, 2, 2); }
+var SUPS = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+function sup(n) { return String(n).replace(/\d/g, function (c) { return SUPS[+c]; }); }
+var QFR = { 0.25: '¼', 0.5: '½', 0.75: '¾' };
+function mean(a) { if (!a.length) return NaN; var s = 0; for (var i = 0; i < a.length; i++) s += a[i]; return s / a.length; }
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function now() { return (window.performance && performance.now) ? performance.now() : Date.now(); }
+
+/* =====================================================================
+   2. CATEGORIES
+   tgt = target seconds per question at difficulty 1/2/3 (used by Weakness mode)
+   ===================================================================== */
+var CATS = [
+  { id: 'pct',    name: 'Percent of a number',   short: 'Percent',   ex: '6% of 18,000 · 17.5% of 240',   tgt: [6, 9, 12] },
+  { id: 'mult',   name: 'Multiplication',        short: 'Multiply',  ex: '47 × 6 · 38 × 24 · 45 × 8,000', tgt: [6, 10, 12] },
+  { id: 'frac',   name: 'Fractions ↔ percents',  short: 'Fractions', ex: '1/8 · 5/6 · 3/7',               tgt: [5, 7, 9] },
+  { id: 'cagr',   name: 'Growth & CAGR',         short: 'CAGR',      ex: '100 → 150 in 3 years',          tgt: [8, 14, 18] },
+  { id: 'val',    name: 'Valuation multiples',   short: 'Multiples', ex: 'EBITDA $45M at 8.5x → EV',      tgt: [7, 10, 15] },
+  { id: 'irr',    name: 'Rule of 72 / IRR',      short: 'IRR',       ex: '2x in 5 years → IRR',           tgt: [7, 10, 14] },
+  { id: 'margin', name: 'Margins',               short: 'Margins',   ex: 'Revenue 320, EBITDA 56',        tgt: [7, 10, 14] },
+  { id: 'lbo',    name: 'Paper LBO steps',       short: 'LBO',       ex: 'Debt paydown · MOIC',           tgt: [10, 15, 22] }
+];
+var CAT = {};
+CATS.forEach(function (c) { CAT[c.id] = c; });
+var DIFF_LABEL = ['', 'Warm-up', 'Interview', 'Stretch'];
+function targetSec(cat, d) { var c = CAT[cat]; return c ? c.tgt[Math.max(0, Math.min(2, (d || 2) - 1))] : 10; }
+
+/* =====================================================================
+   3. PROBLEM FACTORY
+   A problem: { cat, diff, kind, q, ans, unit, tol, tolLabel, disp, how }
+   unit: ''  plain number (k/m/bn suffix scale it)
+         'amt' an amount in $M implied (m suffix is a no-op, bn = x1000)
+         'M'  explicit $M amount, '%', 'x', 'yrs', 'bps', '$' (per share)
+   tol:  absolute tolerance in answer units
+   ===================================================================== */
+function dispAns(ans, unit, dec) {
+  var n = fmt(ans, dec == null ? 2 : dec);
+  switch (unit) {
+    case '%': return n + '%';
+    case 'x': return n + 'x';
+    case 'M': return '$' + n + 'M';
+    case 'yrs': return n + ' yrs';
+    case 'bps': return n + ' bps';
+    case '$': return '$' + f2(ans);
+    default: return n;
+  }
+}
+function mk(cat, diff, kind, q, ans, unit, how, o) {
+  o = o || {};
+  ans = snap(ans);
+  return {
+    cat: cat, diff: diff, kind: kind, q: q, ans: ans, unit: unit || '', how: how,
+    tol: o.tol || 0, tolLabel: o.tolLabel || '',
+    disp: o.disp || ((o.approx ? '≈' : '') + dispAns(ans, unit || '', o.dec))
+  };
+}
+function tolPt(t, extra) { return assign({ tol: t, tolLabel: '±' + t + ' pt' }, extra); }
+function tolRel(ans, r, extra) { return assign({ tol: Math.abs(ans) * r, tolLabel: '±' + snap(r * 100) + '%' }, extra); }
+function assign(a, b) { if (b) for (var k in b) a[k] = b[k]; return a; }
+var UNIT_ADORN = { '%': '%', x: 'x', M: '$M', yrs: 'yrs', bps: 'bps', '$': '$/sh', amt: '', '': '' };
+function fallback(cat, d) { return mk(cat, d, 'fallback', '10% of 500', 50, '', '10% = 50'); }
+
+/* ---------- shortcut builders ---------- */
+var FRAC_PCT = { 12.5: [1, 8], 25: [1, 4], 50: [1, 2], 20: [1, 5], 37.5: [3, 8], 62.5: [5, 8], 75: [3, 4], 87.5: [7, 8], 40: [2, 5], 60: [3, 5], 80: [4, 5] };
+function decompPct(p) {
+  var out = [], r = p;
+  var tens = Math.floor(r / 10);
+  if (tens) { out.push(tens * 10); r = snap(r - tens * 10); }
+  if (r >= 5) { out.push(5); r = snap(r - 5); }
+  if (snap(r - 2.5) === 0) { out.push(2.5); r = 0; }
+  else if (Math.floor(r) > 0) { out.push(Math.floor(r)); r = snap(r - Math.floor(r)); }
+  if (r > 0) out.push(r);
+  return out;
+}
+function pctHow(p, N, a) {
+  var one = N / 100, fr = FRAC_PCT[p];
+  if (fr) {
+    return fr[0] === 1
+      ? fmt(p) + '% = 1/' + fr[1] + ' → ' + fmt(N) + ' ÷ ' + fr[1] + ' = ' + fmt(a)
+      : fmt(p) + '% = ' + fr[0] + '/' + fr[1] + ' → ' + fmt(N) + ' ÷ ' + fr[1] + ' = ' + fmt(N / fr[1]) + ', ×' + fr[0] + ' = ' + fmt(a);
+  }
+  if (p === 10) return '10% = move the decimal one place → ' + fmt(a);
+  if (p === 2.5) return '10% = ' + fmt(N / 10) + ', ÷ 4 = ' + fmt(a);
+  if (p === 7.5) return '10% = ' + fmt(N / 10) + ', − ¼ of that (' + fmt(N / 40) + ') = ' + fmt(a);
+  if (p < 10) {
+    var k = Math.floor(p), f = snap(p - k);
+    if (f === 0) return '1% = ' + fmt(one) + ', ×' + k + ' = ' + fmt(a);
+    if (k === 0) return '1% = ' + fmt(one) + ' → ' + (QFR[f] || fmt(f)) + ' of that = ' + fmt(a);
+    return '1% = ' + fmt(one) + ' → ' + k + '% = ' + fmt(one * k) + ', + ' + fmt(f) + '% = ' + fmt(one * f) + ' → ' + fmt(a);
+  }
+  var anchors = [100, 50, 25, 20];
+  for (var i = 0; i < anchors.length; i++) {
+    var an = anchors[i], dl = snap(an - p);
+    if ([0.5, 1, 2, 2.5, 5].indexOf(dl) >= 0) {
+      return fmt(an) + '% = ' + fmt(N * an / 100) + ', − ' + fmt(dl) + '% (' + fmt(N * dl / 100) + ') = ' + fmt(a);
+    }
+  }
+  return decompPct(p).map(function (x) { return fmt(x) + '% = ' + fmt(N * x / 100); }).join(', ') + ' → ' + fmt(a);
+}
+function whatHow(X, Y, p) {
+  var fr = FRAC_PCT[p];
+  if (fr) return fmt(X) + '/' + fmt(Y) + ' = ' + fr[0] + '/' + fr[1] + ' = ' + fmt(p) + '%';
+  var parts = decompPct(p);
+  if (parts.length <= 3) {
+    return parts.map(function (x) { return fmt(x) + '% = ' + fmt(Y * x / 100); }).join(', ') + ' → ' + fmt(X) + ' is ' + fmt(p) + '%';
+  }
+  return '1% = ' + fmt(Y / 100) + ' → ' + fmt(X) + ' ÷ ' + fmt(Y / 100) + ' = ' + fmt(p) + '%';
+}
+function baseHow(p, X, N) {
+  var fr = FRAC_PCT[p];
+  if (fr && fr[0] === 1) return fmt(p) + '% = 1/' + fr[1] + ' → ' + fmt(X) + ' × ' + fr[1] + ' = ' + fmt(N);
+  if (fr) return fmt(p) + '% = ' + fr[0] + '/' + fr[1] + ' → ' + fmt(X) + ' ÷ ' + fr[0] + ' × ' + fr[1] + ' = ' + fmt(N);
+  return '1% = ' + fmt(X) + ' ÷ ' + fmt(p) + ' = ' + fmt(X / p) + ' → 100% = ' + fmt(N);
+}
+function stripZ(n) { var z = 0; while (n >= 10 && n % 10 === 0) { n /= 10; z++; } return [n, z]; }
+function multCore(a, b) {
+  var F = fmt, ans = a * b, big = Math.max(a, b), small = Math.min(a, b), t, u, h, r;
+  if (small < 10) {
+    if (big < 100) {
+      t = Math.floor(big / 10) * 10; u = big % 10;
+      if (u === 0 || t === 0) return F(a) + ' × ' + F(b) + ' = ' + F(ans);
+      return F(big) + ' × ' + small + ' = ' + t + '×' + small + ' + ' + u + '×' + small + ' = ' + F(t * small) + ' + ' + F(u * small) + ' = ' + F(ans);
+    }
+    h = Math.floor(big / 100) * 100; r = big - h;
+    if (r === 0) return F(a) + ' × ' + F(b) + ' = ' + F(ans);
+    return F(big) + ' × ' + small + ' = ' + F(h) + '×' + small + ' + ' + r + '×' + small + ' = ' + F(h * small) + ' + ' + F(r * small) + ' = ' + F(ans);
+  }
+  var pairs = [[a, b], [b, a]];
+  for (var i = 0; i < 2; i++) {
+    var x = pairs[i][0], y = pairs[i][1];
+    if (x === 25) return '×25 = ×100 ÷ 4 → ' + F(y * 100) + ' ÷ 4 = ' + F(ans);
+    if (x === 50) return '×50 = ×100 ÷ 2 → ' + F(y * 100) + ' ÷ 2 = ' + F(ans);
+    if (x === 125) return '×125 = ×1,000 ÷ 8 → ' + F(y * 1000) + ' ÷ 8 = ' + F(ans);
+    if (x === 250) return '×250 = ×1,000 ÷ 4 → ' + F(y * 1000) + ' ÷ 4 = ' + F(ans);
+    if (x === 75) return '×75 = ¾ of ×100 → ' + F(y * 100) + ' × ¾ = ' + F(ans);
+    if (x === 15) return '×15 = ×10 + half → ' + F(y * 10) + ' + ' + F(y * 5) + ' = ' + F(ans);
+    if (x === 150) return '×150 = ×100 + half → ' + F(y * 100) + ' + ' + F(y * 50) + ' = ' + F(ans);
+    if (x === 11 && y < 100) return '×11 = ×10 + itself → ' + F(y * 10) + ' + ' + F(y) + ' = ' + F(ans);
+  }
+  if (a === b && a < 100) {
+    if (a % 10 === 5) { var n5 = (a - 5) / 10; return a + '²: ' + n5 + '×' + (n5 + 1) + ' = ' + n5 * (n5 + 1) + ', then append 25 → ' + F(ans); }
+    var r10 = Math.round(a / 10) * 10, k = Math.abs(a - r10);
+    return a + '² = ' + (a + k) + '×' + (a - k) + ' + ' + k + '² = ' + F((a + k) * (a - k)) + ' + ' + k * k + ' = ' + F(ans);
+  }
+  if ((a + b) % 2 === 0 && a !== b && Math.abs(a - b) <= 12 && big < 100) {
+    var m = (a + b) / 2, dd = Math.abs(a - b) / 2;
+    if (m % 5 === 0) return '(' + m + '+' + dd + ')(' + m + '−' + dd + ') = ' + m + '² − ' + dd + '² = ' + F(m * m) + ' − ' + dd * dd + ' = ' + F(ans);
+  }
+  var near = pairs.map(function (p) { var rr = Math.round(p[0] / 10) * 10; return { x: p[0], y: p[1], r10: rr, dl: p[0] - rr }; })
+    .filter(function (o) { return o.dl !== 0 && Math.abs(o.dl) <= 2 && o.r10 > 0 && o.x < 100; })
+    .sort(function (p, q) { return Math.abs(p.dl) - Math.abs(q.dl); });
+  if (near.length) {
+    var o = near[0], ad = Math.abs(o.dl), sg = o.dl < 0 ? '−' : '+';
+    return o.x + ' × ' + F(o.y) + ' = ' + o.r10 + '×' + F(o.y) + ' ' + sg + ' ' + (ad === 1 ? F(o.y) : ad + '×' + F(o.y)) + ' = ' + F(o.r10 * o.y) + ' ' + sg + ' ' + F(ad * o.y) + ' = ' + F(ans);
+  }
+  if (big >= 100) {
+    h = Math.floor(big / 100) * 100; r = big - h;
+    return F(big) + ' × ' + small + ' = ' + F(h) + '×' + small + ' + ' + r + '×' + small + ' = ' + F(h * small) + ' + ' + F(r * small) + ' = ' + F(ans);
+  }
+  var xs = (a % 10 <= b % 10) ? [b, a] : [a, b];
+  var X = xs[0], Y = xs[1];
+  t = Math.floor(Y / 10) * 10; u = Y % 10;
+  return X + ' × ' + Y + ' = ' + X + '×' + t + ' + ' + X + '×' + u + ' = ' + F(X * t) + ' + ' + F(X * u) + ' = ' + F(ans);
+}
+function multHow(a, b) {
+  var ans = snap(a * b);
+  if (!Number.isInteger(a) || !Number.isInteger(b)) {
+    var x = Number.isInteger(a) ? b : a, y = Number.isInteger(a) ? a : b;
+    var k = Math.floor(x), f = snap(x - k), fs = QFR[f] || fmt(f);
+    if (k === 0) return fs + ' × ' + fmt(y) + ' = ' + fmt(ans);
+    return k + ' × ' + fmt(y) + ' + ' + fs + ' × ' + fmt(y) + ' = ' + fmt(k * y) + ' + ' + fmt(f * y) + ' = ' + fmt(ans);
+  }
+  var sa = stripZ(a), sb = stripZ(b), z = sa[1] + sb[1];
+  if (z > 0) {
+    var ca = sa[0], cb = sb[0], core = ca * cb;
+    var coreHow = (Math.min(ca, cb) < 10 && Math.max(ca, cb) < 100) ? fmt(ca) + ' × ' + fmt(cb) + ' = ' + fmt(core) : multCore(ca, cb);
+    return coreHow + ', + ' + z + ' zero' + (z > 1 ? 's' : '') + ' → ' + fmt(ans);
+  }
+  return multCore(a, b);
+}
+function halfHow(E, m) {
+  var k = Math.floor(m);
+  return fmt(E) + ' × ' + fmt(m) + ' = ' + fmt(E) + '×' + k + ' + ½×' + fmt(E) + ' = ' + fmt(E * k) + ' + ' + fmt(E / 2) + ' = ' + fmt(E * m);
+}
+function bracket(c, n) {
+  var lo = Math.floor(c), hi = lo + 1;
+  return f2(1 + lo / 100) + sup(n) + ' = ' + f2(Math.pow(1 + lo / 100, n)) + ', ' + f2(1 + hi / 100) + sup(n) + ' = ' + f2(Math.pow(1 + hi / 100, n));
+}
+
+/* =====================================================================
+   4. GENERATORS — one per category. Each returns a problem object.
+   ===================================================================== */
+function genPct(d) {
+  for (var t = 0; t < 300; t++) {
+    var p, N, a, X, Y, r;
+    if (d === 1) {
+      p = pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 75]);
+      N = pick([2, 3, 4, 5, 6, 8, 12, 15, 16, 18, 24, 25, 32, 36, 40, 45, 48, 60, 64, 72, 80, 90]) * pick([10, 100, 1000]);
+      a = p * N / 100;
+      if (!isInt(a) || a < 1) continue;
+      return mk('pct', 1, 'pct.of', fmt(p) + '% of ' + fmt(N), a, '', pctHow(p, N, a));
+    }
+    if (d === 2) {
+      if (chance(0.7)) {
+        p = pick([2.5, 7.5, 11, 12, 12.5, 14, 15, 16, 17.5, 18, 22.5, 24, 35, 37.5, 45, 62.5, 65, 85]);
+        N = pick([12, 16, 18, 24, 32, 36, 44, 48, 56, 64, 72, 84, 96, 120, 125, 140, 160, 180, 240, 250, 320, 360, 480, 640, 720, 960]) * pick([1, 10, 100]);
+        a = p * N / 100;
+        if (decimals(a) > 1 || a < 1) continue;
+        return mk('pct', 2, 'pct.of', fmt(p) + '% of ' + fmt(N), a, '', pctHow(p, N, a));
+      }
+      p = pick([2.5, 5, 7.5, 12.5, 15, 17.5, 20, 22.5, 25, 30, 35, 40, 45, 60, 75, 80]);
+      Y = pick([40, 80, 120, 160, 200, 240, 320, 360, 400, 480, 600, 640, 800, 1200, 1600, 2400]);
+      X = p * Y / 100;
+      if (!isInt(X)) continue;
+      return mk('pct', 2, 'pct.what', fmt(X) + ' is what % of ' + fmt(Y) + '?', p, '%', whatHow(X, Y, p), { tol: 0.05 });
+    }
+    r = rand();
+    if (r < 0.4) {
+      p = pick([0.25, 0.5, 0.75, 1.25, 1.5, 2.25, 3.25, 4.5, 6.25, 6.75, 8.25, 13, 17, 19, 23, 27, 33, 42.5]);
+      N = ri(12, 99) * pick([100, 1000, 10000]) + (chance(0.35) ? ri(1, 9) * pick([10, 100]) : 0);
+      a = p * N / 100;
+      if (decimals(a) > 1 || a < 1) continue;
+      return mk('pct', 3, 'pct.of', fmt(p) + '% of ' + fmt(N), a, '', pctHow(p, N, a));
+    }
+    if (r < 0.7) {
+      p = pick([0.5, 1.5, 2.5, 4, 6, 7.5, 8, 12, 12.5, 15, 16, 20, 24, 25, 35, 40]);
+      N = pick([12, 15, 16, 18, 24, 25, 32, 36, 40, 45, 48, 60, 64, 72, 75, 80, 96]) * pick([100, 1000, 10000]);
+      X = p * N / 100;
+      if (!isInt(X)) continue;
+      return mk('pct', 3, 'pct.base', fmt(p) + '% of what is ' + fmt(X) + '?', N, '', baseHow(p, X, N));
+    }
+    p = pick([6, 7.5, 8, 12, 14, 15, 16, 18, 22.5, 24, 32, 35, 45, 55, 64]);
+    Y = ri(11, 99) * pick([10, 20, 40]);
+    X = p * Y / 100;
+    if (!isInt(X)) continue;
+    return mk('pct', 3, 'pct.what', fmt(X) + ' is what % of ' + fmt(Y) + '?', p, '%', whatHow(X, Y, p), { tol: 0.05 });
+  }
+  return fallback('pct', d);
+}
+
+function genMult(d) {
+  for (var t = 0; t < 300; t++) {
+    var a, b, r, mode, sw;
+    if (d === 1) {
+      if (chance(0.7)) { a = ri(12, 99); if (a % 10 === 0) continue; b = ri(3, 9); }
+      else { a = ri(2, 9) * pick([1, 10, 100]); b = ri(2, 9) * pick([10, 100, 1000]); if (stripZ(a)[1] + stripZ(b)[1] < 2) continue; }
+      sw = chance(0.5);
+    } else if (d === 2) {
+      r = rand();
+      if (r < 0.75) {
+        mode = rand();
+        if (mode < 0.15) { a = ri(2, 9) * 10 + pick([-1, 1, -2, 2]); b = ri(12, 99); }
+        else if (mode < 0.3) { var m = pick([20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90]), dd = ri(1, 6); a = m + dd; b = m - dd; }
+        else if (mode < 0.4) { a = pick([25, 15, 11, 75]); b = ri(12, 99); }
+        else { a = ri(12, 99); b = ri(12, 99); }
+        if (a % 10 === 0 || b % 10 === 0 || a < 12 && a !== 11 || b < 12) continue;
+      } else {
+        a = pick([125, 150, 175, 225, 250, 275, 325, 375, 450, 625, 750, ri(101, 999)]); b = ri(3, 9);
+      }
+      sw = chance(0.5);
+    } else {
+      r = rand();
+      if (r < 0.35) {
+        a = ri(12, 99); if (a % 10 === 0) continue;
+        a = a * pick([1, 1, 10, 100]); b = ri(2, 9) * pick([100, 1000, 10000]);
+        if (stripZ(a)[1] + stripZ(b)[1] < 3) continue;
+      } else if (r < 0.55) {
+        a = pick([1.5, 2.5, 3.5, 4.5, 5.5, 7.5, 1.25, 2.25, 0.75]); b = ri(12, 96) * pick([100, 1000]);
+        if (decimals(a * b) > 0) continue;
+      } else if (r < 0.8) {
+        a = ri(31, 99); b = ri(31, 99); if (a % 10 === 0 || b % 10 === 0) continue;
+      } else {
+        a = pick([125, 175, 225, 375, 625, 150, 250, 350, 450]); b = ri(12, 48); if (b % 10 === 0) continue;
+      }
+      sw = chance(0.5);
+    }
+    if (sw) { var tmp = a; a = b; b = tmp; }
+    return mk('mult', d, 'mult.x', fmt(a) + ' × ' + fmt(b), a * b, '', multHow(a, b));
+  }
+  return fallback('mult', d);
+}
+
+var FR_SETS = {
+  1: [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 8], [3, 8], [5, 8], [7, 8], [1, 10], [3, 10], [7, 10], [9, 10], [1, 20], [3, 20], [7, 20]],
+  2: [[1, 6], [5, 6], [1, 9], [2, 9], [4, 9], [5, 9], [7, 9], [1, 12], [5, 12], [7, 12], [11, 12], [1, 16], [3, 16], [5, 16], [7, 16], [1, 40], [3, 40], [7, 40], [1, 15], [2, 15]],
+  3: [[1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [1, 11], [2, 11], [3, 11], [4, 11], [5, 11], [7, 11], [9, 16], [11, 16], [13, 16], [15, 16], [4, 15], [7, 15], [1, 14], [3, 14], [9, 8], [11, 8], [7, 6], [5, 3], [7, 4], [13, 12]]
+};
+var UNIT_PRE = { 6: 'half of 1/3: ', 12: 'half of 1/6: ', 14: 'half of 1/7: ', 15: '⅓ of 20%: ', 16: 'half of 1/8: ', 40: '¼ of 10%: ' };
+function unitStr(b) { return (UNIT_PRE[b] || '') + '1/' + b + ' = ' + fmt(100 / b, 2) + '%'; }
+function fracHow(a, b) {
+  var pct = 100 * a / b;
+  if (a > b) {
+    var w = Math.floor(a / b), rem = a - w * b;
+    return a + '/' + b + ' = ' + w + ' + ' + rem + '/' + b + ' → ' + fmt(100 * w) + '% + ' + fmt(100 * rem / b, 2) + '% = ' + fmt(pct, 2) + '%';
+  }
+  if (a === 1) return 'Memorize: ' + unitStr(b);
+  return unitStr(b) + ' → ×' + a + ' = ' + fmt(pct, 2) + '%';
+}
+function genFrac(d) {
+  var r = rand(), ab = pick(FR_SETS[d]), a = ab[0], b = ab[1];
+  var pct = 100 * a / b, term = decimals(pct) <= 2;
+  if (r < 0.6) {
+    return mk('frac', d, 'frac.toPct', a + '/' + b + ' as a %', pct, '%', fracHow(a, b),
+      { tol: 0.1, tolLabel: '±0.1 pt', disp: (term ? '' : '≈') + fmt(pct, 2) + '%' });
+  }
+  if (d === 3 && r > 0.85) {
+    var n = pick([6, 7, 8, 9, 11, 12, 14, 15, 16]), pp = Math.round(10000 / n) / 100;
+    return mk('frac', 3, 'frac.unit', fmt(pp, 2) + '% ≈ 1/?', n, '', 'Memorize: 1/' + n + ' = ' + fmt(100 / n, 2) + '% → ' + n, { disp: String(n) });
+  }
+  var p2 = Math.round(pct * 100) / 100;
+  return mk('frac', d, 'frac.toNum', (term ? '' : '≈ ') + fmt(p2, 2) + '% = ?/' + b, a, '',
+    '1/' + b + ' = ' + fmt(100 / b, 2) + '% → ' + fmt(p2, 2) + ' ÷ ' + fmt(100 / b, 2) + ' = ' + a, { disp: String(a) });
+}
+
+function cagrP(d, s, e, n) {
+  var m = e / s, c = (Math.pow(m, 1 / n) - 1) * 100;
+  var how = fmt(m, 2) + 'x over ' + n + ' yrs: ' + bracket(c, n) + ' → ≈' + fmt(c, 1) + '%';
+  return mk('cagr', d, 'cagr.cagr', fmt(s) + ' → ' + fmt(e) + ' in ' + n + ' years. CAGR?', c, '%', how, tolPt(0.5, { approx: !isInt(c * 100) }));
+}
+function fwdP(d, s, g, n) {
+  var k = 1 + g / 100, v = s, chain = [fmt(s)];
+  for (var i = 0; i < n; i++) { v *= k; chain.push(fmt(v, 1)); }
+  var e = s * Math.pow(k, n), exact = decimals(e) <= 2;
+  return mk('cagr', d, 'cagr.fwd', fmt(s) + ' growing ' + fmt(g) + '% a year for ' + n + ' years?', e, 'amt',
+    '×' + f2(k) + ' each year: ' + chain.join(' → '), tolRel(e, 0.005, { approx: !exact, dec: exact ? 2 : 1 }));
+}
+function genCagr(d) {
+  for (var t = 0; t < 400; t++) {
+    var r = rand(), s, g, e, m, n, c;
+    if (d === 1) {
+      if (r < 0.35) {
+        s = pick([40, 50, 60, 80, 120, 150, 200, 240, 250, 400, 500, 800]); g = pick([5, 10, 12.5, 15, 20, 25, 30, 40, 50, 60, 75, 100]); e = s * (1 + g / 100);
+        if (!isInt(e)) continue;
+        return mk('cagr', 1, 'cagr.chg', 'Revenue grows from ' + fmt(s) + ' to ' + fmt(e) + '. Growth?', g, '%',
+          'Δ ' + fmt(e - s) + ' on a base of ' + fmt(s) + ' → ' + fmt(e - s) + '/' + fmt(s) + ' = ' + fmt(g) + '%', tolPt(0.5));
+      }
+      if (r < 0.55) {
+        s = pick([40, 80, 120, 160, 200, 240, 300, 400, 500, 600, 800]); g = pick([10, 12.5, 20, 25, 30, 40, 50, 60, 75]); e = s * (1 - g / 100);
+        if (!isInt(e)) continue;
+        return mk('cagr', 1, 'cagr.decl', 'EBITDA falls from ' + fmt(s) + ' to ' + fmt(e) + '. Decline?', g, '%',
+          'Δ ' + fmt(s - e) + ' on a base of ' + fmt(s) + ' → ' + fmt(s - e) + '/' + fmt(s) + ' = ' + fmt(g) + '%', tolPt(0.5));
+      }
+      if (r < 0.8) return fwdP(1, pick([50, 100, 200, 400, 1000]), pick([5, 10, 15, 20, 25, 30, 50]), 2);
+      g = pick([10, 20, 30, 40, 50, 100]); m = Math.pow(1 + g / 100, 2); s = pick([50, 100, 200, 300, 400, 500]); e = s * m;
+      if (!isInt(e)) continue;
+      return mk('cagr', 1, 'cagr.cagr', fmt(s) + ' → ' + fmt(e) + ' in 2 years. CAGR?', g, '%',
+        fmt(e) + '/' + fmt(s) + ' = ' + fmt(m, 2) + 'x; √' + fmt(m, 2) + ' = ' + f2(1 + g / 100) + ' → ' + fmt(g) + '%', tolPt(0.5));
+    }
+    if (d === 2) {
+      if (r < 0.6) {
+        s = pick([50, 80, 100, 120, 150, 200, 250, 400, 500]); m = pick([1.25, 1.3, 1.4, 1.5, 1.6, 1.75, 1.8, 2, 2.25, 2.5, 3]); n = pick([2, 3, 4, 5]); e = s * m;
+        if (!isInt(e)) continue;
+        c = (Math.pow(m, 1 / n) - 1) * 100; if (c < 3 || c > 50) continue;
+        return cagrP(2, s, e, n);
+      }
+      return fwdP(2, pick([50, 80, 100, 120, 200, 250, 400, 500]), pick([5, 8, 10, 12, 15, 20]), pick([3, 4]));
+    }
+    if (r < 0.6) {
+      s = ri(60, 900); if (s % 10 === 0) continue;
+      m = ri(130, 350) / 100; n = ri(3, 7); e = Math.round(s * m);
+      c = (Math.pow(e / s, 1 / n) - 1) * 100; if (c < 3 || c > 45) continue;
+      return cagrP(3, s, e, n);
+    }
+    return fwdP(3, ri(110, 950), pick([6, 7, 8, 9, 11, 12, 13, 14, 15, 18]), pick([3, 4, 5]));
+  }
+  return fallback('cagr', d);
+}
+
+var HALF = [6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5];
+function genVal(d) {
+  for (var t = 0; t < 400; t++) {
+    var r = rand(), E, m, EV, ND, k;
+    if (d === 1) {
+      E = chance(0.5) ? ri(4, 30) * 5 : ri(12, 95); m = ri(5, 12); EV = E * m;
+      if (r < 0.5) return mk('val', 1, 'val.ev', 'EBITDA $' + fmt(E) + 'M at ' + m + 'x. EV?', EV, 'M', multHow(E, m));
+      if (r < 0.8) return mk('val', 1, 'val.mult', 'EV $' + fmt(EV) + 'M, EBITDA $' + fmt(E) + 'M. EV/EBITDA?', m, 'x',
+        fmt(E) + ' × ' + m + ' = ' + fmt(EV) + ' → ' + fmt(EV) + ' ÷ ' + fmt(E) + ' = ' + m + 'x');
+      return mk('val', 1, 'val.ebitda', 'EV $' + fmt(EV) + 'M at ' + m + 'x EBITDA. EBITDA?', E, 'M',
+        m + ' × ' + fmt(E) + ' = ' + fmt(EV) + ' → ' + fmt(EV) + ' ÷ ' + m + ' = ' + fmt(E));
+    }
+    if (d === 2) {
+      if (r < 0.4) { E = ri(10, 99); m = pick(HALF); return mk('val', 2, 'val.ev', 'EBITDA $' + fmt(E) + 'M at ' + fmt(m) + 'x. EV?', E * m, 'M', halfHow(E, m)); }
+      if (r < 0.65) {
+        E = ri(6, 60) * 2; m = pick(HALF); EV = E * m; k = Math.floor(m);
+        return mk('val', 2, 'val.mult', 'EV $' + fmt(EV) + 'M, EBITDA $' + fmt(E) + 'M. EV/EBITDA?', m, 'x',
+          fmt(E) + ' × ' + k + ' = ' + fmt(E * k) + ', remainder ' + fmt(EV - E * k) + ' = ½ × ' + fmt(E) + ' → ' + fmt(m) + 'x');
+      }
+      if (r < 0.8) {
+        E = ri(6, 60) * 2; m = pick(HALF); EV = E * m;
+        return mk('val', 2, 'val.ebitda', 'EV $' + fmt(EV) + 'M at ' + fmt(m) + 'x EBITDA. EBITDA?', E, 'M',
+          '÷' + fmt(m) + ' = ×2 ÷ ' + fmt(2 * m) + ': ' + fmt(EV) + ' × 2 = ' + fmt(2 * EV) + ' → ÷ ' + fmt(2 * m) + ' = ' + fmt(E));
+      }
+      var NI = ri(8, 60), pe = ri(10, 30);
+      return mk('val', 2, 'val.pe', 'Net income $' + NI + 'M at ' + pe + 'x P/E. Market cap?', NI * pe, 'M', multHow(NI, pe));
+    }
+    if (r < 0.3) {
+      E = ri(30, 200); m = pick([6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 12]); EV = E * m;
+      ND = Math.round(EV * (0.2 + 0.4 * rand()) / 10) * 10; if (ND <= 0) continue;
+      return mk('val', 3, 'val.eq', 'EBITDA $' + fmt(E) + 'M at ' + fmt(m) + 'x, net debt $' + fmt(ND) + 'M. Equity value?', EV - ND, 'M',
+        'EV = ' + fmt(E) + ' × ' + fmt(m) + ' = ' + fmt(EV) + '; equity = ' + fmt(EV) + ' − ' + fmt(ND) + ' = ' + fmt(EV - ND));
+    }
+    if (r < 0.5) {
+      E = ri(40, 200); m = ri(6, 12); EV = E * m; ND = Math.round(EV * (0.15 + 0.4 * rand()) / 10) * 10;
+      var sh = pick([10, 20, 25, 40, 50, 80, 100]), px = (EV - ND) / sh;
+      if (!isInt(px * 4) || px < 2) continue;
+      return mk('val', 3, 'val.px', 'EBITDA $' + fmt(E) + 'M at ' + m + 'x, net debt $' + fmt(ND) + 'M, ' + sh + 'M shares. Share price?', px, '$',
+        'EV ' + fmt(EV) + ' − ' + fmt(ND) + ' = ' + fmt(EV - ND) + ' equity → ÷ ' + sh + 'M shares = $' + f2(px));
+    }
+    if (r < 0.7) {
+      E = ri(20, 150); m = pick([6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 11, 12]); EV = E * m;
+      if (!isInt(EV)) continue;
+      ND = ri(2, Math.max(2, Math.floor(EV * 0.6 / 10))) * 10; if (ND >= EV) continue;
+      var EQ = EV - ND;
+      return mk('val', 3, 'val.bridge', 'Equity value $' + fmt(EQ) + 'M, net debt $' + fmt(ND) + 'M, EBITDA $' + fmt(E) + 'M. EV/EBITDA?', m, 'x',
+        'EV = ' + fmt(EQ) + ' + ' + fmt(ND) + ' = ' + fmt(EV) + ' → ÷ ' + fmt(E) + ' = ' + fmt(m) + 'x');
+    }
+    if (r < 0.85) {
+      var R = ri(40, 900); m = pick([0.5, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 6]); EV = R * m;
+      if (decimals(EV) > 1) continue;
+      return mk('val', 3, 'val.rev', 'Revenue $' + fmt(R) + 'M at ' + fmt(m) + 'x EV/Revenue. EV?', EV, 'M', multHow(R, m));
+    }
+    E = ri(30, 300); EV = ri(30, 300) * 10; m = EV / E;
+    if (m < 5 || m > 15 || isInt(m * 2)) continue;
+    k = Math.floor(m);
+    return mk('val', 3, 'val.mult', 'EV $' + fmt(EV) + 'M, EBITDA $' + fmt(E) + 'M. EV/EBITDA?', m, 'x',
+      fmt(E) + ' × ' + k + ' = ' + fmt(E * k) + '; leftover ' + fmt(EV - E * k) + ' ÷ ' + fmt(E) + ' ≈ ' + f2((EV - E * k) / E) + ' → ≈' + f2(m) + 'x',
+      { tol: 0.1, tolLabel: '±0.1x', approx: true });
+  }
+  return fallback('val', d);
+}
+
+function irrP(d, M, n) {
+  var c = (Math.pow(M, 1 / n) - 1) * 100, rule = M === 2 ? 72 : M === 3 ? 114 : M === 4 ? 144 : 0;
+  var how = (rule ? 'Rule of ' + rule + ': ' + rule + ' ÷ ' + n + ' = ' + fmt(rule / n, 1) + '%; ' : '') + bracket(c, n) + ' → ≈' + fmt(c, 1) + '%';
+  return mk('irr', d, 'irr.irr', fmt(M) + 'x in ' + n + ' years. IRR?', c, '%', how, tolPt(1, { approx: true, dec: 1 }));
+}
+function yrsP(d, r, f) {
+  var y = Math.log(f) / Math.log(1 + r / 100), rule = f === 2 ? 72 : f === 3 ? 114 : 144, word = f === 2 ? 'double' : f === 3 ? 'triple' : 'quadruple';
+  return mk('irr', d, 'irr.yrs', 'At ' + r + '% a year, years to ' + word + '?', y, 'yrs',
+    'Rule of ' + rule + ': ' + rule + ' ÷ ' + r + ' = ' + fmt(rule / r, 1) + ' yrs (exact ' + fmt(y, 1) + ')', tolRel(y, 0.04, { approx: true, dec: 1 }));
+}
+function moicP(r, n) {
+  var k = 1 + r / 100, M = Math.pow(k, n), v = 1, ch = [];
+  for (var i = 0; i < n; i++) { v *= k; ch.push(f2(v)); }
+  return mk('irr', 3, 'irr.moic', 'Target ' + r + '% IRR over ' + n + ' years. Required MOIC?', M, 'x',
+    f2(k) + sup(n) + ': ' + ch.join(' → ') + 'x', tolRel(M, 0.02, { approx: true }));
+}
+function genIrr(d) {
+  for (var t = 0; t < 300; t++) {
+    var M, n, c, r;
+    if (d === 1) return chance(0.45) ? irrP(1, 2, pick([4, 5, 6, 7, 8, 9, 10, 11, 12])) : yrsP(1, pick([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]), 2);
+    if (d === 2) {
+      if (chance(0.6)) {
+        M = pick([1.5, 2, 2.5, 3, 4]); n = pick([3, 4, 5, 6, 7]);
+        if (M === 2 && n >= 4) continue;
+        c = (Math.pow(M, 1 / n) - 1) * 100; if (c < 5 || c > 60) continue;
+        return irrP(2, M, n);
+      }
+      return chance(0.5) ? yrsP(2, pick([3, 5, 7, 14, 15, 16]), 2) : yrsP(2, pick([6, 8, 10, 12]), 3);
+    }
+    r = rand();
+    if (r < 0.4) {
+      M = ri(14, 45) / 10; n = ri(3, 7);
+      if (M === 2 || M === 3 || M === 4) continue;
+      c = (Math.pow(M, 1 / n) - 1) * 100; if (c < 5 || c > 60) continue;
+      return irrP(3, M, n);
+    }
+    if (r < 0.7) return moicP(pick([15, 20, 25, 30]), pick([3, 4, 5, 6]));
+    var f = pick([3, 4]);
+    return yrsP(3, f === 3 ? pick([8, 9, 10, 12, 15]) : pick([8, 9, 12]), f);
+  }
+  return fallback('irr', d);
+}
+
+function genMargin(d) {
+  for (var t = 0; t < 400; t++) {
+    var r = rand(), R, m, E, C, gm, bps, nm;
+    if (d === 1) {
+      R = pick([80, 120, 150, 160, 200, 240, 250, 300, 320, 400, 450, 500, 600, 800, 1000, 1200]);
+      m = pick([5, 7.5, 10, 12.5, 15, 17.5, 20, 22.5, 25, 30, 35, 40, 45]); E = R * m / 100;
+      if (!isInt(E)) continue;
+      if (r < 0.7) return mk('margin', 1, 'mgn.m', 'Revenue ' + fmt(R) + ', EBITDA ' + fmt(E) + '. EBITDA margin?', m, '%', whatHow(E, R, m), { tol: 0.05 });
+      return mk('margin', 1, 'mgn.e', 'Revenue ' + fmt(R) + ' at a ' + fmt(m) + '% EBITDA margin. EBITDA?', E, 'amt', pctHow(m, R, E));
+    }
+    if (d === 2) {
+      if (r < 0.35) {
+        R = ri(12, 99) * pick([5, 10]); m = pick([6, 8, 12, 14, 16, 18, 22, 24, 28, 32, 35, 42, 12.5, 37.5]); E = R * m / 100;
+        if (!isInt(E)) continue;
+        return mk('margin', 2, 'mgn.m', 'Revenue ' + fmt(R) + ', EBITDA ' + fmt(E) + '. EBITDA margin?', m, '%', whatHow(E, R, m), { tol: 0.05 });
+      }
+      if (r < 0.55) {
+        m = pick([8, 12, 12.5, 15, 16, 20, 24, 25, 28, 30, 35, 40]); R = ri(4, 60) * pick([10, 25]); E = R * m / 100;
+        if (!isInt(E)) continue;
+        return mk('margin', 2, 'mgn.r', 'EBITDA ' + fmt(E) + ' at a ' + fmt(m) + '% margin. Revenue?', R, 'amt', baseHow(m, E, R));
+      }
+      if (r < 0.75) {
+        R = pick([200, 240, 250, 300, 320, 400, 450, 500, 600, 800, 1000, 1200]); gm = pick([20, 25, 30, 35, 40, 45, 55, 60, 62.5, 65, 70, 37.5]); C = R * (1 - gm / 100);
+        if (!isInt(C)) continue;
+        return mk('margin', 2, 'mgn.gm', 'Revenue ' + fmt(R) + ', COGS ' + fmt(C) + '. Gross margin?', gm, '%',
+          'Gross profit = ' + fmt(R) + ' − ' + fmt(C) + ' = ' + fmt(R - C) + ' → ' + fmt(R - C) + '/' + fmt(R) + ' = ' + fmt(gm) + '%', { tol: 0.05 });
+      }
+      R = pick([200, 300, 400, 500, 600, 800, 1000, 1200, 1500]); m = ri(8, 30); bps = pick([50, 100, 150, 200, 250]);
+      nm = m + bps / 100; E = R * nm / 100;
+      if (decimals(E) > 1) continue;
+      return mk('margin', 2, 'mgn.bpsE', 'Revenue ' + fmt(R) + '. EBITDA margin of ' + m + '% expands ' + bps + ' bps. New EBITDA?', E, 'amt',
+        m + '% + ' + bps + ' bps = ' + fmt(nm) + '% → ' + fmt(nm) + '% × ' + fmt(R) + ' = ' + fmt(E));
+    }
+    if (r < 0.35) {
+      R = ri(150, 2500); E = Math.round(R * ri(50, 450) / 1000); if (E < 5) continue;
+      m = 100 * E / R; if (isInt(m * 10)) continue;
+      var one = R / 100, a5 = Math.max(5, Math.round(m / 5) * 5), va = one * a5, diff = E - va, dp = diff / one;
+      return mk('margin', 3, 'mgn.m', 'Revenue ' + fmt(R) + ', EBITDA ' + fmt(E) + '. EBITDA margin?', m, '%',
+        '1% = ' + fmt(one, 1) + ' → ' + a5 + '% = ' + fmt(va, 1) + '; ' + fmt(E) + ' is ' + fmt(Math.abs(diff), 1) + (diff < 0 ? ' below' : ' above') +
+        ' ≈ ' + fmt(Math.abs(dp), 1) + ' pt → ≈' + fmt(m, 1) + '%', { tol: 0.2, tolLabel: '±0.2 pt', approx: true });
+    }
+    if (r < 0.6) {
+      var m1 = ri(16, 60) / 2, m2 = m1 + ri(1, 10) / 2, R1 = ri(2, 12) * 100, R2 = R1 + ri(1, 5) * 100;
+      var E1 = R1 * m1 / 100, E2 = R2 * m2 / 100;
+      if (!isInt(E1) || !isInt(E2)) continue;
+      bps = (m2 - m1) * 100;
+      return mk('margin', 3, 'mgn.bps', 'Last year: revenue ' + fmt(R1) + ', EBITDA ' + fmt(E1) + '. This year: revenue ' + fmt(R2) + ', EBITDA ' + fmt(E2) + '. Margin change (bps)?', bps, 'bps',
+        fmt(E1) + '/' + fmt(R1) + ' = ' + fmt(m1) + '%, ' + fmt(E2) + '/' + fmt(R2) + ' = ' + fmt(m2) + '% → +' + fmt(bps) + ' bps');
+    }
+    if (r < 0.8) {
+      var Ra = pick([200, 300, 400, 500, 600, 800, 1000]), Rb = Ra + pick([50, 100, 150, 200, 250]), ma = ri(10, 30), mb = ma + ri(-2, 6);
+      if (mb <= 0) continue;
+      var Ea = Ra * ma / 100, Eb = Rb * mb / 100, gr = 100 * (Eb / Ea - 1);
+      if (gr <= 1 || decimals(Ea) > 1 || decimals(Eb) > 1) continue;
+      return mk('margin', 3, 'mgn.egr', 'Revenue ' + fmt(Ra) + ' → ' + fmt(Rb) + ', EBITDA margin ' + ma + '% → ' + mb + '%. EBITDA growth?', gr, '%',
+        'EBITDA ' + fmt(Ea, 1) + ' → ' + fmt(Eb, 1) + ': +' + fmt(Eb - Ea, 1) + '/' + fmt(Ea, 1) + ' → ≈' + fmt(gr, 1) + '%', tolPt(0.5, { approx: !isInt(gr * 100) }));
+    }
+    R = ri(4, 20) * 100; m = pick([15, 20, 25, 30]); E = R * m / 100;
+    var DA = ri(2, 8) * 10, I = ri(1, 6) * 10, tx = pick([20, 25, 30]), EBT = E - DA - I;
+    if (EBT <= 10) continue;
+    var NIv = EBT * (1 - tx / 100);
+    if (decimals(NIv) > 1) continue;
+    return mk('margin', 3, 'mgn.ni', 'Revenue ' + fmt(R) + ', EBITDA margin ' + m + '%, D&A ' + DA + ', interest ' + I + ', tax rate ' + tx + '%. Net income?', NIv, 'amt',
+      'EBITDA ' + fmt(E) + ' − D&A ' + DA + ' = EBIT ' + fmt(E - DA) + ' − interest ' + I + ' = EBT ' + fmt(EBT) + ' × (1 − ' + tx + '%) = ' + fmt(NIv));
+  }
+  return fallback('margin', d);
+}
+
+function genLbo(d) {
+  for (var t = 0; t < 500; t++) {
+    var r = rand(), E, m, dp, EV, eq, D, p, n, a, M, b;
+    if (d === 1) {
+      if (r < 0.3) {
+        E = pick([20, 30, 40, 50, 60, 75, 80, 100, 120, 150]); m = ri(6, 12); dp = pick([50, 60, 65, 70, 75]); EV = E * m; eq = EV * (1 - dp / 100);
+        if (!isInt(eq)) continue;
+        return mk('lbo', 1, 'lbo.eqchk', 'Buy at ' + m + 'x EBITDA of ' + fmt(E) + ' with ' + dp + '% debt. Equity check?', eq, 'amt',
+          'EV = ' + fmt(E) + ' × ' + m + ' = ' + fmt(EV) + '; equity = ' + (100 - dp) + '% × ' + fmt(EV) + ' = ' + fmt(eq));
+      }
+      if (r < 0.6) {
+        D = ri(4, 20) * 50; p = pick([20, 25, 30, 40, 50, 60, 75]); n = ri(2, 5);
+        if (D - p * n <= 0) continue;
+        return mk('lbo', 1, 'lbo.pay', 'Debt ' + fmt(D) + ', repay ' + p + ' a year for ' + n + ' years. Debt left?', D - p * n, 'amt',
+          p + ' × ' + n + ' = ' + fmt(p * n) + ' repaid → ' + fmt(D) + ' − ' + fmt(p * n) + ' = ' + fmt(D - p * n));
+      }
+      a = pick([50, 80, 100, 120, 150, 200, 250, 400]); M = pick([1.5, 2, 2.5, 3, 3.5, 4]); b = a * M;
+      if (!isInt(b)) continue;
+      return mk('lbo', 1, 'lbo.moic', 'Equity in ' + fmt(a) + ', equity out ' + fmt(b) + '. MOIC?', M, 'x', fmt(b) + ' ÷ ' + fmt(a) + ' = ' + fmt(M) + 'x');
+    }
+    if (d === 2) {
+      if (r < 0.4) {
+        var E0 = pick([100, 150, 200, 250, 300, 400]); M = pick([1.5, 1.75, 2, 2.25, 2.5, 3, 3.5, 4]); var E1 = E0 * M;
+        if (!isInt(E1)) continue;
+        var ND0 = ri(3, 12) * 50, ND1 = ND0 - ri(1, ND0 / 50) * 50, EV0 = E0 + ND0, EV1 = E1 + ND1;
+        return mk('lbo', 2, 'lbo.moicEV', 'Entry: EV ' + fmt(EV0) + ', net debt ' + fmt(ND0) + '. Exit: EV ' + fmt(EV1) + ', net debt ' + fmt(ND1) + '. MOIC?', M, 'x',
+          'Equity in ' + fmt(EV0) + ' − ' + fmt(ND0) + ' = ' + fmt(E0) + '; out ' + fmt(EV1) + ' − ' + fmt(ND1) + ' = ' + fmt(E1) + ' → ' + fmt(E1) + '/' + fmt(E0) + ' = ' + fmt(M) + 'x',
+          { tol: 0.05, tolLabel: '±0.05x' });
+      }
+      if (r < 0.7) {
+        D = ri(6, 16) * 50; n = pick([3, 4]); var fs = [], S = 0;
+        for (var i = 0; i < n; i++) { var fv = ri(4, 16) * 5; fs.push(fv); S += fv; }
+        if (D - S <= 0) continue;
+        return mk('lbo', 2, 'lbo.fcf', 'Debt ' + fmt(D) + '. Free cash flow over the next ' + n + ' years: ' + fs.join(', ') + ', all used to repay debt. Debt left?', D - S, 'amt',
+          'FCF = ' + fs.join(' + ') + ' = ' + fmt(S) + ' → ' + fmt(D) + ' − ' + fmt(S) + ' = ' + fmt(D - S));
+      }
+      E = ri(40, 200); m = pick([7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 12]); EV = E * m;
+      var ND = ri(5, 40) * 10; if (ND >= EV * 0.7) continue;
+      return mk('lbo', 2, 'lbo.exitEq', 'Exit EBITDA ' + fmt(E) + ' at ' + fmt(m) + 'x, net debt ' + fmt(ND) + '. Exit equity?', EV - ND, 'amt',
+        'EV = ' + fmt(E) + ' × ' + fmt(m) + ' = ' + fmt(EV) + ' − ' + fmt(ND) + ' = ' + fmt(EV - ND));
+    }
+    if (r < 0.5) {
+      var e0 = pick([50, 60, 80, 100, 120, 150, 200]), m0 = ri(7, 12), dpc = pick([50, 60, 70]);
+      var e1 = Math.round(e0 * (1 + ri(2, 10) / 10)), m1 = m0 + pick([-1, 0, 0, 1, 2]);
+      var ev0 = e0 * m0, debt0 = ev0 * dpc / 100, eq0 = ev0 - debt0;
+      if (!isInt(debt0)) continue;
+      var D1 = Math.round(debt0 * ri(30, 90) / 100 / 10) * 10, ev1 = e1 * m1, eq1 = ev1 - D1;
+      M = eq1 / eq0;
+      if (M < 1.2 || M > 6 || D1 <= 0) continue;
+      return mk('lbo', 3, 'lbo.full', 'Entry: EBITDA ' + fmt(e0) + ' at ' + m0 + 'x, ' + dpc + '% debt. Exit: EBITDA ' + fmt(e1) + ' at ' + m1 + 'x, debt ' + fmt(D1) + '. MOIC?', M, 'x',
+        'In: EV ' + fmt(ev0) + ', debt ' + fmt(debt0) + ' → equity ' + fmt(eq0) + '. Out: ' + fmt(ev1) + ' − ' + fmt(D1) + ' = ' + fmt(eq1) + ' → ' + fmt(eq1) + '/' + fmt(eq0) + ' = ' + f2(M) + 'x',
+        { tol: 0.05, tolLabel: '±0.05x', approx: decimals(M) > 2 });
+    }
+    if (r < 0.75) {
+      D = ri(6, 18) * 50; E = ri(12, 40) * 5; var C = ri(1, 6) * 5, I = Math.round(D * pick([6, 7, 8, 9, 10]) / 100), T = ri(1, 5) * 5, F = E - C - I - T;
+      if (F <= 0) continue;
+      return mk('lbo', 3, 'lbo.sweep', 'Debt ' + fmt(D) + '. EBITDA ' + fmt(E) + ', capex ' + C + ', interest ' + I + ', taxes ' + T + '. All free cash flow repays debt. Debt after one year?', D - F, 'amt',
+        'FCF = ' + fmt(E) + ' − ' + C + ' − ' + I + ' − ' + T + ' = ' + fmt(F) + ' → ' + fmt(D) + ' − ' + fmt(F) + ' = ' + fmt(D - F));
+    }
+    var Eq = ri(2, 12) * 50; M = pick([2, 2.5, 3, 3.5]); var NDx = ri(2, 10) * 50;
+    return mk('lbo', 3, 'lbo.reqEV', 'Equity of ' + fmt(Eq) + ' must return ' + fmt(M) + 'x. Exit net debt ' + fmt(NDx) + '. Required exit EV?', Eq * M + NDx, 'amt',
+      'Exit equity ' + fmt(Eq) + ' × ' + fmt(M) + ' = ' + fmt(Eq * M) + ' + net debt ' + fmt(NDx) + ' = ' + fmt(Eq * M + NDx));
+  }
+  return fallback('lbo', d);
+}
+
+var GENS = { pct: genPct, mult: genMult, frac: genFrac, cagr: genCagr, val: genVal, irr: genIrr, margin: genMargin, lbo: genLbo };
+function generate(cat, d, seen) {
+  var p;
+  for (var i = 0; i < 30; i++) {
+    p = GENS[cat](d);
+    if (!seen || !seen.has(p.q)) break;
+  }
+  if (seen) seen.add(p.q);
+  return p;
+}
+
+/* =====================================================================
+   5. ANSWER PARSER + GRADER
+   Accepts: "1,080"  "1080"  "8.5x"  "45M"  "$45mm"  "14.5%"  "1.2bn"  "360k"
+            "12,5" (decimal comma)  "3/8"  "150bps"  "9 yrs"  "~14.5"
+   ===================================================================== */
+var SUFFIX_RE = /^(.*?)(%|x|bps|bp|mm|m|bn|b|k|years|year|yrs|yr|y)?$/;
+function parseAnswer(raw) {
+  if (raw == null) return { ok: false };
+  var s = String(raw).toLowerCase();
+  s = s.replace(/[\s  ']/g, '');
+  s = s.replace(/[−‒–—]/g, '-').replace(/[×✕]/g, 'x');
+  s = s.replace(/^[~≈]+/, '');
+  if (!s) return { ok: false };
+  var sign = 1;
+  if (s[0] === '-' || s[0] === '+') { if (s[0] === '-') sign = -1; s = s.slice(1); }
+  s = s.replace(/^\$/, '').replace(/^usd/, '');
+  var m = SUFFIX_RE.exec(s);
+  if (!m) return { ok: false };
+  var body = m[1], suf = m[2] || '';
+  if (suf === 'mm') suf = 'm';
+  if (suf === 'bn') suf = 'b';
+  if (suf === 'bp') suf = 'bps';
+  if (suf === 'years' || suf === 'year' || suf === 'yrs' || suf === 'yr') suf = 'y';
+  if (!body) return { ok: false };
+  var v;
+  if (/^\d+(\.\d+)?\/\d+(\.\d+)?$/.test(body)) {
+    var parts = body.split('/'), den = parseFloat(parts[1]);
+    if (!den) return { ok: false };
+    v = parseFloat(parts[0]) / den;
+  } else {
+    if (body.indexOf(',') >= 0) {
+      if (/^\d{1,3}(,\d{3})+(\.\d*)?$/.test(body)) body = body.replace(/,/g, '');
+      else if (/^\d*,\d{1,2}$/.test(body)) body = body.replace(',', '.');
+      else return { ok: false };
+    }
+    if (!/^(\d+\.?\d*|\.\d+)$/.test(body)) return { ok: false };
+    v = parseFloat(body);
+  }
+  if (!isFinite(v)) return { ok: false };
+  return { ok: true, value: sign * v, suffix: suf };
+}
+function grade(prob, raw) {
+  var p = parseAnswer(raw);
+  if (!p.ok) return { ok: false, invalid: true };
+  var v = p.value, u = prob.unit, sf = p.suffix, money = (u === 'M' || u === 'amt');
+  if (sf === 'k') v = u === '' ? v * 1e3 : money ? v / 1e3 : v;
+  else if (sf === 'm') v = u === '' ? v * 1e6 : v;
+  else if (sf === 'b') v = u === '' ? v * 1e9 : money ? v * 1e3 : v;
+  else if (sf === '%' && u === 'bps') v = v * 100;
+  var tol = prob.tol + 1e-9 * Math.max(1, Math.abs(prob.ans));
+  if (Math.abs(v - prob.ans) <= tol) return { ok: true, value: v };
+  if (u === '%' && sf === '' && Math.abs(v) < 1.5 && prob.ans >= 2 && Math.abs(v * 100 - prob.ans) <= tol) return { ok: true, value: v * 100, decimalForm: true };
+  return { ok: false, value: v };
+}
+
+/* =====================================================================
+   6. STORAGE (localStorage wrapped in try/catch everywhere)
+   ===================================================================== */
+var KEY = 'ibmm.v1';
+var Store = {
+  ok: true,
+  backend: function () { try { return window.localStorage; } catch (e) { return null; } },
+  load: function () {
+    try {
+      var ls = this.backend(); if (!ls) { this.ok = false; return null; }
+      var s = ls.getItem(KEY);
+      return s ? JSON.parse(s) : null;
+    } catch (e) { this.ok = false; return null; }
+  },
+  save: function (db) {
+    try {
+      var ls = this.backend(); if (!ls) { this.ok = false; return false; }
+      ls.setItem(KEY, JSON.stringify(db)); this.ok = true; return true;
+    } catch (e) {
+      try { // quota: drop review details from older sessions, retry once
+        var ls2 = this.backend();
+        if (ls2 && db.sessions.length > 30) {
+          db.sessions.slice(0, db.sessions.length - 30).forEach(function (s) { s.r.forEach(function (r) { delete r.q; delete r.u; delete r.x; delete r.h; }); });
+          ls2.setItem(KEY, JSON.stringify(db)); this.ok = true; return true;
+        }
+      } catch (e2) { /* fall through */ }
+      this.ok = false; return false;
+    }
+  }
+};
+function defaultSettings() {
+  var s = { diff: {}, on: {} };
+  CATS.forEach(function (c) { s.diff[c.id] = 2; s.on[c.id] = true; });
+  return s;
+}
+function freshDB() { return { v: 1, sessions: [], settings: defaultSettings() }; }
+var MODES = { sprint: 1, drill: 1, weak: 1 };
+function clip(s, n) { return typeof s === 'string' ? s.slice(0, n) : undefined; }
+function cleanResult(r) {
+  if (!r || typeof r !== 'object' || !CAT[r.c]) return null;
+  var d = +r.d; if (!(d >= 1 && d <= 3)) d = 2;
+  var t = +r.t; if (!isFinite(t) || t < 0) t = 0; if (t > 36e5) t = 36e5;
+  var o = { c: r.c, d: Math.round(d), ok: !!r.ok, t: Math.round(t) };
+  if (r.k) o.k = clip(String(r.k), 30);
+  if (r.sk) o.sk = 1;
+  ['q', 'u', 'x', 'h'].forEach(function (f) { var v = clip(r[f], 300); if (v != null) o[f] = v; });
+  return o;
+}
+function cleanSession(s) {
+  if (!s || typeof s !== 'object' || !Array.isArray(s.r) || !MODES[s.mode]) return null;
+  var start = +s.start; if (!isFinite(start) || start <= 0) return null;
+  var r = s.r.map(cleanResult).filter(Boolean);
+  if (!r.length) return null;
+  var o = { id: clip(String(s.id || (s.mode + '-' + start)), 40), mode: s.mode, start: start, end: isFinite(+s.end) ? +s.end : start, r: r };
+  if (s.cat && CAT[s.cat]) o.cat = s.cat;
+  if (s.partial) o.partial = 1;
+  return o;
+}
+function cleanSettings(st) {
+  var out = defaultSettings();
+  if (st && typeof st === 'object') {
+    CATS.forEach(function (c) {
+      if (st.diff && [1, 2, 3].indexOf(+st.diff[c.id]) >= 0) out.diff[c.id] = +st.diff[c.id];
+      if (st.on && typeof st.on[c.id] === 'boolean') out.on[c.id] = st.on[c.id];
+    });
+  }
+  return out;
+}
+function cleanDB(raw) {
+  var db = freshDB();
+  if (!raw || typeof raw !== 'object') return db;
+  if (Array.isArray(raw.sessions)) db.sessions = raw.sessions.map(cleanSession).filter(Boolean);
+  db.sessions.sort(function (a, b) { return a.start - b.start; });
+  db.settings = cleanSettings(raw.settings);
+  return db;
+}
+function mergeImport(db, text) {
+  var raw;
+  try { raw = JSON.parse(text); } catch (e) { return { error: 'That is not valid JSON.' }; }
+  var list = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.sessions) ? raw.sessions : null);
+  if (!list) return { error: 'No "sessions" array found in that file.' };
+  var have = {}; db.sessions.forEach(function (s) { have[s.id] = 1; });
+  var added = 0, dup = 0, bad = 0;
+  list.forEach(function (s) {
+    var c = cleanSession(s);
+    if (!c) { bad++; return; }
+    if (have[c.id]) { dup++; return; }
+    have[c.id] = 1; db.sessions.push(c); added++;
+  });
+  db.sessions.sort(function (a, b) { return a.start - b.start; });
+  if (!Array.isArray(raw) && raw.settings && db.sessions.length === added) db.settings = cleanSettings(raw.settings);
+  return { added: added, dup: dup, bad: bad };
+}
+
+/* =====================================================================
+   7. STATS + WEAKNESS WEIGHTS
+   ===================================================================== */
+function sessStats(s) {
+  var n = s.r.length, k = 0, ts = [];
+  s.r.forEach(function (r) { if (r.ok) k++; if (!r.sk) ts.push(r.t); });
+  return { n: n, k: k, acc: n ? k / n : 0, avg: ts.length ? mean(ts) / 1000 : NaN };
+}
+function catStats(db, recentN) {
+  var by = {};
+  CATS.forEach(function (c) { by[c.id] = []; });
+  db.sessions.forEach(function (s) { s.r.forEach(function (r) { if (by[r.c]) by[r.c].push(r); }); });
+  return CATS.map(function (c) {
+    var all = by[c.id], rs = recentN ? all.slice(-recentN) : all;
+    var k = 0, ts = [];
+    rs.forEach(function (r) { if (r.ok) k++; if (!r.sk) ts.push(r.t); });
+    return { id: c.id, total: all.length, n: rs.length, k: k, acc: rs.length ? k / rs.length : NaN, avg: ts.length ? mean(ts) / 1000 : NaN };
+  });
+}
+function catWeights(db) {
+  var ids = CATS.filter(function (c) { return db.settings.on[c.id]; }).map(function (c) { return c.id; });
+  if (!ids.length) ids = CATS.map(function (c) { return c.id; });
+  var by = {};
+  ids.forEach(function (id) { by[id] = []; });
+  db.sessions.forEach(function (s) { s.r.forEach(function (r) { if (by[r.c]) by[r.c].push(r); }); });
+  var rows = ids.map(function (id) {
+    var rs = by[id].slice(-40), n = rs.length, k = 0, sum = 0, m = 0;
+    rs.forEach(function (r) {
+      if (r.ok) k++;
+      if (!r.sk && r.t > 0) { sum += Math.min(4, r.t / 1000 / targetSec(id, r.d)); m++; }
+    });
+    var acc = (k + 0.6 * 3) / (n + 3);          // shrunk toward 60% until there is data
+    var slow = (sum + 1 * 3) / (m + 3);         // 1.0 = on target pace
+    var w = 0.25 + 3 * (1 - acc) + 0.75 * Math.max(0, slow - 0.6) + (n < 8 ? 0.6 : 0);
+    return { id: id, n: n, acc: acc, slow: slow, w: w };
+  });
+  var tot = rows.reduce(function (s, x) { return s + x.w; }, 0), FLOOR = 0.04, free = 1 - FLOOR * rows.length;
+  rows.forEach(function (x) { x.p = FLOOR + free * x.w / tot; });
+  return rows;
+}
+function weightedPick(rows) {
+  var x = rand();
+  for (var i = 0; i < rows.length; i++) { x -= rows[i].p; if (x < 0) return rows[i].id; }
+  return rows[rows.length - 1].id;
+}
+
+/* =====================================================================
+   8. APP STATE + SESSION ENGINE
+   ===================================================================== */
+var SPRINT_MS = 120000, DRILL_N = 20;
+var S = { db: null, screen: 'home', sess: null, recent: true, timer: 0, advT: 0, lastSummary: null };
+var app = document.getElementById('app');
+var MODE_NAME = { sprint: 'Sprint', drill: 'Drill', weak: 'Weakness' };
+
+function persist() {
+  var ok = Store.save(S.db);
+  if (!ok) toast('Could not save to this browser — export your data to keep it.');
+  return ok;
+}
+
+function startSession(mode, cat) {
+  clearTimeout(S.advT);
+  var sess = {
+    id: uid(), mode: mode, cat: cat || null, start: Date.now(), r: [], seen: new Set(),
+    n: mode === 'sprint' ? null : DRILL_N, phase: 'answer', cur: null, shownAt: 0, endsAt: 0, timeUp: false, lastCat: null,
+    weights: mode === 'weak' ? catWeights(S.db) : null
+  };
+  if (mode === 'sprint') sess.endsAt = now() + SPRINT_MS;
+  S.sess = sess;
+  go('play');
+  nextProblem();
+  var inp = document.getElementById('pin');
+  if (inp) inp.focus();
+  clearInterval(S.timer);
+  S.timer = setInterval(tick, 200);
+  tick();
+}
+function chooseCat(sess) {
+  if (sess.mode === 'drill') return sess.cat;
+  if (sess.mode === 'weak') {
+    var c, tries = 0;
+    do { c = weightedPick(sess.weights); tries++; } while (c === sess.lastCat && sess.weights.length > 1 && tries < 3);
+    return c;
+  }
+  var ids = CATS.filter(function (x) { return S.db.settings.on[x.id]; }).map(function (x) { return x.id; });
+  if (!ids.length) ids = CATS.map(function (x) { return x.id; });
+  var id;
+  do { id = pick(ids); } while (ids.length > 1 && id === sess.lastCat);
+  return id;
+}
+function nextProblem() {
+  var sess = S.sess; if (!sess) return;
+  clearTimeout(S.advT);
+  var c = chooseCat(sess), d = S.db.settings.diff[c] || 2;
+  sess.cur = generate(c, d, sess.seen);
+  sess.lastCat = c; sess.phase = 'answer'; sess.shownAt = now();
+  paintProblem();
+}
+function submitAnswer() {
+  var sess = S.sess; if (!sess) return;
+  var inp = document.getElementById('pin');
+  if (sess.phase === 'feedback') { advance(); return; }
+  var raw = inp.value;
+  if (!raw.trim()) { shake(inp); return; }
+  var g = grade(sess.cur, raw);
+  if (g.invalid) { shake(inp); showFeedback({ invalid: true }); return; }
+  var t = Math.round(now() - sess.shownAt);
+  record(sess, g.ok, t, raw.trim(), false);
+  showFeedback({ ok: g.ok, raw: raw.trim(), t: t });
+}
+function skipQuestion() {
+  var sess = S.sess; if (!sess) return;
+  if (sess.phase === 'feedback') { advance(); return; }
+  var t = Math.round(now() - sess.shownAt);
+  record(sess, false, t, '', true);
+  showFeedback({ ok: false, skipped: true, t: t });
+}
+function record(sess, ok, t, raw, skipped) {
+  var p = sess.cur, r = { c: p.cat, d: p.diff, k: p.kind, ok: ok, t: t };
+  if (skipped) r.sk = 1;
+  if (!ok) { r.q = p.q; r.u = raw; r.x = p.disp; r.h = p.how; }
+  sess.r.push(r);
+}
+function advance() {
+  var sess = S.sess; if (!sess) return;
+  clearTimeout(S.advT);
+  if (sess.mode === 'sprint' && (sess.timeUp || now() >= sess.endsAt)) { finishSession(false); return; }
+  if (sess.n && sess.r.length >= sess.n) { finishSession(false); return; }
+  nextProblem();
+}
+function tick() {
+  var sess = S.sess;
+  if (!sess || S.screen !== 'play') { clearInterval(S.timer); return; }
+  if (sess.hiddenAt) return;
+  if (sess.mode === 'sprint') {
+    var left = Math.max(0, sess.endsAt - now());
+    var el = document.getElementById('pclock');
+    if (el) {
+      var sec = Math.ceil(left / 1000);
+      el.textContent = Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
+      el.className = 'clock' + (sec <= 10 ? ' low' : '');
+    }
+    var fill = document.getElementById('pfill');
+    if (fill) fill.style.width = (100 * (1 - left / SPRINT_MS)).toFixed(2) + '%';
+    if (left <= 0) {
+      if (sess.phase === 'answer') finishSession(false);
+      else sess.timeUp = true;
+    }
+  }
+}
+function finishSession(partial) {
+  var sess = S.sess; if (!sess) return;
+  clearInterval(S.timer); clearTimeout(S.advT);
+  S.sess = null;
+  var rec = { id: sess.id, mode: sess.mode, start: sess.start, end: Date.now(), r: sess.r };
+  if (sess.cat) rec.cat = sess.cat;
+  if (partial) rec.partial = 1;
+  var prevBest = bestSprint();
+  if (rec.r.length) { S.db.sessions.push(rec); persist(); }
+  if (!rec.r.length) { go('home'); return; }
+  S.lastSummary = { rec: rec, prevBest: prevBest };
+  go('summary');
+}
+function bestSprint(excludeId) {
+  var b = null;
+  S.db.sessions.forEach(function (s) {
+    if (s.mode !== 'sprint' || s.partial || s.id === excludeId) return;
+    var st = sessStats(s);
+    if (!b || st.k > b.k) b = { k: st.k, acc: st.acc };
+  });
+  return b;
+}
+document.addEventListener('visibilitychange', function () {
+  var s = S.sess; if (!s) return;
+  if (document.hidden) { s.hiddenAt = now(); }
+  else if (s.hiddenAt) {
+    var dt = now() - s.hiddenAt;
+    s.shownAt += dt; if (s.endsAt) s.endsAt += dt; s.hiddenAt = 0;
+    tick();
+  }
+});
+
+/* =====================================================================
+   9. RENDERING
+   ===================================================================== */
+function go(screen, opts) {
+  S.screen = screen;
+  if (screen !== 'home') { try { history.pushState({ s: screen }, ''); } catch (e) { /* ignore */ } }
+  render(opts);
+  window.scrollTo(0, 0);
+}
+window.addEventListener('popstate', function () {
+  if (S.sess) { finishSession(true); return; }
+  S.screen = 'home'; render();
+});
+function render(opts) {
+  var html = '';
+  switch (S.screen) {
+    case 'home': html = viewHome(); break;
+    case 'setup': html = viewSetup(); break;
+    case 'play': html = viewPlay(); break;
+    case 'summary': html = viewSummary(); break;
+    case 'stats': html = viewStats(); break;
+  }
+  app.innerHTML = html;
+  if (S.screen === 'play') bindPlay();
+  if (S.screen === 'stats') drawCharts();
+}
+function storageWarn() {
+  return Store.ok ? '' : '<div class="warnbar">This browser is blocking storage, so history will not survive a reload. Use Export on the Stats screen to keep it.</div>';
+}
+function topBar(title, back) {
+  return '<div class="top">' + (back ? '<button class="iconbtn" data-act="home" aria-label="Back">‹ Back</button>' : '<div class="brand"><b>%</b> IB Mental Math</div>') +
+    (title ? '<div class="brand">' + esc(title) + '</div>' : '') +
+    (back ? '<span style="min-width:44px"></span>' : '<button class="iconbtn" data-act="stats">Stats</button>') + '</div>';
+}
+function pct0(x) { return isFinite(x) ? Math.round(x * 100) + '%' : '—'; }
+function sec1(x) { return isFinite(x) ? x.toFixed(1) + 's' : '—'; }
+
+function viewHome() {
+  var w = catWeights(S.db).slice().sort(function (a, b) { return b.p - a.p; });
+  var hasData = S.db.sessions.length > 0;
+  var focus = hasData
+    ? '<div class="focusline">' + w.slice(0, 3).map(function (x) { return '<span class="pill">' + esc(CAT[x.id].short) + ' ' + Math.round(x.p * 100) + '%</span>'; }).join('') + '</div>'
+    : '<div class="focusline"><span class="pill">Even weights until you have history</span></div>';
+  var best = bestSprint();
+  var last = S.db.sessions[S.db.sessions.length - 1], lastTxt = '';
+  if (last) { var st = sessStats(last); lastTxt = 'Last: ' + MODE_NAME[last.mode] + (last.cat ? ' · ' + CAT[last.cat].short : '') + ' — ' + st.k + '/' + st.n + ', ' + sec1(st.avg) + ' avg'; }
+  return topBar('', false) + storageWarn() +
+    '<h1>Finance interview math, fast.</h1><p class="sub">Percents, multiples, CAGR, IRR, margins and paper-LBO steps. Answer with the number pad; Enter submits.</p>' +
+    '<button class="mode" data-act="start" data-mode="sprint"><span class="mi">2:00</span><span><div class="mt">Sprint</div><div class="md">Two minutes, mixed categories. Best: ' + (best ? best.k + ' correct' : '—') + '</div></span><span class="chev">›</span></button>' +
+    '<button class="mode" data-act="setup"><span class="mi">20</span><span><div class="mt">Drill</div><div class="md">One category, 20 questions. Set difficulty per category.</div></span><span class="chev">›</span></button>' +
+    '<button class="mode" data-act="start" data-mode="weak"><span class="mi">◎</span><span><div class="mt">Weakness</div><div class="md">20 questions weighted toward your slowest, least accurate categories.</div>' + focus + '</span><span class="chev">›</span></button>' +
+    '<div class="links"><button class="btn small" data-act="setup">Categories &amp; difficulty</button><button class="btn small" data-act="stats">Stats &amp; export</button></div>' +
+    (lastTxt ? '<div class="lastline">' + esc(lastTxt) + '</div>' : '');
+}
+
+function viewSetup() {
+  var cs = catStats(S.db, 50), byId = {};
+  cs.forEach(function (x) { byId[x.id] = x; });
+  var rows = CATS.map(function (c) {
+    var on = S.db.settings.on[c.id], d = S.db.settings.diff[c.id], st = byId[c.id];
+    var seg = [1, 2, 3].map(function (k) { return '<button data-act="diff" data-cat="' + c.id + '" data-d="' + k + '" aria-pressed="' + (k === d) + '" aria-label="Difficulty ' + k + ' ' + DIFF_LABEL[k] + '">' + k + '</button>'; }).join('');
+    return '<div class="catrow' + (on ? '' : ' off') + '"><div class="cr1"><div class="ci"><div class="cname">' + esc(c.name) + '</div><div class="cex">' + esc(c.ex) + '</div>' +
+      '<div class="cstat">' + (st.n ? pct0(st.acc) + ' accuracy · ' + sec1(st.avg) + ' avg · ' + st.total + ' answered' : 'No attempts yet') + '</div></div>' +
+      '<label class="tog" title="Include in Sprint and Weakness"><input type="checkbox" data-act="toggle" data-cat="' + c.id + '"' + (on ? ' checked' : '') + ' aria-label="Include ' + esc(c.name) + ' in Sprint and Weakness"><span></span></label></div>' +
+      '<div class="cr2"><div class="seg" role="group" aria-label="Difficulty">' + seg + '</div><span class="seglabel">' + DIFF_LABEL[d] + '</span>' +
+      '<button class="btn small primary" data-act="start" data-mode="drill" data-cat="' + c.id + '">Drill ›</button></div></div>';
+  }).join('');
+  return topBar('Categories', true) + '<p class="note">Difficulty applies everywhere: 1 = warm-up, 2 = interview level, 3 = stretch. The switch controls whether a category appears in Sprint and Weakness.</p>' + rows;
+}
+
+function viewPlay() {
+  var s = S.sess;
+  var meta = s.mode === 'sprint' ? 'Sprint <span class="clock" id="pclock">2:00</span>' : esc(MODE_NAME[s.mode] + (s.cat ? ' · ' + CAT[s.cat].short : ''));
+  return '<div class="playtop"><button class="iconbtn" data-act="quit" data-keep aria-label="End session">✕</button><div class="pmeta" id="pmeta">' + meta + '</div>' +
+    '<div class="pscore"><span class="g" id="pok">0</span>/<span id="pn">0</span></div></div>' +
+    '<div class="pbar"><div id="pfill"></div></div>' +
+    '<div class="chiprow"><div class="pchip" id="pchip"></div><button type="button" class="skipbtn" id="pskip" data-keep>Skip</button></div>' +
+    '<div class="prompt" id="pq"></div>' +
+    '<form id="pform" autocomplete="off" novalidate><div class="irow"><div class="field"><input id="pin" type="text" inputmode="decimal" enterkeyhint="go" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Your answer" placeholder=""><span class="adorn" id="padorn"></span></div>' +
+    '<button type="submit" class="btn primary go" id="pgo" data-keep>Enter</button></div></form>' +
+    '<div class="fb" id="pfb" aria-live="polite"></div>';
+}
+function promptHTML(q) {
+  var lines = q.replace(/([.?])\s+/g, '$1\n').split('\n');
+  return lines.map(function (ln) {
+    return '<span class="ln">' + esc(ln).replace(/(\$?\d(?:[\d,]*\d)?(?:\.\d+)?(?:%|x|M\b)?)/g, '<span class="num">$1</span>') + '</span>';
+  }).join('');
+}
+function promptSize(q) {
+  var L = q.length;
+  return L <= 16 ? 's1' : L <= 38 ? 's2' : L <= 80 ? 's3' : 's4';
+}
+function paintProblem() {
+  var s = S.sess, p = s.cur;
+  var q = document.getElementById('pq');
+  q.className = 'prompt ' + promptSize(p.q);
+  q.innerHTML = promptHTML(p.q);
+  document.getElementById('pchip').textContent = CAT[p.cat].short + ' · L' + p.diff + (p.tolLabel ? ' · ' + p.tolLabel : '');
+  document.getElementById('padorn').textContent = UNIT_ADORN[p.unit] || '';
+  var inp = document.getElementById('pin');
+  inp.value = '';
+  document.getElementById('pfb').innerHTML = '';
+  document.getElementById('pgo').textContent = 'Enter';
+  var k = 0; s.r.forEach(function (r) { if (r.ok) k++; });
+  document.getElementById('pok').textContent = k;
+  document.getElementById('pn').textContent = s.r.length;
+  if (s.n) document.getElementById('pfill').style.width = (100 * s.r.length / s.n) + '%';
+}
+function showFeedback(o) {
+  var s = S.sess, p = s.cur, fb = document.getElementById('pfb');
+  if (o.invalid) {
+    fb.innerHTML = '<div class="fbbox info"><div class="fbs">Couldn\'t read that. Type a number, e.g. 1,080 · 8.5 · 14.5</div></div>';
+    return;
+  }
+  s.phase = 'feedback';
+  var k = 0; s.r.forEach(function (r) { if (r.ok) k++; });
+  document.getElementById('pok').textContent = k;
+  document.getElementById('pn').textContent = s.r.length;
+  if (s.n) document.getElementById('pfill').style.width = (100 * s.r.length / s.n) + '%';
+  var tt = (o.t / 1000).toFixed(1) + 's';
+  var last = s.n && s.r.length >= s.n;
+  if (o.ok) {
+    fb.innerHTML = '<div class="fbbox ok"><div class="fbh"><span class="st">✓</span><span class="ans">' + esc(p.disp) + '</span><span class="t">' + tt + '</span></div></div>';
+    document.getElementById('pgo').textContent = last ? 'Finish' : 'Next';
+    document.getElementById('pin').value = '';
+    S.advT = setTimeout(advance, s.mode === 'sprint' ? 450 : 650);
+  } else {
+    fb.innerHTML = '<div class="fbbox no"><div class="fbh"><span class="st">' + (o.skipped ? '→' : '✗') + '</span><span class="lab">Answer</span><span class="ans">' + esc(p.disp) + '</span><span class="t">' + tt + '</span></div>' +
+      '<div class="fbyou">' + (o.skipped ? 'Skipped' : 'You: <b>' + esc(o.raw) + '</b>') + (p.tolLabel ? ' · accepted ' + esc(p.tolLabel) : '') + '</div>' +
+      '<div class="fbs">' + esc(p.how) + '</div>' +
+      '<div class="fbhint">' + (s.mode === 'sprint' ? 'Continues automatically — Enter or typing skips ahead.' : 'Enter, Next or just start typing to continue.') + '</div></div>';
+    document.getElementById('pgo').textContent = last ? 'Finish' : 'Next';
+    document.getElementById('pin').value = '';
+    if (s.mode === 'sprint') S.advT = setTimeout(advance, 2200);
+  }
+}
+function shake(el) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+function bindPlay() {
+  var form = document.getElementById('pform'), inp = document.getElementById('pin');
+  form.addEventListener('submit', function (e) { e.preventDefault(); submitAnswer(); inp.focus(); });
+  document.getElementById('pskip').addEventListener('click', function () { skipQuestion(); inp.focus(); });
+  inp.addEventListener('input', function () {
+    var s = S.sess;
+    if (s && s.phase === 'feedback' && inp.value) {
+      var typed = inp.value;
+      advance();
+      if (S.sess && S.screen === 'play') { var i2 = document.getElementById('pin'); i2.value = typed; }
+    }
+  });
+}
+
+function viewSummary() {
+  var L = S.lastSummary; if (!L) return viewHome();
+  var rec = L.rec, st = sessStats(rec);
+  var title = MODE_NAME[rec.mode] + (rec.cat ? ' · ' + CAT[rec.cat].name : '') + (rec.partial ? ' (ended early)' : '');
+  var mins = (rec.end - rec.start) / 60000;
+  var tiles = '<div class="tiles four"><div class="tile"><div class="tv">' + st.k + '<span class="faint" style="font-size:1rem">/' + st.n + '</span></div><div class="tl">correct</div></div>' +
+    '<div class="tile"><div class="tv">' + pct0(st.acc) + '</div><div class="tl">accuracy</div></div>' +
+    '<div class="tile"><div class="tv">' + sec1(st.avg) + '</div><div class="tl">avg per question</div></div>' +
+    '<div class="tile"><div class="tv">' + (rec.mode === 'sprint' ? (st.k / 2).toFixed(1) : (mins > 0 ? (st.n / mins).toFixed(1) : '—')) + '</div><div class="tl">' + (rec.mode === 'sprint' ? 'correct / minute' : 'questions / minute') + '</div></div></div>';
+  var best = '';
+  if (rec.mode === 'sprint' && !rec.partial && st.k > 0 && (!L.prevBest || st.k > L.prevBest.k)) best = '<div class="best">★ New sprint best</div>';
+  var by = {};
+  rec.r.forEach(function (r) { var b = by[r.c] || (by[r.c] = { n: 0, k: 0, ts: [] }); b.n++; if (r.ok) b.k++; if (!r.sk) b.ts.push(r.t); });
+  var rows = CATS.filter(function (c) { return by[c.id]; }).map(function (c) {
+    var b = by[c.id];
+    return '<tr><td>' + esc(c.short) + '</td><td class="r">' + b.k + '/' + b.n + '</td><td class="r">' + sec1(mean(b.ts) / 1000) + '</td></tr>';
+  }).join('');
+  var misses = rec.r.filter(function (r) { return !r.ok; });
+  var missHTML = misses.length ? misses.map(function (r) {
+    return '<div class="miss"><div class="mq">' + esc(r.q) + '</div><div class="ma">' + (r.sk ? 'Skipped' : 'You: <b>' + esc(r.u) + '</b>') + ' · Answer: <b>' + esc(r.x) + '</b> · ' + (r.t / 1000).toFixed(1) + 's</div>' +
+      '<div class="mh">' + esc(r.h) + '</div></div>';
+  }).join('') : '<p class="muted">No misses. Bump the difficulty?</p>';
+  return topBar('Summary', true) + '<h1>' + esc(title) + '</h1>' + tiles + best +
+    '<h2>By category</h2><div class="card" style="padding:6px 10px"><table class="t"><thead><tr><th>Category</th><th class="r">Score</th><th class="r">Avg</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+    '<h2>Review misses (' + misses.length + ')</h2>' + missHTML +
+    '<div class="actions"><button class="btn primary" data-act="again">Again</button><button class="btn" data-act="home">Home</button></div>';
+}
+
+function viewStats() {
+  var db = S.db, cs = catStats(db, S.recent ? 50 : 0);
+  var all = []; db.sessions.forEach(function (s) { s.r.forEach(function (r) { all.push(r); }); });
+  var k = 0, ts = []; all.forEach(function (r) { if (r.ok) k++; if (!r.sk) ts.push(r.t); });
+  var tiles = '<div class="tiles four"><div class="tile"><div class="tv">' + db.sessions.length + '</div><div class="tl">sessions</div></div>' +
+    '<div class="tile"><div class="tv">' + all.length + '</div><div class="tl">questions</div></div>' +
+    '<div class="tile"><div class="tv">' + pct0(all.length ? k / all.length : NaN) + '</div><div class="tl">accuracy, all time</div></div>' +
+    '<div class="tile"><div class="tv">' + sec1(ts.length ? mean(ts) / 1000 : NaN) + '</div><div class="tl">avg time, all time</div></div></div>';
+  var rows = cs.map(function (c) {
+    return '<tr><td>' + esc(CAT[c.id].short) + ' <span class="faint small">L' + S.db.settings.diff[c.id] + '</span></td><td class="r">' + c.n + '</td>' +
+      '<td class="r">' + pct0(c.acc) + (isFinite(c.acc) ? '<span class="accbar"><i style="width:' + Math.round(c.acc * 100) + '%"></i></span>' : '') + '</td><td class="r">' + sec1(c.avg) + '</td></tr>';
+  }).join('');
+  var last10 = db.sessions.slice(-10);
+  var sessRows = last10.slice().reverse().map(function (s) {
+    var st = sessStats(s), dt = new Date(s.start);
+    return '<tr><td>' + (dt.getMonth() + 1) + '/' + dt.getDate() + '</td><td>' + esc(MODE_NAME[s.mode] + (s.cat ? ' · ' + CAT[s.cat].short : '')) + (s.partial ? ' <span class="faint">(early)</span>' : '') + '</td><td class="r">' + st.k + '/' + st.n + '</td><td class="r">' + sec1(st.avg) + '</td></tr>';
+  }).join('');
+  return topBar('Stats', true) + storageWarn() + tiles +
+    '<h2>By category</h2><div class="segwide" role="group" aria-label="Window"><button data-act="window" data-v="recent" aria-pressed="' + S.recent + '">Last 50 per category</button><button data-act="window" data-v="all" aria-pressed="' + !S.recent + '">All time</button></div>' +
+    '<div class="card" style="padding:6px 10px"><table class="t"><thead><tr><th>Category</th><th class="r">n</th><th class="r">Accuracy</th><th class="r">Avg</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+    '<h2>Trend — last 10 sessions</h2>' +
+    '<div class="chart" id="chAcc"><div class="ct">Accuracy per session</div></div>' +
+    '<div class="chart" id="chTime"><div class="ct">Average seconds per question</div></div>' +
+    (last10.length ? '<div class="card sesslist" style="padding:6px 10px"><table class="t"><thead><tr><th>Date</th><th>Mode</th><th class="r">Score</th><th class="r">Avg</th></tr></thead><tbody>' + sessRows + '</tbody></table></div>' : '') +
+    '<h2>Your data</h2><p class="note">History lives only in this browser. Export a JSON backup now and then; Import merges a backup (duplicates are skipped).</p>' +
+    '<div class="datarow"><button class="btn" data-act="export">Export JSON</button><button class="btn" data-act="copy">Copy JSON</button><button class="btn" data-act="import">Import file</button><button class="btn" data-act="paste">Paste JSON</button></div>' +
+    '<div id="pastebox"></div>' +
+    '<div class="datarow" style="margin-top:8px"><button class="btn danger" data-act="reset">Reset history</button></div>' +
+    '<input type="file" id="fileIn" accept=".json,application/json,text/plain" hidden>';
+}
+
+/* ---------- charts (inline SVG, single series each, no dual axis) ---------- */
+function drawCharts() {
+  var last10 = S.db.sessions.slice(-10);
+  var pts = last10.map(function (s) {
+    var st = sessStats(s), d = new Date(s.start);
+    return { lab: (d.getMonth() + 1) + '/' + d.getDate(), acc: st.acc * 100, avg: st.avg, tip: MODE_NAME[s.mode] + (s.cat ? ' · ' + CAT[s.cat].short : '') + ' · ' + st.k + '/' + st.n };
+  });
+  lineChart(document.getElementById('chAcc'), pts.map(function (p) { return { lab: p.lab, y: p.acc, tip: p.tip, val: Math.round(p.acc) + '%' }; }), { max: 100, ticks: [0, 50, 100], fmtTick: function (v) { return v + '%'; } });
+  var tp = pts.filter(function (p) { return isFinite(p.avg); });
+  var mx = Math.max.apply(null, tp.map(function (p) { return p.avg; }).concat([5]));
+  var step = mx > 40 ? 20 : mx > 20 ? 10 : 5, top = Math.ceil(mx * 1.15 / step) * step, ticks = [];
+  for (var v = 0; v <= top; v += step) ticks.push(v);
+  lineChart(document.getElementById('chTime'), pts.map(function (p) { return { lab: p.lab, y: p.avg, tip: p.tip, val: sec1(p.avg) }; }), { max: top, ticks: ticks, fmtTick: function (v) { return v + 's'; } });
+}
+function lineChart(el, pts, o) {
+  if (!el) return;
+  var old = el.querySelector('svg, .empty, .tip'); while (old) { old.remove(); old = el.querySelector('svg, .empty, .tip'); }
+  var valid = pts.filter(function (p) { return isFinite(p.y); });
+  if (!valid.length) { el.insertAdjacentHTML('beforeend', '<div class="empty">Finish a session to see your trend.</div>'); return; }
+  var W = Math.max(240, el.clientWidth - 20), H = 150, pl = 36, pr = 40, pt = 10, pb = 22, iw = W - pl - pr, ih = H - pt - pb, n = pts.length;
+  function X(i) { return pl + (n === 1 ? iw / 2 : i * iw / (n - 1)); }
+  function Y(v) { return pt + ih - (Math.max(0, Math.min(o.max, v)) / o.max) * ih; }
+  var g = '';
+  o.ticks.forEach(function (t) {
+    g += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(t).toFixed(1) + '" y2="' + Y(t).toFixed(1) + '" stroke="var(--grid)" stroke-width="1"/>';
+    g += '<text x="' + (pl - 6) + '" y="' + (Y(t) + 4).toFixed(1) + '" text-anchor="end" fill="var(--faint)" font-size="11">' + o.fmtTick(t) + '</text>';
+  });
+  var d = '', started = false;
+  pts.forEach(function (p, i) { if (!isFinite(p.y)) return; d += (started ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(p.y).toFixed(1); started = true; });
+  var dots = pts.map(function (p, i) { return isFinite(p.y) ? '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(p.y).toFixed(1) + '" r="4" fill="var(--series)" stroke="var(--surface)" stroke-width="2"/>' : ''; }).join('');
+  var lastI = -1; pts.forEach(function (p, i) { if (isFinite(p.y)) lastI = i; });
+  var lastLab = '<text x="' + (X(lastI) + 8).toFixed(1) + '" y="' + (Y(pts[lastI].y) + 4).toFixed(1) + '" fill="var(--text)" font-size="12" font-weight="600">' + esc(pts[lastI].val) + '</text>';
+  var xl = '<text x="' + X(0).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="' + (n === 1 ? 'middle' : 'start') + '" fill="var(--faint)" font-size="11">' + esc(pts[0].lab) + '</text>' +
+    (n > 1 ? '<text x="' + X(n - 1).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="end" fill="var(--faint)" font-size="11">' + esc(pts[n - 1].lab) + '</text>' : '');
+  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="' + esc(el.querySelector('.ct').textContent) + '">' + g +
+    '<line class="xh" x1="0" x2="0" y1="' + pt + '" y2="' + (pt + ih) + '" stroke="var(--line2)" stroke-width="1" visibility="hidden"/>' +
+    '<path d="' + d + '" fill="none" stroke="var(--series)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' + dots + lastLab + xl +
+    '<rect x="' + pl + '" y="0" width="' + iw + '" height="' + H + '" fill="transparent" class="hit"/></svg>';
+  el.insertAdjacentHTML('beforeend', svg + '<div class="tip"></div>');
+  var sv = el.querySelector('svg'), tip = el.querySelector('.tip'), xh = sv.querySelector('.xh');
+  function show(ev) {
+    var rc = sv.getBoundingClientRect(), x = (ev.clientX - rc.left) * (W / rc.width);
+    var i = n === 1 ? 0 : Math.round((x - pl) / (iw / (n - 1))); i = Math.max(0, Math.min(n - 1, i));
+    var p = pts[i]; if (!isFinite(p.y)) return;
+    xh.setAttribute('x1', X(i)); xh.setAttribute('x2', X(i)); xh.setAttribute('visibility', 'visible');
+    tip.innerHTML = '<b>' + esc(p.val) + '</b> <span class="tm">' + esc(p.lab) + ' · ' + esc(p.tip) + '</span>';
+    tip.style.display = 'block';
+    var er = el.getBoundingClientRect(), px = rc.left - er.left + X(i) * rc.width / W, py = rc.top - er.top + Y(p.y) * rc.height / H;
+    var tw = tip.offsetWidth, left = Math.max(4, Math.min(er.width - tw - 4, px - tw / 2));
+    tip.style.left = left + 'px'; tip.style.top = Math.max(0, py - 40) + 'px';
+  }
+  function hide() { tip.style.display = 'none'; xh.setAttribute('visibility', 'hidden'); }
+  sv.addEventListener('pointermove', show);
+  sv.addEventListener('pointerdown', show);
+  sv.addEventListener('pointerleave', hide);
+}
+function kbCheck() {
+  var vv = window.visualViewport;
+  var open = !!(vv && S.screen === 'play' && vv.height < window.innerHeight * 0.78);
+  document.body.classList.toggle('kb', open);
+}
+if (window.visualViewport) { window.visualViewport.addEventListener('resize', kbCheck); }
+var resizeT = 0;
+window.addEventListener('resize', function () { clearTimeout(resizeT); resizeT = setTimeout(function () { if (S.screen === 'stats') drawCharts(); }, 150); });
+
+/* ---------- data export / import ---------- */
+function exportText() { return JSON.stringify({ app: 'ib-mental-math', v: 1, exported: new Date().toISOString(), settings: S.db.settings, sessions: S.db.sessions }); }
+function doExport() {
+  try {
+    var blob = new Blob([exportText()], { type: 'application/json' }), url = URL.createObjectURL(blob), a = document.createElement('a'), d = new Date();
+    a.href = url; a.download = 'ib-mental-math-' + d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0') + '.json';
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1500);
+    toast('Exported ' + S.db.sessions.length + ' sessions.');
+  } catch (e) { toast('Download failed — use Copy JSON instead.'); }
+}
+function doCopy() {
+  var txt = exportText();
+  function fallbackCopy() {
+    var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove(); toast(ok ? 'Copied JSON to clipboard.' : 'Copy failed — use Export instead.');
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { toast('Copied JSON to clipboard.'); }, fallbackCopy);
+  else fallbackCopy();
+}
+function doImportText(text) {
+  var res = mergeImport(S.db, text);
+  if (res.error) { toast(res.error); return; }
+  persist();
+  toast('Imported ' + res.added + ' session' + (res.added === 1 ? '' : 's') + (res.dup ? ', ' + res.dup + ' duplicate' + (res.dup === 1 ? '' : 's') + ' skipped' : '') + (res.bad ? ', ' + res.bad + ' unreadable' : '') + '.');
+  render();
+}
+var toastT = 0;
+function toast(msg) {
+  var t = document.querySelector('.toast');
+  if (!t) { t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+  t.textContent = msg; t.style.display = 'block';
+  clearTimeout(toastT); toastT = setTimeout(function () { t.style.display = 'none'; }, 3200);
+}
+
+/* ---------- global event delegation ---------- */
+function keepFocus(e) { if (e.target.closest && e.target.closest('[data-keep]')) e.preventDefault(); }
+app.addEventListener('pointerdown', keepFocus);
+app.addEventListener('mousedown', keepFocus);
+app.addEventListener('click', function (e) {
+  var el = e.target.closest('[data-act]'); if (!el) return;
+  var act = el.getAttribute('data-act');
+  switch (act) {
+    case 'home': if (S.sess) finishSession(true); else { S.screen = 'home'; render(); window.scrollTo(0, 0); } break;
+    case 'stats': go('stats'); break;
+    case 'setup': go('setup'); break;
+    case 'start': startSession(el.getAttribute('data-mode'), el.getAttribute('data-cat')); break;
+    case 'again': var L = S.lastSummary; if (L) startSession(L.rec.mode, L.rec.cat); break;
+    case 'quit': finishSession(true); break;
+    case 'diff':
+      S.db.settings.diff[el.getAttribute('data-cat')] = +el.getAttribute('data-d'); persist(); render(); break;
+    case 'window': S.recent = el.getAttribute('data-v') === 'recent'; render(); break;
+    case 'export': doExport(); break;
+    case 'copy': doCopy(); break;
+    case 'import': var fi = document.getElementById('fileIn'); if (fi) fi.click(); break;
+    case 'paste':
+      var pb = document.getElementById('pastebox');
+      if (pb && !pb.innerHTML) pb.innerHTML = '<textarea class="paste" id="pasteTa" placeholder="Paste exported JSON here"></textarea><div class="datarow" style="margin-top:8px"><button class="btn primary" data-act="pasteGo">Import pasted JSON</button></div>';
+      break;
+    case 'pasteGo': var ta = document.getElementById('pasteTa'); if (ta && ta.value.trim()) doImportText(ta.value); break;
+    case 'reset':
+      if (window.confirm('Delete all history in this browser? Export first if you want a backup.')) { S.db.sessions = []; persist(); render(); toast('History cleared.'); }
+      break;
+  }
+});
+app.addEventListener('change', function (e) {
+  var t = e.target;
+  if (t.getAttribute && t.getAttribute('data-act') === 'toggle') {
+    var id = t.getAttribute('data-cat');
+    S.db.settings.on[id] = t.checked;
+    if (!CATS.some(function (c) { return S.db.settings.on[c.id]; })) { S.db.settings.on[id] = true; toast('Keep at least one category on.'); }
+    persist(); render();
+  }
+  if (t.id === 'fileIn' && t.files && t.files[0]) {
+    var rd = new FileReader();
+    rd.onload = function () { doImportText(String(rd.result || '')); };
+    rd.onerror = function () { toast('Could not read that file.'); };
+    rd.readAsText(t.files[0]);
+  }
+});
+
+/* =====================================================================
+   10. SELF-TEST  (open with ?test — optional &seed=123&n=1000 problems per category×difficulty)
+   Every check below recomputes answers INDEPENDENTLY from the numbers
+   that appear in the question text, not from generator internals.
+   ===================================================================== */
+var NUM_RE = /\d(?:[\d,]*\d)?(?:\.\d+)?/g;
+function numsIn(q) { return (q.match(NUM_RE) || []).map(function (s) { return parseFloat(s.replace(/,/g, '')); }); }
+function sum(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
+function canon(x) {
+  if (Array.isArray(x)) return '[' + x.map(canon).join(',') + ']';
+  if (x && typeof x === 'object') return '{' + Object.keys(x).sort().map(function (k) { return JSON.stringify(k) + ':' + canon(x[k]); }).join(',') + '}';
+  return JSON.stringify(x);
+}
+var VERIFY = {
+  'pct.of':     { n: 2, f: function (v) { return v[0] * v[1] / 100; } },
+  'pct.what':   { n: 2, f: function (v) { return 100 * v[0] / v[1]; } },
+  'pct.base':   { n: 2, f: function (v) { return 100 * v[1] / v[0]; } },
+  'mult.x':     { n: 2, f: function (v) { return v[0] * v[1]; } },
+  'frac.toPct': { n: 2, f: function (v) { return 100 * v[0] / v[1]; } },
+  'frac.toNum': { n: 2, f: function (v) { var x = v[0] * v[1] / 100; return Math.abs(x - Math.round(x)) < 0.01 ? Math.round(x) : NaN; } },
+  'frac.unit':  { n: 2, f: function (v) { var x = 100 / v[0]; return Math.abs(x - Math.round(x)) < 0.05 && v[1] === 1 ? Math.round(x) : NaN; } },
+  'cagr.chg':   { n: 2, f: function (v) { return 100 * (v[1] - v[0]) / v[0]; } },
+  'cagr.decl':  { n: 2, f: function (v) { return 100 * (v[0] - v[1]) / v[0]; } },
+  'cagr.fwd':   { n: 3, f: function (v) { var x = v[0]; for (var i = 0; i < v[2]; i++) x += x * v[1] / 100; return x; } },
+  'cagr.cagr':  { n: 3, f: function (v) { return 100 * (Math.exp(Math.log(v[1] / v[0]) / v[2]) - 1); } },
+  'val.ev':     { n: 2, f: function (v) { return v[0] * v[1]; } },
+  'val.mult':   { n: 2, f: function (v) { return v[0] / v[1]; } },
+  'val.ebitda': { n: 2, f: function (v) { return v[0] / v[1]; } },
+  'val.pe':     { n: 2, f: function (v) { return v[0] * v[1]; } },
+  'val.eq':     { n: 3, f: function (v) { return v[0] * v[1] - v[2]; } },
+  'val.px':     { n: 4, f: function (v) { return (v[0] * v[1] - v[2]) / v[3]; } },
+  'val.bridge': { n: 3, f: function (v) { return (v[0] + v[1]) / v[2]; } },
+  'val.rev':    { n: 2, f: function (v) { return v[0] * v[1]; } },
+  'irr.irr':    { n: 2, f: function (v) { return 100 * (Math.exp(Math.log(v[0]) / v[1]) - 1); } },
+  'irr.yrs':    { n: 1, f: function (v, q) { var f = /double/.test(q) ? 2 : /triple/.test(q) ? 3 : /quadruple/.test(q) ? 4 : NaN; return Math.log(f) / Math.log1p(v[0] / 100); } },
+  'irr.moic':   { n: 2, f: function (v) { var x = 1; for (var i = 0; i < v[1]; i++) x *= 1 + v[0] / 100; return x; } },
+  'mgn.m':      { n: 2, f: function (v) { return 100 * v[1] / v[0]; } },
+  'mgn.e':      { n: 2, f: function (v) { return v[0] * v[1] / 100; } },
+  'mgn.r':      { n: 2, f: function (v) { return 100 * v[0] / v[1]; } },
+  'mgn.gm':     { n: 2, f: function (v) { return 100 * (v[0] - v[1]) / v[0]; } },
+  'mgn.bpsE':   { n: 3, f: function (v) { return v[0] * (v[1] + v[2] / 100) / 100; } },
+  'mgn.bps':    { n: 4, f: function (v) { return 10000 * (v[3] / v[2] - v[1] / v[0]); } },
+  'mgn.egr':    { n: 4, f: function (v) { return 100 * ((v[1] * v[3]) / (v[0] * v[2]) - 1); } },
+  'mgn.ni':     { n: 5, f: function (v) { return (v[0] * v[1] / 100 - v[2] - v[3]) * (1 - v[4] / 100); } },
+  'lbo.eqchk':  { n: 3, f: function (v) { return v[0] * v[1] * (100 - v[2]) / 100; } },
+  'lbo.pay':    { n: 3, f: function (v) { return v[0] - v[1] * v[2]; } },
+  'lbo.moic':   { n: 2, f: function (v) { return v[1] / v[0]; } },
+  'lbo.moicEV': { n: 4, f: function (v) { return (v[2] - v[3]) / (v[0] - v[1]); } },
+  'lbo.fcf':    { n: -1, f: function (v) { return v.length === v[1] + 2 ? v[0] - sum(v.slice(2)) : NaN; } },
+  'lbo.exitEq': { n: 3, f: function (v) { return v[0] * v[1] - v[2]; } },
+  'lbo.full':   { n: 6, f: function (v) { return (v[3] * v[4] - v[5]) / (v[1] * v[0] * (1 - v[2] / 100)); } },
+  'lbo.sweep':  { n: 5, f: function (v) { return v[0] - (v[1] - v[2] - v[3] - v[4]); } },
+  'lbo.reqEV':  { n: 3, f: function (v) { return v[0] * v[1] + v[2]; } }
+};
+var EXPECTED_KINDS = {
+  pct: { 1: ['pct.of'], 2: ['pct.of', 'pct.what'], 3: ['pct.of', 'pct.base', 'pct.what'] },
+  mult: { 1: ['mult.x'], 2: ['mult.x'], 3: ['mult.x'] },
+  frac: { 1: ['frac.toPct', 'frac.toNum'], 2: ['frac.toPct', 'frac.toNum'], 3: ['frac.toPct', 'frac.toNum', 'frac.unit'] },
+  cagr: { 1: ['cagr.chg', 'cagr.decl', 'cagr.fwd', 'cagr.cagr'], 2: ['cagr.cagr', 'cagr.fwd'], 3: ['cagr.cagr', 'cagr.fwd'] },
+  val: { 1: ['val.ev', 'val.mult', 'val.ebitda'], 2: ['val.ev', 'val.mult', 'val.ebitda', 'val.pe'], 3: ['val.eq', 'val.px', 'val.bridge', 'val.rev', 'val.mult'] },
+  irr: { 1: ['irr.irr', 'irr.yrs'], 2: ['irr.irr', 'irr.yrs'], 3: ['irr.irr', 'irr.moic', 'irr.yrs'] },
+  margin: { 1: ['mgn.m', 'mgn.e'], 2: ['mgn.m', 'mgn.r', 'mgn.gm', 'mgn.bpsE'], 3: ['mgn.m', 'mgn.bps', 'mgn.egr', 'mgn.ni'] },
+  lbo: { 1: ['lbo.eqchk', 'lbo.pay', 'lbo.moic'], 2: ['lbo.moicEV', 'lbo.fcf', 'lbo.exitEq'], 3: ['lbo.full', 'lbo.sweep', 'lbo.reqEV'] }
+};
+
+function runSelfTest(seed, perCombo) {
+  var R = { pass: 0, fail: 0, failures: [], sections: {}, seed: seed, kinds: {}, samples: [] };
+  function sec(name) { if (!R.sections[name]) R.sections[name] = { pass: 0, fail: 0 }; return R.sections[name]; }
+  function check(name, cond, detail) {
+    var s = sec(name);
+    if (cond) { s.pass++; R.pass++; }
+    else { s.fail++; R.fail++; if (R.failures.length < 80) R.failures.push(name + ': ' + detail); }
+    return cond;
+  }
+  var near = function (a, b, eps) { return isFinite(a) && isFinite(b) && Math.abs(a - b) <= (eps == null ? 1e-6 : eps) * Math.max(1, Math.abs(b)); };
+
+  /* --- A. parser --- */
+  var PC = [
+    ['1,080', 1080, ''], ['1080', 1080, ''], [' 1 080 ', 1080, ''], ['1,234,567.5', 1234567.5, ''], ['1,080.0', 1080, ''],
+    ['8.5x', 8.5, 'x'], ['8.5X', 8.5, 'x'], ['8.5 x', 8.5, 'x'], ['8.5×', 8.5, 'x'],
+    ['45M', 45, 'm'], ['45m', 45, 'm'], ['$45M', 45, 'm'], ['45mm', 45, 'm'], ['$45 mm', 45, 'm'], ['45MM', 45, 'm'],
+    ['14.5%', 14.5, '%'], ['14.5 %', 14.5, '%'], ['~14.5%', 14.5, '%'], ['≈14.5', 14.5, ''],
+    ['1.2bn', 1.2, 'b'], ['1.2B', 1.2, 'b'], ['360k', 360, 'k'], ['360K', 360, 'k'],
+    ['12,5', 12.5, ''], ['0,5', 0.5, ''], ['1,08', 1.08, ''], ['.5', 0.5, ''], ['5.', 5, ''], ['007', 7, ''],
+    ['3/8', 0.375, ''], ['-5', -5, ''], ['−5', -5, ''], ['+5', 5, ''],
+    ['150bps', 150, 'bps'], ['150 bp', 150, 'bps'], ['9 yrs', 9, 'y'], ['9y', 9, 'y'], ['9 years', 9, 'y'], ['$17.50', 17.5, '']
+  ];
+  PC.forEach(function (c) {
+    var p = parseAnswer(c[0]);
+    check('parser', p.ok && near(p.value, c[1], 1e-12) && p.suffix === c[2], JSON.stringify(c[0]) + ' → ' + JSON.stringify(p) + ' (want ' + c[1] + ' ' + JSON.stringify(c[2]) + ')');
+  });
+  ['', '   ', 'abc', '1..2', '1.2.3', '12,34,5', '1,2345', '--5', '%', 'x', '5/0', '1e3', 'NaN', 'Infinity', '0x10', '12%%', '$', '.', ',', '1,,000', null, undefined].forEach(function (c) {
+    var p = parseAnswer(c);
+    check('parser', !p.ok, 'should reject ' + JSON.stringify(c) + ' but got ' + JSON.stringify(p));
+  });
+
+  /* --- B. grader --- */
+  function P(ans, unit, tol) { return { ans: ans, unit: unit, tol: tol || 0 }; }
+  var GC = [
+    [P(1080, ''), '1,080', true], [P(1080, ''), '1080', true], [P(1080, ''), '1.08k', true], [P(1080, ''), '1079', false], [P(1080, ''), '0.00108m', true],
+    [P(360000, ''), '360k', true], [P(360000, ''), '0.36M', true], [P(1080, ''), '-1,080', false],
+    [P(382.5, 'M'), '382.5', true], [P(382.5, 'M'), '$382.5M', true], [P(382.5, 'M'), '382.5mm', true], [P(382.5, 'M'), '0.3825bn', true], [P(382.5, 'M'), '382', false],
+    [P(1200, 'amt'), '1.2bn', true], [P(1200, 'amt'), '1,200M', true],
+    [P(8.5, 'x'), '8.5x', true], [P(8.5, 'x'), '8.5', true], [P(8.5, 'x'), '8.50', true], [P(8.5, 'x'), '8', false],
+    [P(14.4714, '%', 0.5), '14.5%', true], [P(14.4714, '%', 0.5), '14', true], [P(14.4714, '%', 0.5), '15', false], [P(14.4714, '%', 0.5), '0.145', true], [P(14.4714, '%', 0.5), '13.9', false],
+    [P(42.857, '%', 0.1), '42.9', true], [P(42.857, '%', 0.1), '42.8', true], [P(42.857, '%', 0.1), '43', false], [P(42.857, '%', 0.1), '.4286', true], [P(42.857, '%', 0.1), '3/7', true],
+    [P(1.5, '%', 0.1), '0.015', false], [P(150, 'bps'), '150', true], [P(150, 'bps'), '1.5%', true], [P(150, 'bps'), '150bps', true],
+    [P(9.006, 'yrs', 0.36), '9', true], [P(9.006, 'yrs', 0.36), '9 yrs', true], [P(9.006, 'yrs', 0.36), '9.5', false],
+    [P(3, ''), '3', true], [P(3, ''), '3.0', true], [P(3, ''), '0.03', false], [P(17.5, '$'), '$17.50', true], [P(17.5, '$'), '17.5', true]
+  ];
+  GC.forEach(function (c) {
+    var g = grade(c[0], c[1]);
+    check('grader', !!g.ok === c[2], JSON.stringify(c[1]) + ' vs ' + JSON.stringify(c[0]) + ' → ' + JSON.stringify(g) + ' (want ' + c[2] + ')');
+  });
+
+  /* --- C. generators: every category × difficulty --- */
+  var seen = {};
+  CATS.forEach(function (c) {
+    for (var d = 1; d <= 3; d++) {
+      var kinds = {};
+      for (var i = 0; i < perCombo; i++) {
+        var p = GENS[c.id](d), tag = c.id + ' L' + d + ' ' + p.kind + ' "' + p.q + '"';
+        kinds[p.kind] = (kinds[p.kind] || 0) + 1;
+        var ok = check('gen.shape', p.cat === c.id && p.diff === d && typeof p.q === 'string' && p.q.length > 0 && typeof p.how === 'string' && p.how.length > 0 && typeof p.disp === 'string', tag + ' malformed');
+        if (!ok) continue;
+        check('gen.noFallback', p.kind !== 'fallback', tag + ' generator exhausted its retries');
+        check('gen.text', !/NaN|undefined|Infinity|null|\[object/.test(p.q + ' ' + p.how + ' ' + p.disp), tag + ' bad text: ' + p.how + ' | ' + p.disp);
+        check('gen.positive', isFinite(p.ans) && p.ans > 0, tag + ' answer ' + p.ans);
+        var V = VERIFY[p.kind];
+        if (!check('gen.verifier', !!V, tag + ' has no verifier')) continue;
+        var nums = numsIn(p.q);
+        check('gen.arity', V.n < 0 || nums.length === V.n, tag + ' expected ' + V.n + ' numbers in question, found ' + nums.length + ' ' + JSON.stringify(nums));
+        var exp = V.f(nums, p.q);
+        check('gen.correct', near(exp, p.ans, 1e-7), tag + ' recomputed ' + exp + ' but generator says ' + p.ans);
+        check('gen.acceptsDisplay', grade(p, p.disp).ok, tag + ' display "' + p.disp + '" not accepted');
+        check('gen.acceptsExact', grade(p, String(p.ans)).ok && grade(p, fmt(p.ans, 6)).ok, tag + ' exact ' + p.ans + ' not accepted');
+        var wrong = p.ans + Math.max(p.tol * 2, Math.abs(p.ans) * 0.01, 0.01);
+        check('gen.rejectsWrong', !grade(p, String(wrong)).ok, tag + ' wrong answer ' + wrong + ' accepted (tol ' + p.tol + ')');
+        if (p.tol === 0) check('gen.cleanExact', decimals(p.ans) <= 2, tag + ' exact answer has >2 decimals: ' + p.ans);
+        if (p.tol > 0) check('gen.tolSane', p.tol <= Math.max(1, Math.abs(p.ans) * 0.06), tag + ' tolerance too loose: ' + p.tol);
+        var hn = numsIn(p.how), lastN = hn[hn.length - 1];
+        check('gen.shortcutEndsOnAnswer', isFinite(lastN) && Math.abs(lastN - p.ans) <= p.tol + 0.051 + 1e-6 * Math.abs(p.ans), tag + ' shortcut ends on ' + lastN + ', answer ' + p.ans + ' :: ' + p.how);
+        check('gen.shortcutLength', p.how.length <= 170, tag + ' shortcut is ' + p.how.length + ' chars');
+        var key = c.id + d + p.kind;
+        if (!seen[key]) { seen[key] = 1; R.samples.push(p); }
+      }
+      R.kinds[c.id + ' L' + d] = kinds;
+      (EXPECTED_KINDS[c.id][d] || []).forEach(function (k) { check('gen.coverage', kinds[k] > 0, c.id + ' L' + d + ' never produced ' + k + ' in ' + perCombo + ' draws'); });
+      var distinct = {};
+      for (var j = 0; j < 60; j++) distinct[GENS[c.id](d).q] = 1;
+      check('gen.variety', Object.keys(distinct).length >= 15, c.id + ' L' + d + ' only ' + Object.keys(distinct).length + ' distinct questions in 60 draws');
+    }
+  });
+
+  /* --- D. weakness weighting --- */
+  var tdb = freshDB(), t0 = 1.7e12;
+  function addSess(cat, n, okRate, sec) {
+    var r = []; for (var i = 0; i < n; i++) r.push({ c: cat, d: 2, ok: i < Math.round(n * okRate), t: sec * 1000 });
+    tdb.sessions.push({ id: 'x' + tdb.sessions.length, mode: 'drill', cat: cat, start: t0 + tdb.sessions.length, end: t0 + tdb.sessions.length + 1, r: r });
+  }
+  CATS.forEach(function (c) { if (c.id !== 'cagr' && c.id !== 'pct') addSess(c.id, 30, 0.9, targetSec(c.id, 2)); });
+  addSess('cagr', 20, 0.3, 40); addSess('pct', 40, 1, 2);
+  var W = catWeights(tdb), wm = {}; W.forEach(function (x) { wm[x.id] = x.p; });
+  check('weakness', near(sum(W.map(function (x) { return x.p; })), 1, 1e-9), 'weights sum to ' + sum(W.map(function (x) { return x.p; })));
+  check('weakness', W.every(function (x) { return x.p >= 0.04 - 1e-12; }), 'a weight fell below the 4% floor');
+  check('weakness', W.every(function (x) { return x.id === 'cagr' || wm.cagr > x.p; }), 'weakest category (cagr) is not weighted highest: ' + JSON.stringify(wm));
+  check('weakness', W.every(function (x) { return x.id === 'pct' || wm.pct < x.p; }), 'strongest category (pct) is not weighted lowest: ' + JSON.stringify(wm));
+  var eW = catWeights(freshDB());
+  check('weakness', eW.every(function (x) { return near(x.p, 1 / CATS.length, 1e-9); }), 'empty history should give even weights');
+  tdb.settings.on.mult = false;
+  check('weakness', !catWeights(tdb).some(function (x) { return x.id === 'mult'; }), 'disabled category still weighted');
+  var counts = {}; _rand = mulberry32(seed + 7);
+  for (var i = 0; i < 4000; i++) { var id = weightedPick(W); counts[id] = (counts[id] || 0) + 1; }
+  check('weakness', near(counts.cagr / 4000, wm.cagr, 0.15), 'sampling frequency ' + counts.cagr / 4000 + ' vs weight ' + wm.cagr);
+
+  /* --- E. stats --- */
+  var sdb = freshDB();
+  sdb.sessions.push({ id: 'a', mode: 'sprint', start: 1, end: 2, r: [{ c: 'pct', d: 1, ok: true, t: 2000 }, { c: 'pct', d: 1, ok: false, t: 4000 }, { c: 'irr', d: 2, ok: false, t: 9000, sk: 1 }] });
+  var ss = sessStats(sdb.sessions[0]);
+  check('stats', ss.n === 3 && ss.k === 1 && near(ss.avg, 3, 1e-9), 'sessStats ' + JSON.stringify(ss));
+  var cst = catStats(sdb, 0), pc = cst.filter(function (x) { return x.id === 'pct'; })[0], ic = cst.filter(function (x) { return x.id === 'irr'; })[0];
+  check('stats', pc.n === 2 && near(pc.acc, 0.5, 1e-9) && near(pc.avg, 3, 1e-9), 'catStats pct ' + JSON.stringify(pc));
+  check('stats', ic.n === 1 && ic.acc === 0 && !isFinite(ic.avg), 'skips excluded from avg time ' + JSON.stringify(ic));
+
+  /* --- F. import / export round trip + sanitising --- */
+  var a = freshDB();
+  a.sessions.push({ id: 's1', mode: 'drill', cat: 'pct', start: 10, end: 11, r: [{ c: 'pct', d: 2, ok: true, t: 1000 }] });
+  var exported = JSON.stringify({ app: 'ib-mental-math', v: 1, settings: a.settings, sessions: a.sessions.concat([
+    { id: 's2', mode: 'sprint', start: 5, end: 6, r: [{ c: 'irr', d: 3, ok: false, t: 5000, q: '<img src=x onerror=alert(1)>' }] },
+    { id: 'bad', mode: 'nope', start: 1, r: [] }, { junk: true }, { id: 's3', mode: 'weak', start: 7, r: [{ c: 'unknown', d: 1, ok: true, t: 1 }] }
+  ]) });
+  var b = freshDB(); b.sessions.push({ id: 's1', mode: 'drill', cat: 'pct', start: 10, end: 11, r: [{ c: 'pct', d: 2, ok: true, t: 1000 }] });
+  var res = mergeImport(b, exported);
+  check('import', res.added === 1 && res.dup === 1 && res.bad === 3, 'merge counts ' + JSON.stringify(res));
+  check('import', b.sessions.length === 2 && b.sessions[0].id === 's2', 'merged sessions sorted by start: ' + b.sessions.map(function (s) { return s.id; }));
+  check('import', mergeImport(b, 'not json').error && mergeImport(b, '{"x":1}').error, 'bad JSON should be rejected with an error');
+  var arr = freshDB(), ar = mergeImport(arr, JSON.stringify([{ id: 'q', mode: 'drill', cat: 'val', start: 3, r: [{ c: 'val', d: 9, ok: 1, t: -5 }] }]));
+  check('import', ar.added === 1 && arr.sessions[0].r[0].d === 2 && arr.sessions[0].r[0].t === 0 && arr.sessions[0].r[0].ok === true, 'array import + sanitising ' + JSON.stringify(arr.sessions));
+  var rt = cleanDB(JSON.parse(JSON.stringify(b)));
+  check('import', canon(rt.sessions) === canon(b.sessions), 'cleanDB round trip changed data');
+  check('import', esc('<img src=x onerror=alert(1)>').indexOf('<') < 0, 'escaping');
+
+  /* --- G. storage failure is contained --- */
+  var realBackend = Store.backend, wasOk = Store.ok;
+  Store.backend = function () { return { getItem: function () { throw new Error('denied'); }, setItem: function () { throw new Error('quota'); } }; };
+  var threw = false, l, sv;
+  try { l = Store.load(); sv = Store.save(freshDB()); } catch (e) { threw = true; }
+  check('storage', !threw && l === null && sv === false, 'throwing localStorage leaked an exception or wrong result');
+  Store.backend = function () { throw new Error('SecurityError'); };
+  threw = false; try { l = Store.load(); } catch (e) { threw = true; }
+  check('storage', !threw && l === null, 'inaccessible localStorage leaked an exception');
+  Store.backend = realBackend; Store.ok = wasOk;
+  check('storage', cleanDB({ sessions: 'nope', settings: { diff: { pct: 7 } } }).settings.diff.pct === 2, 'cleanDB should reset invalid difficulty');
+
+  return R;
+}
+
+function renderSelfTest(R) {
+  var secs = Object.keys(R.sections).map(function (k) { var s = R.sections[k]; return '<tr><td>' + esc(k) + '</td><td class="r ok">' + s.pass + '</td><td class="r ' + (s.fail ? 'bad' : '') + '">' + s.fail + '</td></tr>'; }).join('');
+  var kinds = Object.keys(R.kinds).map(function (k) { return esc(k) + ': ' + Object.keys(R.kinds[k]).map(function (x) { return x + '×' + R.kinds[k][x]; }).join(', '); }).join('\n');
+  var samples = R.samples.map(function (p) {
+    return '<div class="ex"><div class="k">' + esc(p.cat + ' L' + p.diff + ' · ' + p.kind + (p.tolLabel ? ' · ' + p.tolLabel : '')) + '</div><div><b>' + esc(p.q) + '</b> → ' + esc(p.disp) + '</div><div class="muted">' + esc(p.how) + '</div></div>';
+  }).join('');
+  app.innerHTML = '<div class="tst"><div class="top"><div class="brand"><b>%</b> Self-test</div><a class="iconbtn" href="./">Open app</a></div>' +
+    '<h1 class="' + (R.fail ? 'bad' : 'ok') + '">' + (R.fail ? '✗ ' + R.fail + ' failing check' + (R.fail === 1 ? '' : 's') : '✓ All ' + R.pass + ' checks passed') + '</h1>' +
+    '<p class="muted small">Seed ' + R.seed + ' · reload with ?test&amp;seed=' + R.seed + ' to reproduce · ' + R.pass + ' passed, ' + R.fail + ' failed</p>' +
+    '<div class="card" style="padding:6px 10px"><table class="t"><thead><tr><th>Section</th><th class="r">Pass</th><th class="r">Fail</th></tr></thead><tbody>' + secs + '</tbody></table></div>' +
+    (R.failures.length ? '<h2>Failures</h2><pre>' + esc(R.failures.join('\n')) + '</pre>' : '') +
+    '<h2>Kinds generated</h2><pre>' + kinds + '</pre><h2>One sample per kind</h2>' + samples + '</div>';
+}
+
+/* =====================================================================
+   11. BOOT
+   ===================================================================== */
+window.__IBMM__ = { GENS: GENS, CATS: CATS, parseAnswer: parseAnswer, grade: grade, generate: generate, catWeights: catWeights, catStats: catStats, sessStats: sessStats, mergeImport: mergeImport, cleanDB: cleanDB, VERIFY: VERIFY, numsIn: numsIn, setSeed: function (s) { _rand = mulberry32(s); }, state: S };
+
+var qs = location.search || '';
+if (/[?&]test\b/.test(qs)) {
+  var sm = /[?&]seed=(\d+)/.exec(qs), nm = /[?&]n=(\d+)/.exec(qs);
+  var seed = sm ? +sm[1] : Math.floor(Math.random() * 1e9);
+  var perCombo = nm ? Math.max(50, Math.min(20000, +nm[1])) : 1000;
+  app.innerHTML = '<div class="tst"><h1>Running self-test…</h1><p class="muted">' + perCombo + ' problems per category × difficulty, seed ' + seed + '.</p></div>';
+  document.title = 'SELFTEST RUNNING — IB Mental Math';
+  setTimeout(function () {
+    _rand = mulberry32(seed);
+    var t0 = now(), R;
+    try { R = runSelfTest(seed, perCombo); }
+    catch (e) { R = { pass: 0, fail: 1, failures: ['self-test crashed: ' + (e && e.stack || e)], sections: { crash: { pass: 0, fail: 1 } }, seed: seed, kinds: {}, samples: [] }; }
+    R.ms = Math.round(now() - t0);
+    _rand = Math.random;
+    window.__SELFTEST__ = { pass: R.pass, fail: R.fail, failures: R.failures, seed: R.seed, sections: R.sections, kinds: R.kinds, ms: R.ms, perCombo: perCombo };
+    document.title = (R.fail ? 'SELFTEST FAIL' : 'SELFTEST PASS') + ' — IB Mental Math';
+    renderSelfTest(R);
+  }, 30);
+} else {
+  var loaded = Store.load();
+  S.db = cleanDB(loaded);
+  if (Store.ok) Store.save(S.db);
+  try { history.replaceState({ s: 'home' }, ''); } catch (e) { /* ignore */ }
+  render();
+}
+})();
+</script>
+</body>
+</html>
