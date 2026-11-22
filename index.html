@@ -13,7 +13,7 @@
 <style>
 :root{
   --bg:#0d0e10; --surface:#16171a; --surface2:#1e2024; --line:#2a2d33; --line2:#363a42;
-  --text:#eceef1; --text2:#c3c7ce; --muted:#9aa1ab; --faint:#6f7680;
+  --text:#eceef1; --text2:#c3c7ce; --muted:#9aa1ab; --faint:#858c96;
   --accent:#5b9cff; --accent-strong:#2f6fe0; --accent-soft:rgba(91,156,255,.14);
   --good:#34c77b; --good-soft:rgba(52,199,123,.12); --bad:#f06565; --bad-soft:rgba(240,101,101,.12); --warn:#f2b13c;
   --series:#3987e5; --grid:#2a2c31;
@@ -28,6 +28,8 @@ body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 var(--sans);
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.primary:focus-visible{outline-color:#fff}
 .wrap{max-width:560px;margin:0 auto;padding:max(10px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(28px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 .top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:46px}
 .brand{font-weight:650;letter-spacing:.01em;color:var(--text2);font-size:.95rem}
@@ -40,7 +42,7 @@ h2{font-size:1.05rem;margin:26px 0 10px;color:var(--text2);font-weight:650;lette
 .muted{color:var(--muted)} .faint{color:var(--faint)} .small{font-size:.85rem}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
 .mode{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:0 0 10px;color:var(--text)}
-.mode:hover,.mode:focus-visible{border-color:var(--line2);background:var(--surface2);outline:none}
+.mode:hover,.mode:focus-visible{border-color:var(--line2);background:var(--surface2)}
 .mode .mi{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:750;font-size:1.05rem;flex:0 0 auto}
 .mode .mt{font-weight:650;font-size:1.08rem}
 .mode .md{color:var(--muted);font-size:.88rem;margin-top:2px}
@@ -50,11 +52,11 @@ h2{font-size:1.05rem;margin:26px 0 10px;color:var(--text2);font-weight:650;lette
 .links{display:flex;gap:8px;margin-top:6px}
 .links .btn{flex:1}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 18px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-weight:600;font-size:1rem}
-.btn:hover,.btn:focus-visible{border-color:var(--line2);background:var(--surface2);outline:none}
+.btn:hover,.btn:focus-visible{border-color:var(--line2);background:var(--surface2)}
 .btn.primary{background:var(--accent-strong);border-color:var(--accent-strong);color:#fff}
 .btn.primary:hover,.btn.primary:focus-visible{background:#3a7af0;border-color:#3a7af0}
 .btn.ghost{background:transparent}
-.btn.small{min-height:40px;padding:0 12px;font-size:.9rem;border-radius:10px}
+.btn.small{min-height:44px;padding:0 12px;font-size:.9rem;border-radius:10px}
 .btn.danger{color:var(--bad)}
 .lastline{margin-top:18px;color:var(--muted);font-size:.88rem;text-align:center}
 /* setup rows */
@@ -67,12 +69,13 @@ h2{font-size:1.05rem;margin:26px 0 10px;color:var(--text2);font-weight:650;lette
 .cstat{color:var(--faint);font-size:.78rem;margin-top:2px}
 .cr2{display:flex;align-items:center;gap:10px;margin-top:10px}
 .seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
-.seg button{border:0;background:transparent;color:var(--muted);min-width:42px;min-height:36px;border-radius:7px;font-weight:650}
+.seg button{border:0;background:transparent;color:var(--muted);min-width:44px;min-height:44px;border-radius:7px;font-weight:650}
 .seg button[aria-pressed="true"]{background:var(--surface2);color:var(--text);box-shadow:inset 0 0 0 1px var(--line2)}
-.seglabel{font-size:.78rem;color:var(--faint);min-width:64px}
-.cr2 .btn{margin-left:auto}
+.seglabel{font-size:.78rem;color:var(--faint);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cr2 .btn{margin-left:auto;white-space:nowrap;flex:0 0 auto}
+@media (max-width:350px){ .seglabel{display:none} }
 .tog{position:relative;display:inline-block;width:46px;height:28px;flex:0 0 auto;margin-top:2px}
-.tog input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;width:100%;height:100%}
+.tog input{position:absolute;inset:-8px;opacity:0;margin:0;cursor:pointer;width:calc(100% + 16px);height:calc(100% + 16px)}
 .tog span{position:absolute;inset:0;border-radius:999px;background:var(--line);transition:background .15s;pointer-events:none}
 .tog span::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#c9ccd2;transition:transform .15s}
 .tog input:checked + span{background:var(--accent-strong)}
@@ -90,8 +93,8 @@ h2{font-size:1.05rem;margin:26px 0 10px;color:var(--text2);font-weight:650;lette
 .pbar div{height:100%;width:0;background:var(--accent);transition:width .25s linear}
 .chiprow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
 .pchip{display:inline-flex;gap:6px;align-items:center;font-size:.78rem;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 10px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.skipbtn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;min-height:36px;padding:0 14px;font-size:.85rem;font-weight:600;flex:0 0 auto}
-.skipbtn:hover,.skipbtn:focus-visible{color:var(--text);border-color:var(--line2);outline:none}
+.skipbtn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;min-height:44px;padding:0 16px;font-size:.88rem;font-weight:600;flex:0 0 auto}
+.skipbtn:hover,.skipbtn:focus-visible{color:var(--text);border-color:var(--line2)}
 .prompt{font-weight:500;letter-spacing:-.01em;line-height:1.2;color:var(--text2);margin:0 0 14px;min-height:1.2em;overflow-wrap:anywhere}
 .prompt .ln{display:block}
 .prompt .num{color:var(--text);font-weight:700}
@@ -103,6 +106,7 @@ h2{font-size:1.05rem;margin:26px 0 10px;color:var(--text2);font-weight:650;lette
 .field input{width:100%;height:66px;background:var(--surface);border:1.5px solid var(--line2);border-radius:var(--r);padding:0 76px 0 16px;font-size:clamp(1.9rem,8vw,2.4rem);font-weight:650;color:var(--text);outline:none;font-variant-numeric:tabular-nums;caret-color:var(--accent)}
 .field input:focus{border-color:var(--accent)}
 .field input.shake{animation:shake .28s}
+.field input.long{font-size:clamp(1.3rem,5.6vw,1.7rem)}
 @keyframes shake{25%{transform:translateX(-6px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
 .adorn{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:650;font-size:1.15rem;pointer-events:none}
 .irow{display:flex;gap:8px;align-items:stretch}
@@ -146,7 +150,7 @@ table.t tr:last-child td{border-bottom:0}
 .actions .btn{flex:1}
 /* stats */
 .segwide{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px;margin:0 0 10px}
-.segwide button{flex:1;border:0;background:transparent;color:var(--muted);min-height:38px;border-radius:7px;font-weight:600;font-size:.9rem}
+.segwide button{flex:1;border:0;background:transparent;color:var(--muted);min-height:44px;border-radius:7px;font-weight:600;font-size:.9rem}
 .segwide button[aria-pressed="true"]{background:var(--surface2);color:var(--text);box-shadow:inset 0 0 0 1px var(--line2)}
 .chart{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 10px 6px;margin-bottom:10px}
 .chart .ct{font-size:.85rem;color:var(--text2);font-weight:600;margin:0 4px 4px}
@@ -157,7 +161,7 @@ table.t tr:last-child td{border-bottom:0}
 .sesslist{font-size:.88rem}
 .datarow{display:flex;flex-wrap:wrap;gap:8px}
 .datarow .btn{flex:1 1 140px}
-textarea.paste{width:100%;min-height:120px;margin-top:10px;background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:10px;font:13px/1.4 var(--mono);color:var(--text)}
+textarea.paste{width:100%;min-height:120px;margin-top:10px;background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:10px;font:16px/1.4 var(--mono);color:var(--text)}
 .warnbar{background:rgba(242,177,60,.1);border:1px solid rgba(242,177,60,.35);color:#f5cf86;border-radius:10px;padding:8px 12px;font-size:.85rem;margin:6px 0 10px}
 .toast{position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);background:#22252b;border:1px solid var(--line2);color:var(--text);padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:10;max-width:calc(100% - 32px);box-shadow:0 10px 30px rgba(0,0,0,.45)}
 /* self-test */
@@ -179,6 +183,11 @@ body.kb .prompt.s4{font-size:clamp(1.05rem,4.3vw,1.3rem)}
 body.kb .field input,body.kb .irow .go{height:58px;min-height:58px}
 body.kb .fb{margin-top:8px}
 body.kb .fbhint{display:none}
+body.kb.fbtight .chiprow,body.kb.fbtight .pbar{display:none}
+body.kb.fbtight .prompt{margin-bottom:8px}
+body.kb.fbtight .prompt.s1{font-size:1.8rem} body.kb.fbtight .prompt.s2{font-size:1.35rem}
+body.kb.fbtight .prompt.s3{font-size:1.1rem} body.kb.fbtight .prompt.s4{font-size:1rem}
+body.kb.fbtight .fbs{font-size:.9rem}
 @media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} }
 </style>
 </head>
@@ -276,7 +285,7 @@ function mk(cat, diff, kind, q, ans, unit, how, o) {
   ans = snap(ans);
   return {
     cat: cat, diff: diff, kind: kind, q: q, ans: ans, unit: unit || '', how: how,
-    tol: o.tol || 0, tolLabel: o.tolLabel || '',
+    tol: o.tol || 0, tolLabel: o.tolLabel || '', signFree: !!o.signFree,
     disp: o.disp || ((o.approx ? '≈' : '') + dispAns(ans, unit || '', o.dec))
   };
 }
@@ -284,10 +293,12 @@ function tolPt(t, extra) { return assign({ tol: t, tolLabel: '±' + t + ' pt' },
 function tolRel(ans, r, extra) { return assign({ tol: Math.abs(ans) * r, tolLabel: '±' + snap(r * 100) + '%' }, extra); }
 function assign(a, b) { if (b) for (var k in b) a[k] = b[k]; return a; }
 var UNIT_ADORN = { '%': '%', x: 'x', M: '$M', yrs: 'yrs', bps: 'bps', '$': '$/sh', amt: '', '': '' };
+function sigDigits(x) { return String(snap(Math.abs(x))).replace('.', '').replace(/^0+/, '').replace(/0+$/, '').length; }
 function fallback(cat, d) { return mk(cat, d, 'fallback', '10% of 500', 50, '', '10% = 50'); }
 
 /* ---------- shortcut builders ---------- */
-var FRAC_PCT = { 12.5: [1, 8], 25: [1, 4], 50: [1, 2], 20: [1, 5], 37.5: [3, 8], 62.5: [5, 8], 75: [3, 4], 87.5: [7, 8], 40: [2, 5], 60: [3, 5], 80: [4, 5] };
+var FRAC_PCT = { 6.25: [1, 16], 12.5: [1, 8], 25: [1, 4], 50: [1, 2], 20: [1, 5], 37.5: [3, 8], 62.5: [5, 8], 75: [3, 4], 87.5: [7, 8], 40: [2, 5], 60: [3, 5], 80: [4, 5] };
+var BASE_FR = assign(assign({}, FRAC_PCT), { 0.5: [1, 200], 2.5: [1, 40], 7.5: [3, 40] });
 function decompPct(p) {
   var out = [], r = p;
   var tens = Math.floor(r / 10);
@@ -306,12 +317,16 @@ function pctHow(p, N, a) {
       : fmt(p) + '% = ' + fr[0] + '/' + fr[1] + ' → ' + fmt(N) + ' ÷ ' + fr[1] + ' = ' + fmt(N / fr[1]) + ', ×' + fr[0] + ' = ' + fmt(a);
   }
   if (p === 10) return '10% = move the decimal one place → ' + fmt(a);
+  if (p === 1) return '1% = move the decimal two places → ' + fmt(a);
+  if (p === 5) return '10% = ' + fmt(N / 10) + ', half of that = ' + fmt(a);
+  if (p % 10 === 0 && p > 10 && p < 100) return '10% = ' + fmt(N / 10) + ', ×' + p / 10 + ' = ' + fmt(a);
   if (p === 2.5) return '10% = ' + fmt(N / 10) + ', ÷ 4 = ' + fmt(a);
   if (p === 7.5) return '10% = ' + fmt(N / 10) + ', − ¼ of that (' + fmt(N / 40) + ') = ' + fmt(a);
   if (p < 10) {
     var k = Math.floor(p), f = snap(p - k);
     if (f === 0) return '1% = ' + fmt(one) + ', ×' + k + ' = ' + fmt(a);
     if (k === 0) return '1% = ' + fmt(one) + ' → ' + (QFR[f] || fmt(f)) + ' of that = ' + fmt(a);
+    if (k === 1) return '1% = ' + fmt(one) + ', + ' + (QFR[f] || fmt(f)) + ' of that (' + fmt(one * f) + ') → ' + fmt(a);
     return '1% = ' + fmt(one) + ' → ' + k + '% = ' + fmt(one * k) + ', + ' + fmt(f) + '% = ' + fmt(one * f) + ' → ' + fmt(a);
   }
   var anchors = [100, 50, 25, 20];
@@ -327,13 +342,17 @@ function whatHow(X, Y, p) {
   var fr = FRAC_PCT[p];
   if (fr) return fmt(X) + '/' + fmt(Y) + ' = ' + fr[0] + '/' + fr[1] + ' = ' + fmt(p) + '%';
   var parts = decompPct(p);
+  if (parts.length === 1) {
+    if (isInt(Y / X)) return fmt(X) + '/' + fmt(Y) + ' = 1/' + fmt(Y / X) + ' = ' + fmt(p) + '%';
+    return '10% = ' + fmt(Y / 10) + ' → ' + fmt(X) + ' ÷ ' + fmt(Y / 10) + ' = ' + fmt(p / 10) + ' → ' + fmt(p) + '%';
+  }
   if (parts.length <= 3) {
     return parts.map(function (x) { return fmt(x) + '% = ' + fmt(Y * x / 100); }).join(', ') + ' → ' + fmt(X) + ' is ' + fmt(p) + '%';
   }
   return '1% = ' + fmt(Y / 100) + ' → ' + fmt(X) + ' ÷ ' + fmt(Y / 100) + ' = ' + fmt(p) + '%';
 }
 function baseHow(p, X, N) {
-  var fr = FRAC_PCT[p];
+  var fr = BASE_FR[p];
   if (fr && fr[0] === 1) return fmt(p) + '% = 1/' + fr[1] + ' → ' + fmt(X) + ' × ' + fr[1] + ' = ' + fmt(N);
   if (fr) return fmt(p) + '% = ' + fr[0] + '/' + fr[1] + ' → ' + fmt(X) + ' ÷ ' + fr[0] + ' × ' + fr[1] + ' = ' + fmt(N);
   return '1% = ' + fmt(X) + ' ÷ ' + fmt(p) + ' = ' + fmt(X / p) + ' → 100% = ' + fmt(N);
@@ -399,6 +418,7 @@ function multHow(a, b) {
   var sa = stripZ(a), sb = stripZ(b), z = sa[1] + sb[1];
   if (z > 0) {
     var ca = sa[0], cb = sb[0], core = ca * cb;
+    if (ca === 1 || cb === 1) return fmt(a) + ' × ' + fmt(b) + ': add ' + z + ' zero' + (z > 1 ? 's' : '') + ' → ' + fmt(ans);
     var coreHow = (Math.min(ca, cb) < 10 && Math.max(ca, cb) < 100) ? fmt(ca) + ' × ' + fmt(cb) + ' = ' + fmt(core) : multCore(ca, cb);
     return coreHow + ', + ' + z + ' zero' + (z > 1 ? 's' : '') + ' → ' + fmt(ans);
   }
@@ -417,8 +437,9 @@ function bracket(c, n) {
    4. GENERATORS — one per category. Each returns a problem object.
    ===================================================================== */
 function genPct(d) {
+  var r = rand(), r2 = rand();
   for (var t = 0; t < 300; t++) {
-    var p, N, a, X, Y, r;
+    var p, N, a, X, Y;
     if (d === 1) {
       p = pick([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50, 60, 75]);
       N = pick([2, 3, 4, 5, 6, 8, 12, 15, 16, 18, 24, 25, 32, 36, 40, 45, 48, 60, 64, 72, 80, 90]) * pick([10, 100, 1000]);
@@ -427,11 +448,11 @@ function genPct(d) {
       return mk('pct', 1, 'pct.of', fmt(p) + '% of ' + fmt(N), a, '', pctHow(p, N, a));
     }
     if (d === 2) {
-      if (chance(0.7)) {
+      if (r2 < 0.7) {
         p = pick([2.5, 7.5, 11, 12, 12.5, 14, 15, 16, 17.5, 18, 22.5, 24, 35, 37.5, 45, 62.5, 65, 85]);
         N = pick([12, 16, 18, 24, 32, 36, 44, 48, 56, 64, 72, 84, 96, 120, 125, 140, 160, 180, 240, 250, 320, 360, 480, 640, 720, 960]) * pick([1, 10, 100]);
         a = p * N / 100;
-        if (decimals(a) > 1 || a < 1) continue;
+        if (decimals(a) > 1 || a < 1 || sigDigits(a) > 4) continue;
         return mk('pct', 2, 'pct.of', fmt(p) + '% of ' + fmt(N), a, '', pctHow(p, N, a));
       }
       p = pick([2.5, 5, 7.5, 12.5, 15, 17.5, 20, 22.5, 25, 30, 35, 40, 45, 60, 75, 80]);
@@ -440,12 +461,11 @@ function genPct(d) {
       if (!isInt(X)) continue;
       return mk('pct', 2, 'pct.what', fmt(X) + ' is what % of ' + fmt(Y) + '?', p, '%', whatHow(X, Y, p), { tol: 0.05 });
     }
-    r = rand();
     if (r < 0.4) {
       p = pick([0.25, 0.5, 0.75, 1.25, 1.5, 2.25, 3.25, 4.5, 6.25, 6.75, 8.25, 13, 17, 19, 23, 27, 33, 42.5]);
-      N = ri(12, 99) * pick([100, 1000, 10000]) + (chance(0.35) ? ri(1, 9) * pick([10, 100]) : 0);
+      N = ri(12, 99) * pick([100, 1000, 10000]);
       a = p * N / 100;
-      if (decimals(a) > 1 || a < 1) continue;
+      if (decimals(a) > 1 || a < 1 || sigDigits(a) > 4) continue;
       return mk('pct', 3, 'pct.of', fmt(p) + '% of ' + fmt(N), a, '', pctHow(p, N, a));
     }
     if (r < 0.7) {
@@ -465,14 +485,14 @@ function genPct(d) {
 }
 
 function genMult(d) {
+  var r = rand();
   for (var t = 0; t < 300; t++) {
-    var a, b, r, mode, sw;
+    var a, b, mode, sw;
     if (d === 1) {
       if (chance(0.7)) { a = ri(12, 99); if (a % 10 === 0) continue; b = ri(3, 9); }
       else { a = ri(2, 9) * pick([1, 10, 100]); b = ri(2, 9) * pick([10, 100, 1000]); if (stripZ(a)[1] + stripZ(b)[1] < 2) continue; }
       sw = chance(0.5);
     } else if (d === 2) {
-      r = rand();
       if (r < 0.75) {
         mode = rand();
         if (mode < 0.15) { a = ri(2, 9) * 10 + pick([-1, 1, -2, 2]); b = ri(12, 99); }
@@ -485,7 +505,6 @@ function genMult(d) {
       }
       sw = chance(0.5);
     } else {
-      r = rand();
       if (r < 0.35) {
         a = ri(12, 99); if (a % 10 === 0) continue;
         a = a * pick([1, 1, 10, 100]); b = ri(2, 9) * pick([100, 1000, 10000]);
@@ -507,7 +526,7 @@ function genMult(d) {
 }
 
 var FR_SETS = {
-  1: [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 8], [3, 8], [5, 8], [7, 8], [1, 10], [3, 10], [7, 10], [9, 10], [1, 20], [3, 20], [7, 20]],
+  1: [[1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 8], [3, 8], [5, 8], [7, 8], [1, 10], [3, 10], [7, 10], [9, 10], [1, 20], [3, 20], [7, 20]],
   2: [[1, 6], [5, 6], [1, 9], [2, 9], [4, 9], [5, 9], [7, 9], [1, 12], [5, 12], [7, 12], [11, 12], [1, 16], [3, 16], [5, 16], [7, 16], [1, 40], [3, 40], [7, 40], [1, 15], [2, 15]],
   3: [[1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7], [1, 11], [2, 11], [3, 11], [4, 11], [5, 11], [7, 11], [9, 16], [11, 16], [13, 16], [15, 16], [4, 15], [7, 15], [1, 14], [3, 14], [9, 8], [11, 8], [7, 6], [5, 3], [7, 4], [13, 12]]
 };
@@ -519,8 +538,12 @@ function fracHow(a, b) {
     var w = Math.floor(a / b), rem = a - w * b;
     return a + '/' + b + ' = ' + w + ' + ' + rem + '/' + b + ' → ' + fmt(100 * w) + '% + ' + fmt(100 * rem / b, 2) + '% = ' + fmt(pct, 2) + '%';
   }
+  if (100 % b === 0) return a + '/' + b + ' = ' + (a * 100 / b) + '/100 = ' + fmt(pct, 2) + '%';
   if (a === 1) return 'Memorize: ' + unitStr(b);
-  return unitStr(b) + ' → ×' + a + ' = ' + fmt(pct, 2) + '%';
+  var c = b - a;
+  if (c < a && c <= 2) return a + '/' + b + ' = 1 − ' + c + '/' + b + ' → 100% − ' + fmt(100 * c / b, 2) + '% = ' + fmt(pct, 2) + '%';
+  var base = Math.round(10000 / b) / 100;
+  return unitStr(b) + ' → ×' + a + (fmt(base * a, 2) === fmt(pct, 2) ? ' = ' : ' ≈ ') + fmt(pct, 2) + '%';
 }
 function genFrac(d) {
   var r = rand(), ab = pick(FR_SETS[d]), a = ab[0], b = ab[1];
@@ -533,9 +556,10 @@ function genFrac(d) {
     var n = pick([6, 7, 8, 9, 11, 12, 14, 15, 16]), pp = Math.round(10000 / n) / 100;
     return mk('frac', 3, 'frac.unit', fmt(pp, 2) + '% ≈ 1/?', n, '', 'Memorize: 1/' + n + ' = ' + fmt(100 / n, 2) + '% → ' + n, { disp: String(n) });
   }
-  var p2 = Math.round(pct * 100) / 100;
-  return mk('frac', d, 'frac.toNum', (term ? '' : '≈ ') + fmt(p2, 2) + '% = ?/' + b, a, '',
-    '1/' + b + ' = ' + fmt(100 / b, 2) + '% → ' + fmt(p2, 2) + ' ÷ ' + fmt(100 / b, 2) + ' = ' + a, { disp: String(a) });
+  var p2 = Math.round(pct * 100) / 100, base = Math.round(10000 / b) / 100;
+  var nHow = a === 1 ? 'Memorize: ' + unitStr(b) + ' → 1'
+    : unitStr(b) + ' → ' + fmt(p2, 2) + ' ÷ ' + fmt(base, 2) + (Math.abs(p2 / base - a) < 1e-9 ? ' = ' : ' ≈ ') + a;
+  return mk('frac', d, 'frac.toNum', (term ? '' : '≈ ') + fmt(p2, 2) + '% = ?/' + b, a, '', nHow, { disp: String(a) });
 }
 
 function cagrP(d, s, e, n) {
@@ -547,12 +571,13 @@ function fwdP(d, s, g, n) {
   var k = 1 + g / 100, v = s, chain = [fmt(s)];
   for (var i = 0; i < n; i++) { v *= k; chain.push(fmt(v, 1)); }
   var e = s * Math.pow(k, n), exact = decimals(e) <= 2;
-  return mk('cagr', d, 'cagr.fwd', fmt(s) + ' growing ' + fmt(g) + '% a year for ' + n + ' years?', e, 'amt',
-    '×' + f2(k) + ' each year: ' + chain.join(' → '), tolRel(e, 0.005, { approx: !exact, dec: exact ? 2 : 1 }));
+  return mk('cagr', d, 'cagr.fwd', 'Revenue $' + fmt(s) + 'M grows ' + fmt(g) + '% a year. Value after ' + n + ' years?', e, 'M',
+    '×' + f2(k) + ' each year: ' + chain.join(' → '), tolRel(e, 0.005, { approx: !exact, dec: exact ? 2 : 1, tolLabel: '±0.5% of value' }));
 }
 function genCagr(d) {
+  var r = rand();
   for (var t = 0; t < 400; t++) {
-    var r = rand(), s, g, e, m, n, c;
+    var s, g, e, m, n, c;
     if (d === 1) {
       if (r < 0.35) {
         s = pick([40, 50, 60, 80, 120, 150, 200, 240, 250, 400, 500, 800]); g = pick([5, 10, 12.5, 15, 20, 25, 30, 40, 50, 60, 75, 100]); e = s * (1 + g / 100);
@@ -563,8 +588,8 @@ function genCagr(d) {
       if (r < 0.55) {
         s = pick([40, 80, 120, 160, 200, 240, 300, 400, 500, 600, 800]); g = pick([10, 12.5, 20, 25, 30, 40, 50, 60, 75]); e = s * (1 - g / 100);
         if (!isInt(e)) continue;
-        return mk('cagr', 1, 'cagr.decl', 'EBITDA falls from ' + fmt(s) + ' to ' + fmt(e) + '. Decline?', g, '%',
-          'Δ ' + fmt(s - e) + ' on a base of ' + fmt(s) + ' → ' + fmt(s - e) + '/' + fmt(s) + ' = ' + fmt(g) + '%', tolPt(0.5));
+        return mk('cagr', 1, 'cagr.decl', 'EBITDA falls from ' + fmt(s) + ' to ' + fmt(e) + '. % decline?', g, '%',
+          'Δ ' + fmt(s - e) + ' on a base of ' + fmt(s) + ' → ' + fmt(s - e) + '/' + fmt(s) + ' = ' + fmt(g) + '%', tolPt(0.5, { signFree: true, tolLabel: '±0.5 pt, sign optional' }));
       }
       if (r < 0.8) return fwdP(1, pick([50, 100, 200, 400, 1000]), pick([5, 10, 15, 20, 25, 30, 50]), 2);
       g = pick([10, 20, 30, 40, 50, 100]); m = Math.pow(1 + g / 100, 2); s = pick([50, 100, 200, 300, 400, 500]); e = s * m;
@@ -594,8 +619,9 @@ function genCagr(d) {
 
 var HALF = [6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5];
 function genVal(d) {
+  var r = rand();
   for (var t = 0; t < 400; t++) {
-    var r = rand(), E, m, EV, ND, k;
+    var E, m, EV, ND, k;
     if (d === 1) {
       E = chance(0.5) ? ri(4, 30) * 5 : ri(12, 95); m = ri(5, 12); EV = E * m;
       if (r < 0.5) return mk('val', 1, 'val.ev', 'EBITDA $' + fmt(E) + 'M at ' + m + 'x. EV?', EV, 'M', multHow(E, m));
@@ -626,9 +652,10 @@ function genVal(d) {
         'EV = ' + fmt(E) + ' × ' + fmt(m) + ' = ' + fmt(EV) + '; equity = ' + fmt(EV) + ' − ' + fmt(ND) + ' = ' + fmt(EV - ND));
     }
     if (r < 0.5) {
-      E = ri(40, 200); m = ri(6, 12); EV = E * m; ND = Math.round(EV * (0.15 + 0.4 * rand()) / 10) * 10;
-      var sh = pick([10, 20, 25, 40, 50, 80, 100]), px = (EV - ND) / sh;
-      if (!isInt(px * 4) || px < 2) continue;
+      E = ri(40, 200); m = ri(6, 12); EV = E * m;
+      var sh = pick([10, 20, 25, 40, 50, 80, 100]), px = Math.round(EV * (0.45 + 0.4 * rand()) / sh * 4) / 4;
+      ND = EV - px * sh;
+      if (px < 2 || ND <= 0 || !isInt(ND) || ND % 5 !== 0) continue;
       return mk('val', 3, 'val.px', 'EBITDA $' + fmt(E) + 'M at ' + m + 'x, net debt $' + fmt(ND) + 'M, ' + sh + 'M shares. Share price?', px, '$',
         'EV ' + fmt(EV) + ' − ' + fmt(ND) + ' = ' + fmt(EV - ND) + ' equity → ÷ ' + sh + 'M shares = $' + f2(px));
     }
@@ -656,8 +683,14 @@ function genVal(d) {
 }
 
 function irrP(d, M, n) {
-  var c = (Math.pow(M, 1 / n) - 1) * 100, rule = M === 2 ? 72 : M === 3 ? 114 : M === 4 ? 144 : 0;
-  var how = (rule ? 'Rule of ' + rule + ': ' + rule + ' ÷ ' + n + ' = ' + fmt(rule / n, 1) + '%; ' : '') + bracket(c, n) + ' → ≈' + fmt(c, 1) + '%';
+  var c = (Math.pow(M, 1 / n) - 1) * 100, rule = M === 2 ? 72 : M === 3 ? 114 : M === 4 ? 144 : 0, pre = '';
+  if (rule) {
+    var rv = rule / n;
+    if (Math.abs(rv - c) <= 1) pre = 'Rule of ' + rule + ': ' + rule + ' ÷ ' + n + ' = ' + fmt(rv, 1) + '%; ';
+    else if (M === 4 && n % 2 === 0) pre = '4x = 2x twice → same IRR as 2x in ' + n / 2 + ' yrs; ';
+    else pre = 'Rule of ' + rule + ' undershoots at high rates (' + fmt(rv, 1) + '%); ';
+  }
+  var how = pre + bracket(c, n) + ' → ≈' + fmt(c, 1) + '%';
   return mk('irr', d, 'irr.irr', fmt(M) + 'x in ' + n + ' years. IRR?', c, '%', how, tolPt(1, { approx: true, dec: 1 }));
 }
 function yrsP(d, r, f) {
@@ -668,13 +701,20 @@ function yrsP(d, r, f) {
 function moicP(r, n) {
   var k = 1 + r / 100, M = Math.pow(k, n), v = 1, ch = [];
   for (var i = 0; i < n; i++) { v *= k; ch.push(f2(v)); }
+  var tol = Math.max(0.05, 0.02 * M);
   return mk('irr', 3, 'irr.moic', 'Target ' + r + '% IRR over ' + n + ' years. Required MOIC?', M, 'x',
-    f2(k) + sup(n) + ': ' + ch.join(' → ') + 'x', tolRel(M, 0.02, { approx: true }));
+    f2(k) + sup(n) + ': ' + ch.join(' → ') + 'x', { tol: tol, tolLabel: tol === 0.05 ? '±0.05x' : '±2%', approx: true });
 }
 function genIrr(d) {
   for (var t = 0; t < 300; t++) {
     var M, n, c, r;
-    if (d === 1) return chance(0.45) ? irrP(1, 2, pick([4, 5, 6, 7, 8, 9, 10, 11, 12])) : yrsP(1, pick([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]), 2);
+    if (d === 1) {
+      var r1 = rand();
+      if (r1 < 0.4) return irrP(1, 2, pick([4, 5, 6, 7, 8, 9, 10, 11, 12]));
+      if (r1 < 0.8) return yrsP(1, pick([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]), 2);
+      if (r1 < 0.9) return irrP(1, 4, pick([8, 9, 10, 12, 14, 16]));
+      return yrsP(1, pick([6, 8, 9, 12]), 4);
+    }
     if (d === 2) {
       if (chance(0.6)) {
         M = pick([1.5, 2, 2.5, 3, 4]); n = pick([3, 4, 5, 6, 7]);
@@ -699,8 +739,9 @@ function genIrr(d) {
 }
 
 function genMargin(d) {
+  var r = rand();
   for (var t = 0; t < 400; t++) {
-    var r = rand(), R, m, E, C, gm, bps, nm;
+    var R, m, E, C, gm, bps, nm;
     if (d === 1) {
       R = pick([80, 120, 150, 160, 200, 240, 250, 300, 320, 400, 450, 500, 600, 800, 1000, 1200]);
       m = pick([5, 7.5, 10, 12.5, 15, 17.5, 20, 22.5, 25, 30, 35, 40, 45]); E = R * m / 100;
@@ -736,7 +777,7 @@ function genMargin(d) {
       m = 100 * E / R; if (isInt(m * 10)) continue;
       var one = R / 100, a5 = Math.max(5, Math.round(m / 5) * 5), va = one * a5, diff = E - va, dp = diff / one;
       return mk('margin', 3, 'mgn.m', 'Revenue ' + fmt(R) + ', EBITDA ' + fmt(E) + '. EBITDA margin?', m, '%',
-        '1% = ' + fmt(one, 1) + ' → ' + a5 + '% = ' + fmt(va, 1) + '; ' + fmt(E) + ' is ' + fmt(Math.abs(diff), 1) + (diff < 0 ? ' below' : ' above') +
+        '1% = ' + fmt(one) + ' → ' + a5 + '% = ' + fmt(va) + '; ' + fmt(E) + ' is ' + fmt(Math.abs(diff)) + (diff < 0 ? ' below' : ' above') +
         ' ≈ ' + fmt(Math.abs(dp), 1) + ' pt → ≈' + fmt(m, 1) + '%', { tol: 0.2, tolLabel: '±0.2 pt', approx: true });
     }
     if (r < 0.6) {
@@ -761,14 +802,15 @@ function genMargin(d) {
     var NIv = EBT * (1 - tx / 100);
     if (decimals(NIv) > 1) continue;
     return mk('margin', 3, 'mgn.ni', 'Revenue ' + fmt(R) + ', EBITDA margin ' + m + '%, D&A ' + DA + ', interest ' + I + ', tax rate ' + tx + '%. Net income?', NIv, 'amt',
-      'EBITDA ' + fmt(E) + ' − D&A ' + DA + ' = EBIT ' + fmt(E - DA) + ' − interest ' + I + ' = EBT ' + fmt(EBT) + ' × (1 − ' + tx + '%) = ' + fmt(NIv));
+      'EBITDA = ' + fmt(E) + '; EBIT = ' + fmt(E) + ' − ' + DA + ' = ' + fmt(E - DA) + '; EBT = ' + fmt(E - DA) + ' − ' + I + ' = ' + fmt(EBT) + '; NI = ' + fmt(EBT) + ' × ' + f2(1 - tx / 100) + ' = ' + fmt(NIv));
   }
   return fallback('margin', d);
 }
 
 function genLbo(d) {
+  var r = rand();
   for (var t = 0; t < 500; t++) {
-    var r = rand(), E, m, dp, EV, eq, D, p, n, a, M, b;
+    var E, m, dp, EV, eq, D, p, n, a, M, b;
     if (d === 1) {
       if (r < 0.3) {
         E = pick([20, 30, 40, 50, 60, 75, 80, 100, 120, 150]); m = ri(6, 12); dp = pick([50, 60, 65, 70, 75]); EV = E * m; eq = EV * (1 - dp / 100);
@@ -788,9 +830,11 @@ function genLbo(d) {
     }
     if (d === 2) {
       if (r < 0.4) {
-        var E0 = pick([100, 150, 200, 250, 300, 400]); M = pick([1.5, 1.75, 2, 2.25, 2.5, 3, 3.5, 4]); var E1 = E0 * M;
-        if (!isInt(E1)) continue;
-        var ND0 = ri(3, 12) * 50, ND1 = ND0 - ri(1, ND0 / 50) * 50, EV0 = E0 + ND0, EV1 = E1 + ND1;
+        // coherent deal: 40-60% leverage at entry, EV grows 0-60%, debt is paid down 10-70%
+        var EV0 = ri(4, 24) * 50, ND0 = Math.round(EV0 * pick([0.4, 0.5, 0.6]) / 50) * 50, E0 = EV0 - ND0;
+        var EV1 = Math.round(EV0 * (1 + ri(0, 12) / 20) / 50) * 50, ND1 = Math.round(ND0 * ri(3, 9) / 10 / 50) * 50, E1 = EV1 - ND1;
+        M = E1 / E0;
+        if (E0 <= 0 || ND1 >= ND0 || M < 1.2 || M > 5 || decimals(M) > 2) continue;
         return mk('lbo', 2, 'lbo.moicEV', 'Entry: EV ' + fmt(EV0) + ', net debt ' + fmt(ND0) + '. Exit: EV ' + fmt(EV1) + ', net debt ' + fmt(ND1) + '. MOIC?', M, 'x',
           'Equity in ' + fmt(EV0) + ' − ' + fmt(ND0) + ' = ' + fmt(E0) + '; out ' + fmt(EV1) + ' − ' + fmt(ND1) + ' = ' + fmt(E1) + ' → ' + fmt(E1) + '/' + fmt(E0) + ' = ' + fmt(M) + 'x',
           { tol: 0.05, tolLabel: '±0.05x' });
@@ -805,7 +849,7 @@ function genLbo(d) {
       E = ri(40, 200); m = pick([7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 12]); EV = E * m;
       var ND = ri(5, 40) * 10; if (ND >= EV * 0.7) continue;
       return mk('lbo', 2, 'lbo.exitEq', 'Exit EBITDA ' + fmt(E) + ' at ' + fmt(m) + 'x, net debt ' + fmt(ND) + '. Exit equity?', EV - ND, 'amt',
-        'EV = ' + fmt(E) + ' × ' + fmt(m) + ' = ' + fmt(EV) + ' − ' + fmt(ND) + ' = ' + fmt(EV - ND));
+        'EV = ' + fmt(E) + ' × ' + fmt(m) + ' = ' + fmt(EV) + '; equity = ' + fmt(EV) + ' − ' + fmt(ND) + ' = ' + fmt(EV - ND));
     }
     if (r < 0.5) {
       var e0 = pick([50, 60, 80, 100, 120, 150, 200]), m0 = ri(7, 12), dpc = pick([50, 60, 70]);
@@ -827,7 +871,7 @@ function genLbo(d) {
     }
     var Eq = ri(2, 12) * 50; M = pick([2, 2.5, 3, 3.5]); var NDx = ri(2, 10) * 50;
     return mk('lbo', 3, 'lbo.reqEV', 'Equity of ' + fmt(Eq) + ' must return ' + fmt(M) + 'x. Exit net debt ' + fmt(NDx) + '. Required exit EV?', Eq * M + NDx, 'amt',
-      'Exit equity ' + fmt(Eq) + ' × ' + fmt(M) + ' = ' + fmt(Eq * M) + ' + net debt ' + fmt(NDx) + ' = ' + fmt(Eq * M + NDx));
+      'Exit equity = ' + fmt(Eq) + ' × ' + fmt(M) + ' = ' + fmt(Eq * M) + '; EV = ' + fmt(Eq * M) + ' + ' + fmt(NDx) + ' = ' + fmt(Eq * M + NDx));
   }
   return fallback('lbo', d);
 }
@@ -846,7 +890,7 @@ function generate(cat, d, seen) {
 /* =====================================================================
    5. ANSWER PARSER + GRADER
    Accepts: "1,080"  "1080"  "8.5x"  "45M"  "$45mm"  "14.5%"  "1.2bn"  "360k"
-            "12,5" (decimal comma)  "3/8"  "150bps"  "9 yrs"  "~14.5"
+            "12,5" (decimal comma)  "150bps"  "9 yrs"  "~14.5"   (not "3/8")
    ===================================================================== */
 var SUFFIX_RE = /^(.*?)(%|x|bps|bp|mm|m|bn|b|k|years|year|yrs|yr|y)?$/;
 function parseAnswer(raw) {
@@ -867,34 +911,37 @@ function parseAnswer(raw) {
   if (suf === 'bp') suf = 'bps';
   if (suf === 'years' || suf === 'year' || suf === 'yrs' || suf === 'yr') suf = 'y';
   if (!body) return { ok: false };
-  var v;
-  if (/^\d+(\.\d+)?\/\d+(\.\d+)?$/.test(body)) {
-    var parts = body.split('/'), den = parseFloat(parts[1]);
-    if (!den) return { ok: false };
-    v = parseFloat(parts[0]) / den;
-  } else {
-    if (body.indexOf(',') >= 0) {
-      if (/^\d{1,3}(,\d{3})+(\.\d*)?$/.test(body)) body = body.replace(/,/g, '');
-      else if (/^\d*,\d{1,2}$/.test(body)) body = body.replace(',', '.');
-      else return { ok: false };
-    }
-    if (!/^(\d+\.?\d*|\.\d+)$/.test(body)) return { ok: false };
-    v = parseFloat(body);
+  if (body.indexOf(',') >= 0) {
+    if (/^[1-9]\d{0,2}(,\d{3})+(\.\d*)?$/.test(body)) body = body.replace(/,/g, '');
+    else if (/^\d*,\d{1,2}$/.test(body) || /^0?,\d+$/.test(body)) body = body.replace(',', '.');
+    else return { ok: false };
   }
+  // fractions like "3/7" are deliberately NOT accepted: typing the question's own ratio is not mental math
+  if (!/^(\d+\.?\d*|\.\d+)$/.test(body)) return { ok: false };
+  var v = parseFloat(body);
   if (!isFinite(v)) return { ok: false };
   return { ok: true, value: sign * v, suffix: suf };
 }
+// which typed suffixes make sense for which answer unit; anything else gets a "drop the suffix" hint
+var SUFFIX_OK = {
+  '%': { '%': 1, bps: 1 }, x: { x: 1 }, bps: { bps: 1, '%': 1 }, y: { yrs: 1 },
+  k: { '': 1, amt: 1, M: 1 }, m: { '': 1, amt: 1, M: 1 }, b: { '': 1, amt: 1, M: 1 }
+};
+var UNIT_WORD = { '%': 'a percent', x: 'a multiple (x)', bps: 'in basis points', yrs: 'in years', M: 'in $ millions', amt: 'a plain amount', '': 'a plain number', '$': 'a $ share price' };
 function grade(prob, raw) {
   var p = parseAnswer(raw);
   if (!p.ok) return { ok: false, invalid: true };
-  var v = p.value, u = prob.unit, sf = p.suffix, money = (u === 'M' || u === 'amt');
-  if (sf === 'k') v = u === '' ? v * 1e3 : money ? v / 1e3 : v;
+  var v = p.value, u = prob.unit, sf = p.suffix;
+  if (sf && !(SUFFIX_OK[sf] && SUFFIX_OK[sf][u])) return { ok: false, invalid: true, hint: 'This answer is ' + UNIT_WORD[u] + ' — drop the unit you typed and try again.' };
+  if (sf === 'k') v = u === 'M' ? v / 1e3 : v * 1e3;
   else if (sf === 'm') v = u === '' ? v * 1e6 : v;
-  else if (sf === 'b') v = u === '' ? v * 1e9 : money ? v * 1e3 : v;
+  else if (sf === 'b') v = u === '' ? v * 1e9 : v * 1e3;
   else if (sf === '%' && u === 'bps') v = v * 100;
+  else if (sf === 'bps' && u === '%') v = v / 100;
+  if (prob.signFree) v = Math.abs(v);
   var tol = prob.tol + 1e-9 * Math.max(1, Math.abs(prob.ans));
   if (Math.abs(v - prob.ans) <= tol) return { ok: true, value: v };
-  if (u === '%' && sf === '' && Math.abs(v) < 1.5 && prob.ans >= 2 && Math.abs(v * 100 - prob.ans) <= tol) return { ok: true, value: v * 100, decimalForm: true };
+  if (u === '%' && sf === '' && Math.abs(v) < 10 && prob.ans >= 2 && Math.abs(v * 100 - prob.ans) <= tol) return { ok: true, value: v * 100, decimalForm: true };
   return { ok: false, value: v };
 }
 
@@ -905,12 +952,21 @@ var KEY = 'ibmm.v1';
 var Store = {
   ok: true,
   backend: function () { try { return window.localStorage; } catch (e) { return null; } },
+  corrupt: false,
   load: function () {
+    var ls, raw;
     try {
-      var ls = this.backend(); if (!ls) { this.ok = false; return null; }
-      var s = ls.getItem(KEY);
-      return s ? JSON.parse(s) : null;
+      ls = this.backend(); if (!ls) { this.ok = false; return null; }
+      raw = ls.getItem(KEY);
     } catch (e) { this.ok = false; return null; }
+    if (!raw) return null;
+    try { return JSON.parse(raw); }
+    catch (e2) {
+      // keep the unreadable copy instead of silently overwriting it
+      this.corrupt = true;
+      try { ls.setItem(KEY + '.corrupt', raw); } catch (e3) { /* ignore */ }
+      return null;
+    }
   },
   save: function (db) {
     try {
@@ -940,7 +996,7 @@ function cleanResult(r) {
   if (!r || typeof r !== 'object' || !CAT[r.c]) return null;
   var d = +r.d; if (!(d >= 1 && d <= 3)) d = 2;
   var t = +r.t; if (!isFinite(t) || t < 0) t = 0; if (t > 36e5) t = 36e5;
-  var o = { c: r.c, d: Math.round(d), ok: !!r.ok, t: Math.round(t) };
+  var o = { c: r.c, d: Math.round(d), ok: r.ok === true || r.ok === 1, t: Math.round(t) };
   if (r.k) o.k = clip(String(r.k), 30);
   if (r.sk) o.sk = 1;
   ['q', 'u', 'x', 'h'].forEach(function (f) { var v = clip(r[f], 300); if (v != null) o[f] = v; });
@@ -948,12 +1004,14 @@ function cleanResult(r) {
 }
 function cleanSession(s) {
   if (!s || typeof s !== 'object' || !Array.isArray(s.r) || !MODES[s.mode]) return null;
-  var start = +s.start; if (!isFinite(start) || start <= 0) return null;
-  var r = s.r.map(cleanResult).filter(Boolean);
+  var start = +s.start; if (!isFinite(start) || start <= 0 || start > 8.64e15) return null;
+  var end = +s.end; if (!isFinite(end) || end < start || end > 8.64e15) end = start;
+  var r = s.r.slice(0, 500).map(cleanResult).filter(Boolean);
   if (!r.length) return null;
-  var o = { id: clip(String(s.id || (s.mode + '-' + start)), 40), mode: s.mode, start: start, end: isFinite(+s.end) ? +s.end : start, r: r };
+  var o = { id: clip(String(s.id || (s.mode + '-' + start)), 40), mode: s.mode, start: start, end: end, r: r };
   if (s.cat && CAT[s.cat]) o.cat = s.cat;
   if (s.partial) o.partial = 1;
+  if (isFinite(+s.imp) && +s.imp > 0) o.imp = +s.imp;
   return o;
 }
 function cleanSettings(st) {
@@ -972,19 +1030,34 @@ function cleanDB(raw) {
   if (Array.isArray(raw.sessions)) db.sessions = raw.sessions.map(cleanSession).filter(Boolean);
   db.sessions.sort(function (a, b) { return a.start - b.start; });
   db.settings = cleanSettings(raw.settings);
+  if (isFinite(+raw.resetAt) && +raw.resetAt > 0) db.resetAt = +raw.resetAt;
   return db;
+}
+// Merge what another tab saved into this tab's copy before writing, so tabs never clobber each other.
+// A reset in any tab wins over sessions that ended before it (imports carry their own timestamp).
+function liveAfter(s, t) { return Math.max(s.end || 0, s.imp || 0) >= t; }
+function mergeDisk(mem, disk) {
+  if (!disk) return mem;
+  var mine = mem.resetAt || 0, theirs = disk.resetAt || 0;
+  if (theirs > mine) { mem.sessions = mem.sessions.filter(function (s) { return liveAfter(s, theirs); }); mem.resetAt = theirs; }
+  var cut = mem.resetAt || 0, have = Object.create(null);
+  mem.sessions.forEach(function (s) { have[s.id] = 1; });
+  disk.sessions.forEach(function (s) { if (!have[s.id] && liveAfter(s, cut)) { mem.sessions.push(s); have[s.id] = 1; } });
+  mem.sessions.sort(function (a, b) { return a.start - b.start; });
+  return mem;
 }
 function mergeImport(db, text) {
   var raw;
   try { raw = JSON.parse(text); } catch (e) { return { error: 'That is not valid JSON.' }; }
   var list = Array.isArray(raw) ? raw : (raw && Array.isArray(raw.sessions) ? raw.sessions : null);
   if (!list) return { error: 'No "sessions" array found in that file.' };
-  var have = {}; db.sessions.forEach(function (s) { have[s.id] = 1; });
-  var added = 0, dup = 0, bad = 0;
+  var have = Object.create(null); db.sessions.forEach(function (s) { have[s.id] = 1; });
+  var added = 0, dup = 0, bad = 0, stamp = Date.now();
   list.forEach(function (s) {
     var c = cleanSession(s);
     if (!c) { bad++; return; }
     if (have[c.id]) { dup++; return; }
+    c.imp = stamp;
     have[c.id] = 1; db.sessions.push(c); added++;
   });
   db.sessions.sort(function (a, b) { return a.start - b.start; });
@@ -1017,16 +1090,22 @@ function catWeights(db) {
   var by = {};
   ids.forEach(function (id) { by[id] = []; });
   db.sessions.forEach(function (s) { s.r.forEach(function (r) { if (by[r.c]) by[r.c].push(r); }); });
-  var rows = ids.map(function (id) {
+  var raw = ids.map(function (id) {
     var rs = by[id].slice(-40), n = rs.length, k = 0, sum = 0, m = 0;
     rs.forEach(function (r) {
       if (r.ok) k++;
       if (!r.sk && r.t > 0) { sum += Math.min(4, r.t / 1000 / targetSec(id, r.d)); m++; }
     });
-    var acc = (k + 0.6 * 3) / (n + 3);          // shrunk toward 60% until there is data
-    var slow = (sum + 1 * 3) / (m + 3);         // 1.0 = on target pace
-    var w = 0.25 + 3 * (1 - acc) + 0.75 * Math.max(0, slow - 0.6) + (n < 8 ? 0.6 : 0);
-    return { id: id, n: n, acc: acc, slow: slow, w: w };
+    return { id: id, n: n, k: k, sum: sum, m: m };
+  });
+  // prior = your typical accuracy in categories with real history (60% before there is any)
+  var est = raw.filter(function (x) { return x.n >= 8; });
+  var prior = est.length ? Math.max(0.3, Math.min(0.95, mean(est.map(function (x) { return x.k / x.n; })))) : 0.6;
+  var rows = raw.map(function (x) {
+    var acc = (x.k + prior * 3) / (x.n + 3);       // shrunk toward the prior until there is data
+    var slow = (x.sum + 1 * 3) / (x.m + 3);        // 1.0 = on target pace
+    var w = 0.25 + 3 * (1 - acc) + 0.75 * Math.max(0, slow - 0.6) + 0.9 / (x.n + 3);
+    return { id: x.id, n: x.n, acc: acc, slow: slow, w: w };
   });
   var tot = rows.reduce(function (s, x) { return s + x.w; }, 0), FLOOR = 0.04, free = 1 - FLOOR * rows.length;
   rows.forEach(function (x) { x.p = FLOOR + free * x.w / tot; });
@@ -1041,16 +1120,38 @@ function weightedPick(rows) {
 /* =====================================================================
    8. APP STATE + SESSION ENGINE
    ===================================================================== */
-var SPRINT_MS = 120000, DRILL_N = 20;
+var APP_VERSION = 'v2', SPRINT_MS = 120000, DRILL_N = 20;
 var S = { db: null, screen: 'home', sess: null, recent: true, timer: 0, advT: 0, lastSummary: null };
 var app = document.getElementById('app');
 var MODE_NAME = { sprint: 'Sprint', drill: 'Drill', weak: 'Weakness' };
 
-function persist() {
+function persist(quiet) {
+  if (!Store.corrupt) { var disk = Store.load(); if (disk) mergeDisk(S.db, cleanDB(disk)); }
   var ok = Store.save(S.db);
-  if (!ok) toast('Could not save to this browser — export your data to keep it.');
+  if (!ok && !quiet) toast('Could not save to this browser — export your data to keep it.');
   return ok;
 }
+function upsertSession(rec) {
+  for (var i = 0; i < S.db.sessions.length; i++) if (S.db.sessions[i].id === rec.id) { S.db.sessions[i] = rec; return; }
+  S.db.sessions.push(rec);
+}
+function sessRecord(sess, partial) {
+  var rec = { id: sess.id, mode: sess.mode, start: sess.start, end: Date.now(), r: sess.r.slice() };
+  if (sess.cat) rec.cat = sess.cat;
+  if (partial) rec.partial = 1;
+  return rec;
+}
+// save an in-progress session when the tab is hidden, so a discarded tab does not lose it
+function checkpoint() {
+  var s = S.sess; if (!s || !s.r.length) return;
+  upsertSession(sessRecord(s, true)); persist(true);
+}
+window.addEventListener('storage', function (e) {
+  if (e.key !== KEY || S.sess || !S.db) return;
+  var nd; try { nd = cleanDB(e.newValue ? JSON.parse(e.newValue) : null); } catch (er) { return; }
+  S.db.sessions = nd.sessions; S.db.settings = nd.settings; S.db.resetAt = nd.resetAt;
+  if (S.screen === 'home' || S.screen === 'setup' || S.screen === 'stats') render();
+});
 
 function startSession(mode, cat) {
   clearTimeout(S.advT);
@@ -1097,15 +1198,15 @@ function submitAnswer() {
   var raw = inp.value;
   if (!raw.trim()) { shake(inp); return; }
   var g = grade(sess.cur, raw);
-  if (g.invalid) { shake(inp); showFeedback({ invalid: true }); return; }
-  var t = Math.round(now() - sess.shownAt);
+  if (g.invalid) { shake(inp); showFeedback({ invalid: true, hint: g.hint }); return; }
+  var t = Math.max(0, Math.round(now() - sess.shownAt));
   record(sess, g.ok, t, raw.trim(), false);
   showFeedback({ ok: g.ok, raw: raw.trim(), t: t });
 }
 function skipQuestion() {
   var sess = S.sess; if (!sess) return;
   if (sess.phase === 'feedback') { advance(); return; }
-  var t = Math.round(now() - sess.shownAt);
+  var t = Math.max(0, Math.round(now() - sess.shownAt));
   record(sess, false, t, '', true);
   showFeedback({ ok: false, skipped: true, t: t });
 }
@@ -1115,9 +1216,13 @@ function record(sess, ok, t, raw, skipped) {
   if (!ok) { r.q = p.q; r.u = raw; r.x = p.disp; r.h = p.how; }
   sess.r.push(r);
 }
+function isDone(sess) {
+  return !!((sess.n && sess.r.length >= sess.n) || (sess.mode === 'sprint' && (sess.timeUp || now() >= sess.endsAt)));
+}
 function advance() {
   var sess = S.sess; if (!sess) return;
   clearTimeout(S.advT);
+  if (document.hidden) { sess.pendingAdv = true; return; }
   if (sess.mode === 'sprint' && (sess.timeUp || now() >= sess.endsAt)) { finishSession(false); return; }
   if (sess.n && sess.r.length >= sess.n) { finishSession(false); return; }
   nextProblem();
@@ -1138,20 +1243,21 @@ function tick() {
     if (fill) fill.style.width = (100 * (1 - left / SPRINT_MS)).toFixed(2) + '%';
     if (left <= 0) {
       if (sess.phase === 'answer') finishSession(false);
-      else sess.timeUp = true;
+      else { sess.timeUp = true; var go2 = document.getElementById('pgo'); if (go2) go2.textContent = 'Finish'; }
     }
   }
 }
 function finishSession(partial) {
   var sess = S.sess; if (!sess) return;
   clearInterval(S.timer); clearTimeout(S.advT);
+  if (isDone(sess)) partial = false;
   S.sess = null;
-  var rec = { id: sess.id, mode: sess.mode, start: sess.start, end: Date.now(), r: sess.r };
-  if (sess.cat) rec.cat = sess.cat;
-  if (partial) rec.partial = 1;
-  var prevBest = bestSprint();
-  if (rec.r.length) { S.db.sessions.push(rec); persist(); }
-  if (!rec.r.length) { go('home'); return; }
+  document.body.classList.remove('kb', 'fbtight');
+  var rec = sessRecord(sess, partial);
+  var prevBest = bestSprint(rec.id);
+  if (rec.r.length) { upsertSession(rec); persist(); }
+  else { S.db.sessions = S.db.sessions.filter(function (x) { return x.id !== rec.id; }); }
+  if (!rec.r.length) { goHome(); return; }
   S.lastSummary = { rec: rec, prevBest: prevBest };
   go('summary');
 }
@@ -1166,22 +1272,35 @@ function bestSprint(excludeId) {
 }
 document.addEventListener('visibilitychange', function () {
   var s = S.sess; if (!s) return;
-  if (document.hidden) { s.hiddenAt = now(); }
+  if (document.hidden) { s.hiddenAt = now(); checkpoint(); }
   else if (s.hiddenAt) {
-    var dt = now() - s.hiddenAt;
-    s.shownAt += dt; if (s.endsAt) s.endsAt += dt; s.hiddenAt = 0;
+    var t = now(), dt = t - s.hiddenAt;
+    s.shownAt += t - Math.max(s.hiddenAt, s.shownAt);   // only pause time that belonged to this question
+    if (s.endsAt) s.endsAt += dt;
+    s.hiddenAt = 0;
+    if (s.pendingAdv) { s.pendingAdv = false; advance(); }
     tick();
   }
 });
+window.addEventListener('pagehide', checkpoint);
 
 /* =====================================================================
    9. RENDERING
    ===================================================================== */
 function go(screen, opts) {
   S.screen = screen;
-  if (screen !== 'home') { try { history.pushState({ s: screen }, ''); } catch (e) { /* ignore */ } }
+  if (screen !== 'home') {
+    try {
+      if (history.state && history.state.s && history.state.s !== 'home') history.replaceState({ s: screen }, '');
+      else history.pushState({ s: screen }, '');
+    } catch (e) { /* ignore */ }
+  }
   render(opts);
   window.scrollTo(0, 0);
+}
+function goHome() {
+  if (history.state && history.state.s && history.state.s !== 'home') { try { history.back(); return; } catch (e) { /* fall through */ } }
+  S.screen = 'home'; render(); window.scrollTo(0, 0);
 }
 window.addEventListener('popstate', function () {
   if (S.sess) { finishSession(true); return; }
@@ -1201,6 +1320,7 @@ function render(opts) {
   if (S.screen === 'stats') drawCharts();
 }
 function storageWarn() {
+  if (Store.corrupt) return '<div class="warnbar">Saved history in this browser could not be read, so the app started fresh. The unreadable copy was kept under "' + KEY + '.corrupt".</div>';
   return Store.ok ? '' : '<div class="warnbar">This browser is blocking storage, so history will not survive a reload. Use Export on the Stats screen to keep it.</div>';
 }
 function topBar(title, back) {
@@ -1226,7 +1346,8 @@ function viewHome() {
     '<button class="mode" data-act="setup"><span class="mi">20</span><span><div class="mt">Drill</div><div class="md">One category, 20 questions. Set difficulty per category.</div></span><span class="chev">›</span></button>' +
     '<button class="mode" data-act="start" data-mode="weak"><span class="mi">◎</span><span><div class="mt">Weakness</div><div class="md">20 questions weighted toward your slowest, least accurate categories.</div>' + focus + '</span><span class="chev">›</span></button>' +
     '<div class="links"><button class="btn small" data-act="setup">Categories &amp; difficulty</button><button class="btn small" data-act="stats">Stats &amp; export</button></div>' +
-    (lastTxt ? '<div class="lastline">' + esc(lastTxt) + '</div>' : '');
+    (lastTxt ? '<div class="lastline">' + esc(lastTxt) + '</div>' : '') +
+    '<div class="lastline faint small">' + APP_VERSION + ' · data stays in this browser · <a href="?test">self-test</a></div>';
 }
 
 function viewSetup() {
@@ -1236,7 +1357,7 @@ function viewSetup() {
     var on = S.db.settings.on[c.id], d = S.db.settings.diff[c.id], st = byId[c.id];
     var seg = [1, 2, 3].map(function (k) { return '<button data-act="diff" data-cat="' + c.id + '" data-d="' + k + '" aria-pressed="' + (k === d) + '" aria-label="Difficulty ' + k + ' ' + DIFF_LABEL[k] + '">' + k + '</button>'; }).join('');
     return '<div class="catrow' + (on ? '' : ' off') + '"><div class="cr1"><div class="ci"><div class="cname">' + esc(c.name) + '</div><div class="cex">' + esc(c.ex) + '</div>' +
-      '<div class="cstat">' + (st.n ? pct0(st.acc) + ' accuracy · ' + sec1(st.avg) + ' avg · ' + st.total + ' answered' : 'No attempts yet') + '</div></div>' +
+      '<div class="cstat">' + (st.n ? pct0(st.acc) + ' accuracy · ' + sec1(st.avg) + ' avg · ' + st.total + ' answered (all levels)' : 'No attempts yet') + '</div></div>' +
       '<label class="tog" title="Include in Sprint and Weakness"><input type="checkbox" data-act="toggle" data-cat="' + c.id + '"' + (on ? ' checked' : '') + ' aria-label="Include ' + esc(c.name) + ' in Sprint and Weakness"><span></span></label></div>' +
       '<div class="cr2"><div class="seg" role="group" aria-label="Difficulty">' + seg + '</div><span class="seglabel">' + DIFF_LABEL[d] + '</span>' +
       '<button class="btn small primary" data-act="start" data-mode="drill" data-cat="' + c.id + '">Drill ›</button></div></div>';
@@ -1251,8 +1372,8 @@ function viewPlay() {
     '<div class="pscore"><span class="g" id="pok">0</span>/<span id="pn">0</span></div></div>' +
     '<div class="pbar"><div id="pfill"></div></div>' +
     '<div class="chiprow"><div class="pchip" id="pchip"></div><button type="button" class="skipbtn" id="pskip" data-keep>Skip</button></div>' +
-    '<div class="prompt" id="pq"></div>' +
-    '<form id="pform" autocomplete="off" novalidate><div class="irow"><div class="field"><input id="pin" type="text" inputmode="decimal" enterkeyhint="go" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Your answer" placeholder=""><span class="adorn" id="padorn"></span></div>' +
+    '<div class="prompt" id="pq" aria-live="polite"></div>' +
+    '<form id="pform" autocomplete="off" novalidate><div class="irow"><div class="field"><input id="pin" type="text" inputmode="decimal" enterkeyhint="go" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Your answer" aria-describedby="pq" placeholder=""><span class="adorn" id="padorn"></span></div>' +
     '<button type="submit" class="btn primary go" id="pgo" data-keep>Enter</button></div></form>' +
     '<div class="fb" id="pfb" aria-live="polite"></div>';
 }
@@ -1272,9 +1393,13 @@ function paintProblem() {
   q.className = 'prompt ' + promptSize(p.q);
   q.innerHTML = promptHTML(p.q);
   document.getElementById('pchip').textContent = CAT[p.cat].short + ' · L' + p.diff + (p.tolLabel ? ' · ' + p.tolLabel : '');
-  document.getElementById('padorn').textContent = UNIT_ADORN[p.unit] || '';
+  var ad = document.getElementById('padorn');
+  ad.textContent = UNIT_ADORN[p.unit] || '';
   var inp = document.getElementById('pin');
-  inp.value = '';
+  inp.value = ''; inp.classList.remove('long');
+  inp.style.paddingRight = ad.textContent ? (ad.offsetWidth + 26) + 'px' : '16px';
+  document.body.classList.remove('fbtight');
+  if (document.body.classList.contains('kb') && window.scrollY > 0) window.scrollTo(0, 0);
   document.getElementById('pfb').innerHTML = '';
   document.getElementById('pgo').textContent = 'Enter';
   var k = 0; s.r.forEach(function (r) { if (r.ok) k++; });
@@ -1282,10 +1407,19 @@ function paintProblem() {
   document.getElementById('pn').textContent = s.r.length;
   if (s.n) document.getElementById('pfill').style.width = (100 * s.r.length / s.n) + '%';
 }
+function fitFeedback() {
+  var fb = document.getElementById('pfb'), vv = window.visualViewport;
+  if (!fb || !vv || !document.body.classList.contains('kb')) return 0;
+  var over = function () { return fb.getBoundingClientRect().bottom - (vv.offsetTop + vv.height) + 8; };
+  var o = over();
+  if (o > 0) { document.body.classList.add('fbtight'); o = over(); }
+  if (o > 0) window.scrollBy(0, o);
+  return o;
+}
 function showFeedback(o) {
   var s = S.sess, p = s.cur, fb = document.getElementById('pfb');
   if (o.invalid) {
-    fb.innerHTML = '<div class="fbbox info"><div class="fbs">Couldn\'t read that. Type a number, e.g. 1,080 · 8.5 · 14.5</div></div>';
+    fb.innerHTML = '<div class="fbbox info"><div class="fbs">' + esc(o.hint || 'Couldn\'t read that. Type a number, e.g. 1,080 · 8.5 · 14.5') + '</div></div>';
     return;
   }
   s.phase = 'feedback';
@@ -1294,7 +1428,7 @@ function showFeedback(o) {
   document.getElementById('pn').textContent = s.r.length;
   if (s.n) document.getElementById('pfill').style.width = (100 * s.r.length / s.n) + '%';
   var tt = (o.t / 1000).toFixed(1) + 's';
-  var last = s.n && s.r.length >= s.n;
+  var last = isDone(s);
   if (o.ok) {
     fb.innerHTML = '<div class="fbbox ok"><div class="fbh"><span class="st">✓</span><span class="ans">' + esc(p.disp) + '</span><span class="t">' + tt + '</span></div></div>';
     document.getElementById('pgo').textContent = last ? 'Finish' : 'Next';
@@ -1307,7 +1441,8 @@ function showFeedback(o) {
       '<div class="fbhint">' + (s.mode === 'sprint' ? 'Continues automatically — Enter or typing skips ahead.' : 'Enter, Next or just start typing to continue.') + '</div></div>';
     document.getElementById('pgo').textContent = last ? 'Finish' : 'Next';
     document.getElementById('pin').value = '';
-    if (s.mode === 'sprint') S.advT = setTimeout(advance, 2200);
+    var cramped = fitFeedback() > 0 || document.body.classList.contains('fbtight');
+    if (s.mode === 'sprint') S.advT = setTimeout(advance, cramped ? 3500 : 2200);
   }
 }
 function shake(el) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
@@ -1316,11 +1451,12 @@ function bindPlay() {
   form.addEventListener('submit', function (e) { e.preventDefault(); submitAnswer(); inp.focus(); });
   document.getElementById('pskip').addEventListener('click', function () { skipQuestion(); inp.focus(); });
   inp.addEventListener('input', function () {
+    inp.classList.toggle('long', inp.value.length > 8);
     var s = S.sess;
     if (s && s.phase === 'feedback' && inp.value) {
       var typed = inp.value;
       advance();
-      if (S.sess && S.screen === 'play') { var i2 = document.getElementById('pin'); i2.value = typed; }
+      if (S.sess && S.screen === 'play') { var i2 = document.getElementById('pin'); i2.value = typed; i2.classList.toggle('long', typed.length > 8); }
     }
   });
 }
@@ -1329,11 +1465,11 @@ function viewSummary() {
   var L = S.lastSummary; if (!L) return viewHome();
   var rec = L.rec, st = sessStats(rec);
   var title = MODE_NAME[rec.mode] + (rec.cat ? ' · ' + CAT[rec.cat].name : '') + (rec.partial ? ' (ended early)' : '');
-  var mins = (rec.end - rec.start) / 60000;
+  var mins = Math.max(1 / 60, (rec.end - rec.start) / 60000), sprintMins = rec.partial ? mins : SPRINT_MS / 60000;
   var tiles = '<div class="tiles four"><div class="tile"><div class="tv">' + st.k + '<span class="faint" style="font-size:1rem">/' + st.n + '</span></div><div class="tl">correct</div></div>' +
     '<div class="tile"><div class="tv">' + pct0(st.acc) + '</div><div class="tl">accuracy</div></div>' +
     '<div class="tile"><div class="tv">' + sec1(st.avg) + '</div><div class="tl">avg per question</div></div>' +
-    '<div class="tile"><div class="tv">' + (rec.mode === 'sprint' ? (st.k / 2).toFixed(1) : (mins > 0 ? (st.n / mins).toFixed(1) : '—')) + '</div><div class="tl">' + (rec.mode === 'sprint' ? 'correct / minute' : 'questions / minute') + '</div></div></div>';
+    '<div class="tile"><div class="tv">' + (rec.mode === 'sprint' ? (st.k / sprintMins).toFixed(1) : (st.n / mins).toFixed(1)) + '</div><div class="tl">' + (rec.mode === 'sprint' ? 'correct / minute' : 'questions / minute') + '</div></div></div>';
   var best = '';
   if (rec.mode === 'sprint' && !rec.partial && st.k > 0 && (!L.prevBest || st.k > L.prevBest.k)) best = '<div class="best">★ New sprint best</div>';
   var by = {};
@@ -1362,7 +1498,7 @@ function viewStats() {
     '<div class="tile"><div class="tv">' + pct0(all.length ? k / all.length : NaN) + '</div><div class="tl">accuracy, all time</div></div>' +
     '<div class="tile"><div class="tv">' + sec1(ts.length ? mean(ts) / 1000 : NaN) + '</div><div class="tl">avg time, all time</div></div></div>';
   var rows = cs.map(function (c) {
-    return '<tr><td>' + esc(CAT[c.id].short) + ' <span class="faint small">L' + S.db.settings.diff[c.id] + '</span></td><td class="r">' + c.n + '</td>' +
+    return '<tr><td>' + esc(CAT[c.id].short) + ' <span class="faint small" title="Current difficulty setting; stats pool all levels">now L' + S.db.settings.diff[c.id] + '</span></td><td class="r">' + c.n + '</td>' +
       '<td class="r">' + pct0(c.acc) + (isFinite(c.acc) ? '<span class="accbar"><i style="width:' + Math.round(c.acc * 100) + '%"></i></span>' : '') + '</td><td class="r">' + sec1(c.avg) + '</td></tr>';
   }).join('');
   var last10 = db.sessions.slice(-10);
@@ -1371,9 +1507,9 @@ function viewStats() {
     return '<tr><td>' + (dt.getMonth() + 1) + '/' + dt.getDate() + '</td><td>' + esc(MODE_NAME[s.mode] + (s.cat ? ' · ' + CAT[s.cat].short : '')) + (s.partial ? ' <span class="faint">(early)</span>' : '') + '</td><td class="r">' + st.k + '/' + st.n + '</td><td class="r">' + sec1(st.avg) + '</td></tr>';
   }).join('');
   return topBar('Stats', true) + storageWarn() + tiles +
-    '<h2>By category</h2><div class="segwide" role="group" aria-label="Window"><button data-act="window" data-v="recent" aria-pressed="' + S.recent + '">Last 50 per category</button><button data-act="window" data-v="all" aria-pressed="' + !S.recent + '">All time</button></div>' +
+    '<h2>By category</h2><p class="note" style="margin-top:-4px">Pooled across difficulty levels. Skips count as misses; average time excludes skips.</p><div class="segwide" role="group" aria-label="Window"><button data-act="window" data-v="recent" aria-pressed="' + S.recent + '">Last 50 per category</button><button data-act="window" data-v="all" aria-pressed="' + !S.recent + '">All time</button></div>' +
     '<div class="card" style="padding:6px 10px"><table class="t"><thead><tr><th>Category</th><th class="r">n</th><th class="r">Accuracy</th><th class="r">Avg</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
-    '<h2>Trend — last 10 sessions</h2>' +
+    '<h2>Trend — last 10 sessions</h2><p class="note" style="margin-top:-4px">Hollow dots are sessions you ended early.</p>' +
     '<div class="chart" id="chAcc"><div class="ct">Accuracy per session</div></div>' +
     '<div class="chart" id="chTime"><div class="ct">Average seconds per question</div></div>' +
     (last10.length ? '<div class="card sesslist" style="padding:6px 10px"><table class="t"><thead><tr><th>Date</th><th>Mode</th><th class="r">Score</th><th class="r">Avg</th></tr></thead><tbody>' + sessRows + '</tbody></table></div>' : '') +
@@ -1389,14 +1525,14 @@ function drawCharts() {
   var last10 = S.db.sessions.slice(-10);
   var pts = last10.map(function (s) {
     var st = sessStats(s), d = new Date(s.start);
-    return { lab: (d.getMonth() + 1) + '/' + d.getDate(), acc: st.acc * 100, avg: st.avg, tip: MODE_NAME[s.mode] + (s.cat ? ' · ' + CAT[s.cat].short : '') + ' · ' + st.k + '/' + st.n };
+    return { lab: (d.getMonth() + 1) + '/' + d.getDate(), acc: st.acc * 100, avg: st.avg, partial: !!s.partial, tip: MODE_NAME[s.mode] + (s.cat ? ' · ' + CAT[s.cat].short : '') + (s.partial ? ' (ended early)' : '') + ' · ' + st.k + '/' + st.n };
   });
-  lineChart(document.getElementById('chAcc'), pts.map(function (p) { return { lab: p.lab, y: p.acc, tip: p.tip, val: Math.round(p.acc) + '%' }; }), { max: 100, ticks: [0, 50, 100], fmtTick: function (v) { return v + '%'; } });
+  lineChart(document.getElementById('chAcc'), pts.map(function (p) { return { lab: p.lab, y: p.acc, tip: p.tip, partial: p.partial, val: Math.round(p.acc) + '%' }; }), { max: 100, ticks: [0, 50, 100], fmtTick: function (v) { return v + '%'; } });
   var tp = pts.filter(function (p) { return isFinite(p.avg); });
   var mx = Math.max.apply(null, tp.map(function (p) { return p.avg; }).concat([5]));
   var step = mx > 40 ? 20 : mx > 20 ? 10 : 5, top = Math.ceil(mx * 1.15 / step) * step, ticks = [];
   for (var v = 0; v <= top; v += step) ticks.push(v);
-  lineChart(document.getElementById('chTime'), pts.map(function (p) { return { lab: p.lab, y: p.avg, tip: p.tip, val: sec1(p.avg) }; }), { max: top, ticks: ticks, fmtTick: function (v) { return v + 's'; } });
+  lineChart(document.getElementById('chTime'), pts.map(function (p) { return { lab: p.lab, y: p.avg, tip: p.tip, partial: p.partial, val: sec1(p.avg) }; }), { max: top, ticks: ticks, fmtTick: function (v) { return v + 's'; } });
 }
 function lineChart(el, pts, o) {
   if (!el) return;
@@ -1413,7 +1549,12 @@ function lineChart(el, pts, o) {
   });
   var d = '', started = false;
   pts.forEach(function (p, i) { if (!isFinite(p.y)) return; d += (started ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(p.y).toFixed(1); started = true; });
-  var dots = pts.map(function (p, i) { return isFinite(p.y) ? '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(p.y).toFixed(1) + '" r="4" fill="var(--series)" stroke="var(--surface)" stroke-width="2"/>' : ''; }).join('');
+  var dots = pts.map(function (p, i) {
+    if (!isFinite(p.y)) return '';
+    return p.partial
+      ? '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(p.y).toFixed(1) + '" r="4" fill="var(--surface)" stroke="var(--series)" stroke-width="2"/>'
+      : '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(p.y).toFixed(1) + '" r="4" fill="var(--series)" stroke="var(--surface)" stroke-width="2"/>';
+  }).join('');
   var lastI = -1; pts.forEach(function (p, i) { if (isFinite(p.y)) lastI = i; });
   var lastLab = '<text x="' + (X(lastI) + 8).toFixed(1) + '" y="' + (Y(pts[lastI].y) + 4).toFixed(1) + '" fill="var(--text)" font-size="12" font-weight="600">' + esc(pts[lastI].val) + '</text>';
   var xl = '<text x="' + X(0).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="' + (n === 1 ? 'middle' : 'start') + '" fill="var(--faint)" font-size="11">' + esc(pts[0].lab) + '</text>' +
@@ -1436,9 +1577,10 @@ function lineChart(el, pts, o) {
     tip.style.left = left + 'px'; tip.style.top = Math.max(0, py - 40) + 'px';
   }
   function hide() { tip.style.display = 'none'; xh.setAttribute('visibility', 'hidden'); }
+  var hideT = 0;
   sv.addEventListener('pointermove', show);
-  sv.addEventListener('pointerdown', show);
-  sv.addEventListener('pointerleave', hide);
+  sv.addEventListener('pointerdown', function (ev) { show(ev); clearTimeout(hideT); if (ev.pointerType === 'touch') hideT = setTimeout(hide, 3000); });
+  sv.addEventListener('pointerleave', function (ev) { if (ev.pointerType !== 'touch') hide(); });
 }
 function kbCheck() {
   var vv = window.visualViewport;
@@ -1474,9 +1616,10 @@ function doCopy() {
 function doImportText(text) {
   var res = mergeImport(S.db, text);
   if (res.error) { toast(res.error); return; }
-  persist();
-  toast('Imported ' + res.added + ' session' + (res.added === 1 ? '' : 's') + (res.dup ? ', ' + res.dup + ' duplicate' + (res.dup === 1 ? '' : 's') + ' skipped' : '') + (res.bad ? ', ' + res.bad + ' unreadable' : '') + '.');
+  var saved = persist(true);
+  var msg = 'Imported ' + res.added + ' session' + (res.added === 1 ? '' : 's') + (res.dup ? ', ' + res.dup + ' duplicate' + (res.dup === 1 ? '' : 's') + ' skipped' : '') + (res.bad ? ', ' + res.bad + ' unreadable' : '');
   render();
+  toast(saved ? msg + '.' : msg + ' for this visit only — this browser would not save them. Export a backup.');
 }
 var toastT = 0;
 function toast(msg) {
@@ -1494,7 +1637,7 @@ app.addEventListener('click', function (e) {
   var el = e.target.closest('[data-act]'); if (!el) return;
   var act = el.getAttribute('data-act');
   switch (act) {
-    case 'home': if (S.sess) finishSession(true); else { S.screen = 'home'; render(); window.scrollTo(0, 0); } break;
+    case 'home': if (S.sess) finishSession(true); else goHome(); break;
     case 'stats': go('stats'); break;
     case 'setup': go('setup'); break;
     case 'start': startSession(el.getAttribute('data-mode'), el.getAttribute('data-cat')); break;
@@ -1512,7 +1655,7 @@ app.addEventListener('click', function (e) {
       break;
     case 'pasteGo': var ta = document.getElementById('pasteTa'); if (ta && ta.value.trim()) doImportText(ta.value); break;
     case 'reset':
-      if (window.confirm('Delete all history in this browser? Export first if you want a backup.')) { S.db.sessions = []; persist(); render(); toast('History cleared.'); }
+      if (window.confirm('Delete all history in this browser? Export first if you want a backup.')) { S.db.sessions = []; S.db.resetAt = Date.now(); persist(); render(); toast('History cleared.'); }
       break;
   }
 });
@@ -1540,6 +1683,40 @@ app.addEventListener('change', function (e) {
 var NUM_RE = /\d(?:[\d,]*\d)?(?:\.\d+)?/g;
 function numsIn(q) { return (q.match(NUM_RE) || []).map(function (s) { return parseFloat(s.replace(/,/g, '')); }); }
 function sum(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
+/* Evaluates every "expr = expr" step inside a shortcut line and reports any that do not hold
+   (allowing for the rounding of displayed literals). Parts with words, or mixing % and plain
+   numbers, are skipped. */
+var SUPMAP = { '²': 2, '³': 3, '⁴': 4, '⁵': 5, '⁶': 6, '⁷': 7, '⁸': 8, '⁹': 9 };
+function evalPart(t) {
+  var s0 = t.trim().replace(/\$/g, '').replace(/(\d)\s*(x|M|yrs|bps|pt)\s*$/, '$1');
+  if (!s0) return null;
+  var toks = s0.match(/\d[\d,]*(?:\.\d+)?%?/g) || [];
+  if (!toks.length) return null;
+  var pctN = toks.filter(function (x) { return /%$/.test(x); }).length;
+  if (pctN && pctN !== toks.length) return null;
+  var e = s0.replace(/(\d),(?=\d{3}(?!\d))/g, '$1').replace(/%/g, '').replace(/−/g, '-').replace(/×/g, '*').replace(/÷/g, '/')
+    .replace(/½/g, '(1/2)').replace(/¼/g, '(1/4)').replace(/¾/g, '(3/4)')
+    .replace(/[²³⁴⁵⁶⁷⁸⁹]/g, function (c) { return '**' + SUPMAP[c]; }).replace(/\)\s*\(/g, ')*(');
+  if (!/^[\d.\s+\-*\/()]+$/.test(e) || /^\s*[*\/+\-]/.test(e) || /[*\/+\-]\s*$/.test(e)) return null;
+  var v; try { v = Function('"use strict";return (' + e + ');')(); } catch (er) { return null; }
+  if (!isFinite(v)) return null;
+  var lit = /^\d[\d,]*(?:\.\d+)?%?$/.test(s0) ? ((s0.split('.')[1] || '').replace(/\D/g, '')).length : -1;
+  return { v: v, pct: pctN > 0, lit: lit };
+}
+function shortcutMathErrors(how) {
+  var errs = [];
+  how.split(/\s*(?:→|;|:|≈|, )\s*/).forEach(function (seg) {
+    var parts = seg.split('=').map(evalPart);
+    for (var i = 0; i + 1 < parts.length; i++) {
+      var a = parts[i], b = parts[i + 1];
+      if (!a || !b || a.pct !== b.pct) continue;
+      var tol = 1e-9 * Math.max(1, Math.abs(b.v));
+      [a, b].forEach(function (x) { if (x.lit > 0) tol = Math.max(tol, 0.5 * Math.pow(10, -x.lit) + 1e-9); });
+      if (Math.abs(a.v - b.v) > tol) errs.push('"' + seg.trim() + '" (' + a.v + ' ≠ ' + b.v + ')');
+    }
+  });
+  return errs;
+}
 function canon(x) {
   if (Array.isArray(x)) return '[' + x.map(canon).join(',') + ']';
   if (x && typeof x === 'object') return '{' + Object.keys(x).sort().map(function (k) { return JSON.stringify(k) + ':' + canon(x[k]); }).join(',') + '}';
@@ -1616,20 +1793,20 @@ function runSelfTest(seed, perCombo) {
     ['14.5%', 14.5, '%'], ['14.5 %', 14.5, '%'], ['~14.5%', 14.5, '%'], ['≈14.5', 14.5, ''],
     ['1.2bn', 1.2, 'b'], ['1.2B', 1.2, 'b'], ['360k', 360, 'k'], ['360K', 360, 'k'],
     ['12,5', 12.5, ''], ['0,5', 0.5, ''], ['1,08', 1.08, ''], ['.5', 0.5, ''], ['5.', 5, ''], ['007', 7, ''],
-    ['3/8', 0.375, ''], ['-5', -5, ''], ['−5', -5, ''], ['+5', 5, ''],
+    ['0,125', 0.125, ''], [',5', 0.5, ''], ['-5', -5, ''], ['−5', -5, ''], ['+5', 5, ''],
     ['150bps', 150, 'bps'], ['150 bp', 150, 'bps'], ['9 yrs', 9, 'y'], ['9y', 9, 'y'], ['9 years', 9, 'y'], ['$17.50', 17.5, '']
   ];
   PC.forEach(function (c) {
     var p = parseAnswer(c[0]);
     check('parser', p.ok && near(p.value, c[1], 1e-12) && p.suffix === c[2], JSON.stringify(c[0]) + ' → ' + JSON.stringify(p) + ' (want ' + c[1] + ' ' + JSON.stringify(c[2]) + ')');
   });
-  ['', '   ', 'abc', '1..2', '1.2.3', '12,34,5', '1,2345', '--5', '%', 'x', '5/0', '1e3', 'NaN', 'Infinity', '0x10', '12%%', '$', '.', ',', '1,,000', null, undefined].forEach(function (c) {
+  ['', '   ', 'abc', '1..2', '1.2.3', '12,34,5', '1,2345', '--5', '%', 'x', '5/0', '3/8', '128/160', '12 1/2', '1e3', 'NaN', 'Infinity', '0x10', '12%%', '$', '.', ',', '1,,000', '01,000', null, undefined].forEach(function (c) {
     var p = parseAnswer(c);
     check('parser', !p.ok, 'should reject ' + JSON.stringify(c) + ' but got ' + JSON.stringify(p));
   });
 
   /* --- B. grader --- */
-  function P(ans, unit, tol) { return { ans: ans, unit: unit, tol: tol || 0 }; }
+  function P(ans, unit, tol, signFree) { return { ans: ans, unit: unit, tol: tol || 0, signFree: !!signFree }; }
   var GC = [
     [P(1080, ''), '1,080', true], [P(1080, ''), '1080', true], [P(1080, ''), '1.08k', true], [P(1080, ''), '1079', false], [P(1080, ''), '0.00108m', true],
     [P(360000, ''), '360k', true], [P(360000, ''), '0.36M', true], [P(1080, ''), '-1,080', false],
@@ -1637,15 +1814,20 @@ function runSelfTest(seed, perCombo) {
     [P(1200, 'amt'), '1.2bn', true], [P(1200, 'amt'), '1,200M', true],
     [P(8.5, 'x'), '8.5x', true], [P(8.5, 'x'), '8.5', true], [P(8.5, 'x'), '8.50', true], [P(8.5, 'x'), '8', false],
     [P(14.4714, '%', 0.5), '14.5%', true], [P(14.4714, '%', 0.5), '14', true], [P(14.4714, '%', 0.5), '15', false], [P(14.4714, '%', 0.5), '0.145', true], [P(14.4714, '%', 0.5), '13.9', false],
-    [P(42.857, '%', 0.1), '42.9', true], [P(42.857, '%', 0.1), '42.8', true], [P(42.857, '%', 0.1), '43', false], [P(42.857, '%', 0.1), '.4286', true], [P(42.857, '%', 0.1), '3/7', true],
+    [P(42.857, '%', 0.1), '42.9', true], [P(42.857, '%', 0.1), '42.8', true], [P(42.857, '%', 0.1), '43', false], [P(42.857, '%', 0.1), '.4286', true], [P(42.857, '%', 0.1), '3/7', false], [P(12.5, '%', 0.1), '0,125', true], [P(112.5, '%', 0.1), '1.125', true],
     [P(1.5, '%', 0.1), '0.015', false], [P(150, 'bps'), '150', true], [P(150, 'bps'), '1.5%', true], [P(150, 'bps'), '150bps', true],
     [P(9.006, 'yrs', 0.36), '9', true], [P(9.006, 'yrs', 0.36), '9 yrs', true], [P(9.006, 'yrs', 0.36), '9.5', false],
-    [P(3, ''), '3', true], [P(3, ''), '3.0', true], [P(3, ''), '0.03', false], [P(17.5, '$'), '$17.50', true], [P(17.5, '$'), '17.5', true]
+    [P(3, ''), '3', true], [P(3, ''), '3.0', true], [P(3, ''), '0.03', false], [P(17.5, '$'), '$17.50', true], [P(17.5, '$'), '17.5', true],
+    [P(25, '%', 0.5, true), '-25%', true], [P(25, '%', 0.5, true), '−25', true], [P(25, '%', 0.5, true), '25', true], [P(25, '%', 0.5, true), '-30', false], [P(25, '%', 0.5), '-25', false],
+    [P(2.5, 'x', 0.05), '2.5%', false], [P(14.5, '%', 0.5), '14.5x', false], [P(1.5, '%', 0.1), '150bps', true], [P(1200, 'amt'), '1.2k', true], [P(1.2, 'M'), '1,200k', true],
+    [P(9.006, 'yrs', 0.36), '9%', false], [P(1080, ''), '1080%', false], [P(1080, ''), '1,080x', false]
   ];
   GC.forEach(function (c) {
     var g = grade(c[0], c[1]);
     check('grader', !!g.ok === c[2], JSON.stringify(c[1]) + ' vs ' + JSON.stringify(c[0]) + ' → ' + JSON.stringify(g) + ' (want ' + c[2] + ')');
   });
+  var mm = grade(P(2.5, 'x', 0.05), '2.5%');
+  check('grader', mm.invalid && /multiple/.test(mm.hint || ''), 'unit mismatch should be "invalid" with a hint, got ' + JSON.stringify(mm));
 
   /* --- C. generators: every category × difficulty --- */
   var seen = {};
@@ -1675,6 +1857,9 @@ function runSelfTest(seed, perCombo) {
         var hn = numsIn(p.how), lastN = hn[hn.length - 1];
         check('gen.shortcutEndsOnAnswer', isFinite(lastN) && Math.abs(lastN - p.ans) <= p.tol + 0.051 + 1e-6 * Math.abs(p.ans), tag + ' shortcut ends on ' + lastN + ', answer ' + p.ans + ' :: ' + p.how);
         check('gen.shortcutLength', p.how.length <= 170, tag + ' shortcut is ' + p.how.length + ' chars');
+        var me = shortcutMathErrors(p.how);
+        check('gen.shortcutMath', me.length === 0, tag + ' false step in shortcut: ' + me.join(' | ') + ' :: ' + p.how);
+        if (p.kind === 'cagr.decl') check('gen.signFree', grade(p, '-' + p.ans).ok, tag + ' negative decline rejected');
         var key = c.id + d + p.kind;
         if (!seen[key]) { seen[key] = 1; R.samples.push(p); }
       }
@@ -1699,6 +1884,25 @@ function runSelfTest(seed, perCombo) {
   check('weakness', W.every(function (x) { return x.p >= 0.04 - 1e-12; }), 'a weight fell below the 4% floor');
   check('weakness', W.every(function (x) { return x.id === 'cagr' || wm.cagr > x.p; }), 'weakest category (cagr) is not weighted highest: ' + JSON.stringify(wm));
   check('weakness', W.every(function (x) { return x.id === 'pct' || wm.pct < x.p; }), 'strongest category (pct) is not weighted lowest: ' + JSON.stringify(wm));
+  function addTo(db, cat, n, okRate, sec) {
+    var r = []; for (var i = 0; i < n; i++) r.push({ c: cat, d: 2, ok: i < Math.round(n * okRate), t: sec * 1000 });
+    if (n) db.sessions.push({ id: cat + db.sessions.length, mode: 'drill', cat: cat, start: t0 + db.sessions.length, end: t0 + db.sessions.length + 1, r: r });
+  }
+  var prevW = -1, mono = true, series = [];
+  for (var nn = 0; nn <= 25; nn++) {
+    var mdb = freshDB();
+    CATS.forEach(function (c) { if (c.id !== 'lbo') addTo(mdb, c.id, 20, 0.9, targetSec(c.id, 2)); });
+    addTo(mdb, 'lbo', nn, 0, targetSec('lbo', 2) * 1.5);
+    var wl = catWeights(mdb).filter(function (x) { return x.id === 'lbo'; })[0].w;
+    series.push(wl.toFixed(3));
+    if (wl < prevW - 1e-12) mono = false; prevW = wl;
+  }
+  check('weakness', mono, 'weight should rise with every additional miss: ' + series.join(' '));
+  var udb = freshDB();
+  CATS.forEach(function (c) { if (c.id !== 'cagr' && c.id !== 'mult') addTo(udb, c.id, 20, 0.9, targetSec(c.id, 2)); });
+  addTo(udb, 'cagr', 20, 0.3, targetSec('cagr', 2));
+  var uw = {}; catWeights(udb).forEach(function (x) { uw[x.id] = x.p; });
+  check('weakness', uw.cagr > uw.mult, 'a known-weak category (30%) should outrank an untried one: ' + JSON.stringify(uw));
   var eW = catWeights(freshDB());
   check('weakness', eW.every(function (x) { return near(x.p, 1 / CATS.length, 1e-9); }), 'empty history should give even weights');
   tdb.settings.on.mult = false;
@@ -1734,6 +1938,18 @@ function runSelfTest(seed, perCombo) {
   check('import', canon(rt.sessions) === canon(b.sessions), 'cleanDB round trip changed data');
   check('import', esc('<img src=x onerror=alert(1)>').indexOf('<') < 0, 'escaping');
 
+  /* --- F2. two tabs: merge instead of clobber; resets win over stale tabs --- */
+  function S1(id, end, imp) { var o = { id: id, mode: 'drill', cat: 'pct', start: end - 1, end: end, r: [{ c: 'pct', d: 2, ok: true, t: 1 }] }; if (imp) o.imp = imp; return o; }
+  var mA = { sessions: [S1('a', 10)], settings: defaultSettings() }, dA = { sessions: [S1('a', 10), S1('b', 20)] };
+  mergeDisk(mA, dA);
+  check('tabs', mA.sessions.map(function (x) { return x.id; }).join() === 'a,b', 'other tab\'s session not merged: ' + mA.sessions.map(function (x) { return x.id; }));
+  var mB = { sessions: [S1('old', 10), S1('imported', 10, 500)], settings: defaultSettings() }, dB = { sessions: [], resetAt: 100 };
+  mergeDisk(mB, dB);
+  check('tabs', mB.sessions.map(function (x) { return x.id; }).join() === 'imported' && mB.resetAt === 100, 'reset in another tab should drop stale sessions but keep later imports: ' + JSON.stringify(mB.sessions.map(function (x) { return x.id; })));
+  var mC = { sessions: [], resetAt: 100, settings: defaultSettings() }, dC = { sessions: [S1('stale', 10)] };
+  mergeDisk(mC, dC);
+  check('tabs', mC.sessions.length === 0, 'a stale tab\'s pre-reset sessions came back');
+
   /* --- G. storage failure is contained --- */
   var realBackend = Store.backend, wasOk = Store.ok;
   Store.backend = function () { return { getItem: function () { throw new Error('denied'); }, setItem: function () { throw new Error('quota'); } }; };
@@ -1766,7 +1982,7 @@ function renderSelfTest(R) {
 /* =====================================================================
    11. BOOT
    ===================================================================== */
-window.__IBMM__ = { GENS: GENS, CATS: CATS, parseAnswer: parseAnswer, grade: grade, generate: generate, catWeights: catWeights, catStats: catStats, sessStats: sessStats, mergeImport: mergeImport, cleanDB: cleanDB, VERIFY: VERIFY, numsIn: numsIn, setSeed: function (s) { _rand = mulberry32(s); }, state: S };
+window.__IBMM__ = { GENS: GENS, CATS: CATS, parseAnswer: parseAnswer, grade: grade, generate: generate, catWeights: catWeights, catStats: catStats, sessStats: sessStats, mergeImport: mergeImport, cleanDB: cleanDB, VERIFY: VERIFY, numsIn: numsIn, shortcutMathErrors: shortcutMathErrors, setSeed: function (s) { _rand = mulberry32(s); }, state: S };
 
 var qs = location.search || '';
 if (/[?&]test\b/.test(qs)) {
@@ -1789,7 +2005,7 @@ if (/[?&]test\b/.test(qs)) {
 } else {
   var loaded = Store.load();
   S.db = cleanDB(loaded);
-  if (Store.ok) Store.save(S.db);
+  if (Store.ok && !Store.corrupt) Store.save(S.db);
   try { history.replaceState({ s: 'home' }, ''); } catch (e) { /* ignore */ }
   render();
 }
